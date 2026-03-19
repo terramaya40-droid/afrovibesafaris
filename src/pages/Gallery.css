@@ -11,6 +11,13 @@
 .gallery-header h1 {
   font-size: 3rem;
   margin-bottom: var(--spacing-sm);
+  color: var(--color-white) !important;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.4);
+}
+
+.gallery-header p {
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-weight: 500;
 }
 
 .gallery-filters {
