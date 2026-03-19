@@ -24,7 +24,7 @@ const Navbar: React.FC = () => {
           <Link to="/trip-planner" className="nav-link">Trip Planner</Link>
           <Link to="/virtual-safari" className="nav-link">Virtual Safari</Link>
           <Link to="/blog" className="nav-link">Blog</Link>
-          <Link to="/admin" className="nav-link">Admin</Link>
+          
           
           <select 
             value={userType} 

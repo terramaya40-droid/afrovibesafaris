@@ -22,7 +22,7 @@ const AdminLogin: React.FC = () => {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || 'Login failed');
       localStorage.setItem('afrivibe_token', data.token);
-      navigate('/admin');
+      navigate('/001/admin');
     } catch (err: any) {
       setError(err.message);
     } finally {

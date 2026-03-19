@@ -33,6 +33,14 @@ const PackageModal: React.FC<{ pkg: any; onClose: () => void; onSave: () => void
   const set = (field: string, val: any) => setForm((p: any) => ({ ...p, [field]: val }));
   const setPricing = (key: string, val: string) => setForm((p: any) => ({ ...p, pricing: { ...p.pricing, [key]: val } }));
 
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onloadend = () => set('image', reader.result as string);
+    reader.readAsDataURL(file);
+  };
+
   const handleSave = async () => {
     setSaving(true);
     const url = isEdit ? `${API_BASE_URL}/packages/${pkg._id}` : `${API_BASE_URL}/packages`;
@@ -74,7 +82,14 @@ const PackageModal: React.FC<{ pkg: any; onClose: () => void; onSave: () => void
             </div>
           </div>
           <div className="form-group"><label>Description</label><textarea rows={3} value={form.description} onChange={e => set('description', e.target.value)} /></div>
-          <div className="form-group"><label>Image URL</label><input value={form.image} onChange={e => set('image', e.target.value)} placeholder="https://images.unsplash.com/..." /></div>
+          <div className="form-group">
+            <label>Package Image</label>
+            <div className="image-upload-wrapper">
+              <input type="file" accept="image/*" onChange={handleImageUpload} className="file-input" />
+              <div className="or-divider"><span>OR</span></div>
+              <input value={form.image} onChange={e => set('image', e.target.value)} placeholder="Paste URL instead..." className="url-input" />
+            </div>
+          </div>
           {form.image && <img src={form.image} alt="preview" className="img-preview" />}
           <p className="form-section-label">Pricing Tiers</p>
           <div className="form-group-row">
@@ -99,6 +114,14 @@ const ArticleModal: React.FC<{ article: any; onClose: () => void; onSave: () => 
   const isEdit = !!article._id;
 
   const set = (field: string, val: any) => setForm((p: any) => ({ ...p, [field]: val }));
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onloadend = () => set('image', reader.result as string);
+    reader.readAsDataURL(file);
+  };
 
   const handleSave = async () => {
     setSaving(true);
@@ -137,7 +160,14 @@ const ArticleModal: React.FC<{ article: any; onClose: () => void; onSave: () => 
             </div>
           </div>
           <div className="form-group"><label>Excerpt (short description)</label><textarea rows={2} value={form.excerpt} onChange={e => set('excerpt', e.target.value)} /></div>
-          <div className="form-group"><label>Image URL</label><input value={form.image} onChange={e => set('image', e.target.value)} /></div>
+          <div className="form-group">
+            <label>Cover Image</label>
+            <div className="image-upload-wrapper">
+              <input type="file" accept="image/*" onChange={handleImageUpload} className="file-input" />
+              <div className="or-divider"><span>OR</span></div>
+              <input value={form.image} onChange={e => set('image', e.target.value)} placeholder="Paste URL instead..." className="url-input" />
+            </div>
+          </div>
           {form.image && <img src={form.image} alt="preview" className="img-preview" />}
           <div className="form-group"><label>Body (Markdown supported)</label><textarea rows={10} value={form.body} onChange={e => set('body', e.target.value)} className="markdown-editor" /></div>
           <div className="form-group checkbox-group">

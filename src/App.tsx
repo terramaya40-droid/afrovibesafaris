@@ -17,11 +17,11 @@ const App: React.FC = () => {
     <Router>
       <Routes>
         {/* Admin login — outside Layout (full-screen) */}
-        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/001/admin/login" element={<AdminLogin />} />
 
         {/* Protected admin dashboard — outside Layout */}
         <Route
-          path="/admin"
+          path="/001/admin"
           element={
             <ProtectedRoute>
               <Admin />

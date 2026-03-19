@@ -1,30 +1,100 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useStore } from '../store/useStore';
-import { Search, ChevronRight, Calendar, User, ArrowRight } from 'lucide-react';
+import { Search, ChevronRight, Calendar, User } from 'lucide-react';
 import { API_BASE_URL } from '../config';
 import './Blog.css';
 
 const Blog: React.FC = () => {
+  const { slug } = useParams<{ slug: string }>();
   const { openQuoteModal } = useStore();
   const [searchTerm, setSearchTerm] = useState('');
   const [allPosts, setAllPosts] = useState<any[]>([]);
+  const [currentPost, setCurrentPost] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/articles`)
-      .then(res => res.json())
-      .then(data => {
-        setAllPosts(Array.isArray(data) ? data : []);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
-  }, []);
+    if (slug) {
+      setLoading(true);
+      fetch(`${API_BASE_URL}/articles/${slug}`)
+        .then(res => res.json())
+        .then(data => {
+          setCurrentPost(data);
+          setLoading(false);
+          window.scrollTo(0, 0);
+        })
+        .catch(() => setLoading(false));
+    } else {
+      setLoading(true);
+      fetch(`${API_BASE_URL}/articles`)
+        .then(res => res.json())
+        .then(data => {
+          setAllPosts(Array.isArray(data) ? data : []);
+          setLoading(false);
+        })
+        .catch(() => setLoading(false));
+    }
+  }, [slug]);
 
   const filteredPosts = allPosts.filter(post =>
     post.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     post.category?.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  // Simple Markdown-style renderer
+  const renderContent = (content: string) => {
+    if (!content) return null;
+    return content.split('\n').map((line, i) => {
+      if (line.startsWith('### ')) return <h3 key={i}>{line.replace('### ', '')}</h3>;
+      if (line.startsWith('## ')) return <h2 key={i}>{line.replace('## ', '')}</h2>;
+      if (line.startsWith('# ')) return <h1 key={i}>{line.replace('# ', '')}</h1>;
+      if (line.trim() === '') return <br key={i} />;
+      return <p key={i}>{line}</p>;
+    });
+  };
+
+  if (slug && currentPost) {
+    return (
+      <div className="blog-page">
+        <div className="blog-detail-header py-xl" style={{ backgroundImage: `url(${currentPost.image})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+          <div className="header-overlay"></div>
+          <div className="container relative z-10 text-white text-center">
+            <span className="blog-category-badge mb-md inline-block">{currentPost.category}</span>
+            <h1 className="text-white mb-md">{currentPost.title}</h1>
+            <div className="blog-meta text-white justify-center">
+              <span><Calendar size={14} /> {new Date(currentPost.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+              <span><User size={14} /> {currentPost.author}</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="container section">
+          <div className="blog-detail-layout">
+            <div className="blog-content card">
+              <div className="post-body">
+                {renderContent(currentPost.body)}
+              </div>
+              <div className="post-footer mt-xl pt-lg border-t">
+                <Link to="/blog" className="btn-outline">
+                  <ChevronRight size={16} style={{ transform: 'rotate(180deg)' }} /> Back to Blog
+                </Link>
+              </div>
+            </div>
+            
+            <aside className="blog-sidebar">
+              <div className="sidebar-widget cta-widget text-center">
+                <h3>Want to visit {currentPost.country || 'Africa'}?</h3>
+                <p className="mb-sm text-sm">Our safari experts can help you plan a trip to see these sights in person.</p>
+                <button className="btn-primary w-full" onClick={() => openQuoteModal({ destination: currentPost.country || 'African Safari' })}>
+                  Request a Quote
+                </button>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="blog-page">
@@ -102,17 +172,6 @@ const Blog: React.FC = () => {
             <p className="mb-sm text-sm">Let our experts design your perfect African adventure.</p>
             <button className="btn-primary w-full" onClick={() => openQuoteModal()}>
               Request a Quote
-            </button>
-          </div>
-
-          {/* Wildlife Spotlight Teaser */}
-          <div className="sidebar-widget spotlight-widget">
-            <h3>Wildlife Spotlight</h3>
-            <img src="https://images.unsplash.com/photo-1549366021-9f761d450615?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Elephant" className="spotlight-img mb-sm rounded" />
-            <h4 className="mb-xs">The African Elephant</h4>
-            <p className="text-sm mb-sm text-gray-500">Discover safaris focused on elephant conservation in Amboseli.</p>
-            <button className="text-primary flex items-center gap-xs font-semibold text-sm" onClick={() => openQuoteModal({ destination: 'Amboseli Elephant Safari' })}>
-              See Elephant Safaris <ArrowRight size={14} />
             </button>
           </div>
 
