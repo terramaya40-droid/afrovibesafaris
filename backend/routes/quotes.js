@@ -1,10 +1,11 @@
 import express from 'express';
 import Quote from '../models/Quote.js';
+import verifyToken from '../middleware/auth.js';
 
 const router = express.Router();
 
-// Get all quote requests (Admin)
-router.get('/', async (req, res) => {
+// Get all quote requests (Admin - Protected)
+router.get('/', verifyToken, async (req, res) => {
   try {
     const quotes = await Quote.find({}).sort({ createdAt: -1 });
     res.json(quotes);
@@ -24,8 +25,8 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Update quote status (Admin)
-router.patch('/:id/status', async (req, res) => {
+// Update quote status (Admin - Protected)
+router.patch('/:id/status', verifyToken, async (req, res) => {
   try {
     const { status } = req.body;
     const updatedQuote = await Quote.findByIdAndUpdate(

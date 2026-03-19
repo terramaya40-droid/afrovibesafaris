@@ -1,5 +1,6 @@
 import express from 'express';
 import Package from '../models/Package.js';
+import verifyToken from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -16,11 +17,42 @@ router.get('/', async (req, res) => {
 // Get packages by country
 router.get('/:country', async (req, res) => {
   try {
-    // Basic regex match for countries (e.g. Kenya matches "Kenya & Tanzania")
     const packages = await Package.find({ country: new RegExp(req.params.country, 'i') });
     res.json(packages);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching country packages', error: error.message });
+  }
+});
+
+// Create package (Admin)
+router.post('/', verifyToken, async (req, res) => {
+  try {
+    const pkg = new Package(req.body);
+    const saved = await pkg.save();
+    res.status(201).json(saved);
+  } catch (error) {
+    res.status(400).json({ message: 'Error creating package', error: error.message });
+  }
+});
+
+// Update package (Admin)
+router.put('/:id', verifyToken, async (req, res) => {
+  try {
+    const updated = await Package.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+    if (!updated) return res.status(404).json({ message: 'Package not found' });
+    res.json(updated);
+  } catch (error) {
+    res.status(400).json({ message: 'Error updating package', error: error.message });
+  }
+});
+
+// Delete package (Admin)
+router.delete('/:id', verifyToken, async (req, res) => {
+  try {
+    await Package.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Package deleted' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting package', error: error.message });
   }
 });
 

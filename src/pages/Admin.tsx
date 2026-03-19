@@ -1,33 +1,230 @@
-import React, { useState, useEffect } from 'react';
-import { LayoutDashboard, Users, FileText, CheckCircle, Trash2, Edit } from 'lucide-react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
+import {
+  LayoutDashboard, Users, FileText, CheckCircle,
+  Trash2, Edit, Plus, X, LogOut, BookOpen
+} from 'lucide-react';
 import { API_BASE_URL } from '../config';
 import './Admin.css';
 
+const getAuthHeader = () => ({
+  'Content-Type': 'application/json',
+  'Authorization': `Bearer ${localStorage.getItem('afrivibe_token')}`
+});
+
+// ——— EMPTY FORM TEMPLATES ——————————————————————————————————————
+const emptyPackage = {
+  title: '', country: '', description: '', image: '', packageType: 'Classical',
+  category: 'Safari', duration: '5 Nights',
+  pricing: { nonRes: '', res: '', cit: '' },
+  rating: 5.0, reviewCount: 0
+};
+const emptyArticle = {
+  title: '', slug: '', excerpt: '', body: '', author: 'AfriVibe Team',
+  category: 'Destination Spotlight', image: '', country: '', published: true
+};
+
+// ——— PACKAGE FORM MODAL ——————————————————————————————————————————
+const PackageModal: React.FC<{ pkg: any; onClose: () => void; onSave: () => void }> = ({ pkg, onClose, onSave }) => {
+  const [form, setForm] = useState(pkg);
+  const [saving, setSaving] = useState(false);
+  const isEdit = !!pkg._id;
+
+  const set = (field: string, val: any) => setForm((p: any) => ({ ...p, [field]: val }));
+  const setPricing = (key: string, val: string) => setForm((p: any) => ({ ...p, pricing: { ...p.pricing, [key]: val } }));
+
+  const handleSave = async () => {
+    setSaving(true);
+    const url = isEdit ? `${API_BASE_URL}/packages/${pkg._id}` : `${API_BASE_URL}/packages`;
+    const method = isEdit ? 'PUT' : 'POST';
+    await fetch(url, { method, headers: getAuthHeader(), body: JSON.stringify(form) });
+    setSaving(false);
+    onSave();
+    onClose();
+  };
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content cms-modal" onClick={e => e.stopPropagation()}>
+        <div className="cms-modal-header">
+          <h3>{isEdit ? 'Edit Package' : 'Add New Package'}</h3>
+          <button onClick={onClose}><X size={20} /></button>
+        </div>
+        <div className="cms-modal-body">
+          <div className="form-group"><label>Title</label><input value={form.title} onChange={e => set('title', e.target.value)} /></div>
+          <div className="form-group-row">
+            <div className="form-group"><label>Country</label>
+              <select value={form.country} onChange={e => set('country', e.target.value)}>
+                <option value="">Select Country</option>
+                {['Kenya', 'Tanzania', 'Uganda', 'Rwanda', 'Botswana'].map(c => <option key={c} value={c}>{c}</option>)}
+              </select>
+            </div>
+            <div className="form-group"><label>Duration</label><input value={form.duration} onChange={e => set('duration', e.target.value)} placeholder="e.g. 5 Nights" /></div>
+          </div>
+          <div className="form-group-row">
+            <div className="form-group"><label>Safari Type</label>
+              <select value={form.packageType} onChange={e => set('packageType', e.target.value)}>
+                {['Classical', 'Family', 'Couple', 'Inclusive', 'Adventure', 'Luxury'].map(t => <option key={t} value={t}>{t}</option>)}
+              </select>
+            </div>
+            <div className="form-group"><label>Category</label>
+              <select value={form.category} onChange={e => set('category', e.target.value)}>
+                {['Safari', 'Beach', 'Hiking', 'Nature', 'Adventure'].map(c => <option key={c} value={c}>{c}</option>)}
+              </select>
+            </div>
+          </div>
+          <div className="form-group"><label>Description</label><textarea rows={3} value={form.description} onChange={e => set('description', e.target.value)} /></div>
+          <div className="form-group"><label>Image URL</label><input value={form.image} onChange={e => set('image', e.target.value)} placeholder="https://images.unsplash.com/..." /></div>
+          {form.image && <img src={form.image} alt="preview" className="img-preview" />}
+          <p className="form-section-label">Pricing Tiers</p>
+          <div className="form-group-row">
+            <div className="form-group"><label>Non-Resident (USD)</label><input value={form.pricing.nonRes} onChange={e => setPricing('nonRes', e.target.value)} placeholder="$2,500" /></div>
+            <div className="form-group"><label>Resident</label><input value={form.pricing.res} onChange={e => setPricing('res', e.target.value)} placeholder="KES 90,000" /></div>
+            <div className="form-group"><label>Citizen</label><input value={form.pricing.cit} onChange={e => setPricing('cit', e.target.value)} placeholder="KES 60,000" /></div>
+          </div>
+        </div>
+        <div className="cms-modal-footer">
+          <button className="btn-outline" onClick={onClose}>Cancel</button>
+          <button className="btn-primary" onClick={handleSave} disabled={saving}>{saving ? 'Saving...' : 'Save Package'}</button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ——— ARTICLE FORM MODAL ——————————————————————————————————————————
+const ArticleModal: React.FC<{ article: any; onClose: () => void; onSave: () => void }> = ({ article, onClose, onSave }) => {
+  const [form, setForm] = useState(article);
+  const [saving, setSaving] = useState(false);
+  const isEdit = !!article._id;
+
+  const set = (field: string, val: any) => setForm((p: any) => ({ ...p, [field]: val }));
+
+  const handleSave = async () => {
+    setSaving(true);
+    const url = isEdit ? `${API_BASE_URL}/articles/${article._id}` : `${API_BASE_URL}/articles`;
+    const method = isEdit ? 'PUT' : 'POST';
+    await fetch(url, { method, headers: getAuthHeader(), body: JSON.stringify(form) });
+    setSaving(false);
+    onSave();
+    onClose();
+  };
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content cms-modal" onClick={e => e.stopPropagation()}>
+        <div className="cms-modal-header">
+          <h3>{isEdit ? 'Edit Article' : 'Add New Article'}</h3>
+          <button onClick={onClose}><X size={20} /></button>
+        </div>
+        <div className="cms-modal-body">
+          <div className="form-group"><label>Title</label><input value={form.title} onChange={e => set('title', e.target.value)} /></div>
+          <div className="form-group-row">
+            <div className="form-group"><label>Slug (URL)</label><input value={form.slug} onChange={e => set('slug', e.target.value)} placeholder="my-article-slug" /></div>
+            <div className="form-group"><label>Author</label><input value={form.author} onChange={e => set('author', e.target.value)} /></div>
+          </div>
+          <div className="form-group-row">
+            <div className="form-group"><label>Category</label>
+              <select value={form.category} onChange={e => set('category', e.target.value)}>
+                {['Travel Tips', 'Destination Spotlight', 'Wildlife & Conservation', 'Inclusive Travel', 'Safari Guide'].map(c => <option key={c} value={c}>{c}</option>)}
+              </select>
+            </div>
+            <div className="form-group"><label>Country (optional)</label>
+              <select value={form.country} onChange={e => set('country', e.target.value)}>
+                <option value="">All Countries</option>
+                {['Kenya', 'Tanzania', 'Uganda', 'Rwanda', 'Botswana'].map(c => <option key={c} value={c}>{c}</option>)}
+              </select>
+            </div>
+          </div>
+          <div className="form-group"><label>Excerpt (short description)</label><textarea rows={2} value={form.excerpt} onChange={e => set('excerpt', e.target.value)} /></div>
+          <div className="form-group"><label>Image URL</label><input value={form.image} onChange={e => set('image', e.target.value)} /></div>
+          {form.image && <img src={form.image} alt="preview" className="img-preview" />}
+          <div className="form-group"><label>Body (Markdown supported)</label><textarea rows={10} value={form.body} onChange={e => set('body', e.target.value)} className="markdown-editor" /></div>
+          <div className="form-group checkbox-group">
+            <label><input type="checkbox" checked={form.published} onChange={e => set('published', e.target.checked)} /> Published (visible on public site)</label>
+          </div>
+        </div>
+        <div className="cms-modal-footer">
+          <button className="btn-outline" onClick={onClose}>Cancel</button>
+          <button className="btn-primary" onClick={handleSave} disabled={saving}>{saving ? 'Saving...' : 'Save Article'}</button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ——— MAIN ADMIN PAGE ——————————————————————————————————————————————
 const Admin: React.FC = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('quotes');
   const [quotes, setQuotes] = useState<any[]>([]);
   const [reviews, setReviews] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [packages, setPackages] = useState<any[]>([]);
+  const [articles, setArticles] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    // Determine which API to fetch based on activeTab
-    if (activeTab === 'quotes') {
-      setLoading(true);
-      fetch(`${API_BASE_URL}/quotes`)
-        .then(res => res.json())
-        .then(data => { setQuotes(data); setLoading(false); })
-        .catch(err => { console.error(err); setLoading(false); });
-    } else if (activeTab === 'reviews') {
-      setLoading(true);
-      fetch(`${API_BASE_URL}/testimonials/admin`)
-        .then(res => res.json())
-        .then(data => { setReviews(data); setLoading(false); })
-        .catch(err => { console.error(err); setLoading(false); });
+  // Modals
+  const [pkgModal, setPkgModal] = useState<any>(null);
+  const [artModal, setArtModal] = useState<any>(null);
+
+  const fetchTab = useCallback(async (tab: string) => {
+    setLoading(true);
+    try {
+      if (tab === 'quotes') {
+        const r = await fetch(`${API_BASE_URL}/quotes`, { headers: getAuthHeader() });
+        setQuotes(await r.json());
+      } else if (tab === 'reviews') {
+        const r = await fetch(`${API_BASE_URL}/testimonials/admin`, { headers: getAuthHeader() });
+        setReviews(await r.json());
+      } else if (tab === 'packages') {
+        const r = await fetch(`${API_BASE_URL}/packages`);
+        setPackages(await r.json());
+      } else if (tab === 'articles') {
+        const r = await fetch(`${API_BASE_URL}/articles/admin/all`, { headers: getAuthHeader() });
+        setArticles(await r.json());
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
-  }, [activeTab]);
+  }, []);
+
+  useEffect(() => { fetchTab(activeTab); }, [activeTab, fetchTab]);
+
+  const handleLogout = () => {
+    localStorage.removeItem('afrivibe_token');
+    navigate('/admin/login');
+  };
+
+  const updateQuoteStatus = async (id: string, status: string) => {
+    await fetch(`${API_BASE_URL}/quotes/${id}/status`, { method: 'PATCH', headers: getAuthHeader(), body: JSON.stringify({ status }) });
+    fetchTab('quotes');
+  };
+
+  const updateReviewStatus = async (id: string, status: string) => {
+    await fetch(`${API_BASE_URL}/testimonials/${id}/status`, { method: 'PATCH', headers: getAuthHeader(), body: JSON.stringify({ status }) });
+    fetchTab('reviews');
+  };
+
+  const deletePackage = async (id: string) => {
+    if (!confirm('Delete this package?')) return;
+    await fetch(`${API_BASE_URL}/packages/${id}`, { method: 'DELETE', headers: getAuthHeader() });
+    fetchTab('packages');
+  };
+
+  const deleteArticle = async (id: string) => {
+    if (!confirm('Delete this article?')) return;
+    await fetch(`${API_BASE_URL}/articles/${id}`, { method: 'DELETE', headers: getAuthHeader() });
+    fetchTab('articles');
+  };
 
   return (
     <div className="admin-page">
+      {/* Modals */}
+      {pkgModal && <PackageModal pkg={pkgModal} onClose={() => setPkgModal(null)} onSave={() => fetchTab('packages')} />}
+      {artModal && <ArticleModal article={artModal} onClose={() => setArtModal(null)} onSave={() => fetchTab('articles')} />}
+
       <div className="admin-sidebar">
         <h2 className="admin-logo">AfriVibe <span>Admin</span></h2>
         <nav className="admin-nav">
@@ -35,128 +232,157 @@ const Admin: React.FC = () => {
             <FileText size={20} /> Quote Requests
           </button>
           <button className={`admin-nav-item ${activeTab === 'reviews' ? 'active' : ''}`} onClick={() => setActiveTab('reviews')}>
-            <CheckCircle size={20} /> Review Moderation
+            <CheckCircle size={20} /> Reviews
           </button>
-          <button className={`admin-nav-item ${activeTab === 'destinations' ? 'active' : ''}`} onClick={() => setActiveTab('destinations')}>
-            <LayoutDashboard size={20} /> Packages & Dest.
+          <button className={`admin-nav-item ${activeTab === 'packages' ? 'active' : ''}`} onClick={() => setActiveTab('packages')}>
+            <LayoutDashboard size={20} /> Packages
+          </button>
+          <button className={`admin-nav-item ${activeTab === 'articles' ? 'active' : ''}`} onClick={() => setActiveTab('articles')}>
+            <BookOpen size={20} /> Blog Articles
           </button>
         </nav>
+        <button className="admin-nav-item logout-btn" onClick={handleLogout}>
+          <LogOut size={20} /> Logout
+        </button>
       </div>
 
-      <div className="admin-content bg-gray-100">
+      <div className="admin-content">
         <div className="admin-header">
-          <h2>Dashboard</h2>
-          <div className="admin-user"><Users size={20} /> Admin User</div>
+          <h2>{activeTab === 'quotes' ? 'Quote Requests' : activeTab === 'reviews' ? 'Review Moderation' : activeTab === 'packages' ? 'Package Manager' : 'Blog Articles'}</h2>
+          <div className="admin-user"><Users size={20} /> Admin</div>
         </div>
 
         <div className="admin-main section">
+
+          {/* ——— QUOTES ——— */}
           {activeTab === 'quotes' && (
             <div className="admin-panel animation-fade">
-              <h3>Recent Quote Requests</h3>
-              <p className="text-gray-500 mb-lg">Manage incoming inquiries and generate PDF quotes.</p>
-              
+              <p className="text-gray-500 mb-lg">Manage incoming inquiries. Update their status as you process each quote.</p>
               <div className="table-wrapper">
                 <table className="admin-table">
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Client Name</th>
-                      <th>Destination(s)</th>
-                      <th>Type</th>
-                      <th>Travel Dates</th>
-                      <th>Status</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
+                  <thead><tr><th>ID</th><th>Client</th><th>Destination</th><th>Type</th><th>Dates</th><th>Status</th><th>Actions</th></tr></thead>
                   <tbody>
-                    {loading ? (
-                      <tr><td colSpan={7} className="text-center">Loading Data...</td></tr>
-                    ) : quotes.length === 0 ? (
-                      <tr><td colSpan={7} className="text-center">No quotes available.</td></tr>
-                    ) : quotes.map((q: any) => (
-                      <tr key={q._id}>
-                        <td><strong>{q._id.substring(q._id.length - 6)}</strong></td>
-                        <td>
-                          {q.name}<br/>
-                          <span className="text-sm text-gray-500">{q.email}</span>
-                        </td>
-                        <td>{q.destination}</td>
-                        <td>{q.safariType}</td>
-                        <td>{q.dates}</td>
-                        <td>
-                          <span className={`status-badge status-${q.status.replace(' ', '').toLowerCase()}`}>
-                            {q.status}
-                          </span>
-                        </td>
-                        <td className="actions-cell">
-                          <button className="btn-sm btn-outline text-primary border-primary">Generate PDF</button>
-                          <button className="btn-sm btn-outline"><Edit size={14}/></button>
-                        </td>
-                      </tr>
-                    ))}
+                    {loading ? <tr><td colSpan={7} className="text-center">Loading...</td></tr>
+                      : quotes.length === 0 ? <tr><td colSpan={7} className="text-center">No quotes yet.</td></tr>
+                      : quotes.map(q => (
+                        <tr key={q._id}>
+                          <td><strong>…{q._id.slice(-6)}</strong></td>
+                          <td>{q.name}<br /><span className="text-sm text-gray-500">{q.email}</span></td>
+                          <td>{q.destination}</td>
+                          <td>{q.safariType}</td>
+                          <td>{q.dates}</td>
+                          <td><span className={`status-badge status-${q.status.replace(/\s/g, '').toLowerCase()}`}>{q.status}</span></td>
+                          <td className="actions-cell">
+                            <select value={q.status} onChange={e => updateQuoteStatus(q._id, e.target.value)} className="status-select">
+                              {['Pending', 'Quote Sent', 'Booked', 'Cancelled'].map(s => <option key={s}>{s}</option>)}
+                            </select>
+                          </td>
+                        </tr>
+                      ))}
                   </tbody>
                 </table>
               </div>
             </div>
           )}
 
+          {/* ——— REVIEWS ——— */}
           {activeTab === 'reviews' && (
             <div className="admin-panel animation-fade">
-              <h3>Review Moderation</h3>
               <p className="text-gray-500 mb-lg">Approve or reject customer reviews before they appear publicly.</p>
-              
               <div className="table-wrapper">
                 <table className="admin-table">
-                  <thead>
-                    <tr>
-                      <th>User</th>
-                      <th>Package / Destination</th>
-                      <th>Rating</th>
-                      <th>Review Snippet</th>
-                      <th>Status</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
+                  <thead><tr><th>User</th><th>Package</th><th>Rating</th><th>Review</th><th>Status</th><th>Actions</th></tr></thead>
                   <tbody>
-                    {loading ? (
-                      <tr><td colSpan={6} className="text-center">Loading Data...</td></tr>
-                    ) : reviews.length === 0 ? (
-                      <tr><td colSpan={6} className="text-center">No reviews available.</td></tr>
-                    ) : reviews.map((r: any) => (
-                      <tr key={r._id}>
-                        <td><strong>{r.userName}</strong></td>
-                        <td>{r.packageTitle || 'General Safari'}</td>
-                        <td>{r.rating} Stars</td>
-                        <td className="w-1/3">"{r.reviewText}"</td>
-                        <td>
-                          <span className={`status-badge ${r.status === 'Approved' ? 'status-booked' : 'status-pending'}`}>
-                            {r.status}
-                          </span>
-                        </td>
-                        <td className="actions-cell">
-                          {r.status === 'Pending Approval' && (
-                            <button className="btn-sm btn-primary">Approve</button>
-                          )}
-                          <button className="btn-sm btn-outline text-red border-red"><Trash2 size={14}/></button>
-                        </td>
-                      </tr>
-                    ))}
+                    {loading ? <tr><td colSpan={6} className="text-center">Loading...</td></tr>
+                      : reviews.length === 0 ? <tr><td colSpan={6} className="text-center">No reviews yet.</td></tr>
+                      : reviews.map(r => (
+                        <tr key={r._id}>
+                          <td><strong>{r.userName}</strong></td>
+                          <td>{r.packageTitle || 'General'}</td>
+                          <td>{'★'.repeat(r.rating)}</td>
+                          <td className="review-cell">"{r.reviewText}"</td>
+                          <td><span className={`status-badge ${r.status === 'Approved' ? 'status-booked' : 'status-pending'}`}>{r.status}</span></td>
+                          <td className="actions-cell">
+                            {r.status !== 'Approved' && <button className="btn-sm btn-primary" onClick={() => updateReviewStatus(r._id, 'Approved')}>Approve</button>}
+                            {r.status === 'Approved' && <button className="btn-sm btn-outline" onClick={() => updateReviewStatus(r._id, 'Pending Approval')}>Unpublish</button>}
+                            <button className="btn-sm btn-outline text-red" onClick={() => updateReviewStatus(r._id, 'Rejected')}><Trash2 size={14} /></button>
+                          </td>
+                        </tr>
+                      ))}
                   </tbody>
                 </table>
               </div>
             </div>
           )}
 
-          {activeTab === 'destinations' && (
-            <div className="admin-panel animation-fade text-center py-xl">
-              <LayoutDashboard size={48} className="mx-auto mb-md text-gray-500" />
-              <h3>Package Management</h3>
-              <p className="text-gray-500 max-w-2xl mx-auto mb-lg">
-                This section allows the operator to add new countries, update dynamic pricing across Resident, Citizen, and Non-Resident tiers, and manage the image gallery.
-              </p>
-              <button className="btn-primary">Add New Package</button>
+          {/* ——— PACKAGES ——— */}
+          {activeTab === 'packages' && (
+            <div className="admin-panel animation-fade">
+              <div className="panel-toolbar">
+                <p className="text-gray-500">Create, edit, or remove safari packages. Changes appear instantly on the public site.</p>
+                <button className="btn-primary btn-sm" onClick={() => setPkgModal({ ...emptyPackage })}>
+                  <Plus size={16} /> Add Package
+                </button>
+              </div>
+              <div className="table-wrapper">
+                <table className="admin-table">
+                  <thead><tr><th>Image</th><th>Title</th><th>Country</th><th>Type</th><th>Non-Res Price</th><th>Actions</th></tr></thead>
+                  <tbody>
+                    {loading ? <tr><td colSpan={6} className="text-center">Loading...</td></tr>
+                      : packages.length === 0 ? <tr><td colSpan={6} className="text-center">No packages yet.</td></tr>
+                      : packages.map(p => (
+                        <tr key={p._id}>
+                          <td><img src={p.image} alt={p.title} className="table-thumb" /></td>
+                          <td><strong>{p.title}</strong><br /><span className="text-sm text-gray-500">{p.duration}</span></td>
+                          <td>{p.country}</td>
+                          <td>{p.packageType}</td>
+                          <td>{p.pricing?.nonRes}</td>
+                          <td className="actions-cell">
+                            <button className="btn-sm btn-outline" onClick={() => setPkgModal(p)}><Edit size={14} /></button>
+                            <button className="btn-sm btn-outline text-red" onClick={() => deletePackage(p._id)}><Trash2 size={14} /></button>
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           )}
+
+          {/* ——— ARTICLES ——— */}
+          {activeTab === 'articles' && (
+            <div className="admin-panel animation-fade">
+              <div className="panel-toolbar">
+                <p className="text-gray-500">Write and manage blog articles. Published articles appear on the public Blog page.</p>
+                <button className="btn-primary btn-sm" onClick={() => setArtModal({ ...emptyArticle })}>
+                  <Plus size={16} /> New Article
+                </button>
+              </div>
+              <div className="table-wrapper">
+                <table className="admin-table">
+                  <thead><tr><th>Image</th><th>Title</th><th>Category</th><th>Author</th><th>Published</th><th>Actions</th></tr></thead>
+                  <tbody>
+                    {loading ? <tr><td colSpan={6} className="text-center">Loading...</td></tr>
+                      : articles.length === 0 ? <tr><td colSpan={6} className="text-center">No articles yet.</td></tr>
+                      : articles.map(a => (
+                        <tr key={a._id}>
+                          <td><img src={a.image} alt={a.title} className="table-thumb" /></td>
+                          <td><strong>{a.title}</strong><br /><span className="text-sm text-gray-500">/{a.slug}</span></td>
+                          <td>{a.category}</td>
+                          <td>{a.author}</td>
+                          <td><span className={`status-badge ${a.published ? 'status-booked' : 'status-pending'}`}>{a.published ? 'Live' : 'Draft'}</span></td>
+                          <td className="actions-cell">
+                            <button className="btn-sm btn-outline" onClick={() => setArtModal(a)}><Edit size={14} /></button>
+                            <button className="btn-sm btn-outline text-red" onClick={() => deleteArticle(a._id)}><Trash2 size={14} /></button>
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
         </div>
       </div>
     </div>

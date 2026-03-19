@@ -1,59 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useStore } from '../store/useStore';
 import { Search, ChevronRight, Calendar, User, ArrowRight } from 'lucide-react';
+import { API_BASE_URL } from '../config';
 import './Blog.css';
-
-const MOCK_POSTS = [
-  {
-    id: 1,
-    title: 'The Great Migration: When and Where to Go',
-    excerpt: 'Everything you need to know to witness the spectacular movement of millions of wildebeest across the Serengeti and Maasai Mara.',
-    author: 'David L.',
-    date: 'Oct 15, 2025',
-    category: 'Travel Tips',
-    image: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    slug: 'great-migration-guide'
-  },
-  {
-    id: 2,
-    title: 'Accessible Safaris: How We Make Africa Inclusive',
-    excerpt: 'A deep dive into our specially equipped vehicles and trained guides that ensure everyone can experience the magic of the bush.',
-    author: 'Sarah Jenkins',
-    date: 'Sep 28, 2025',
-    category: 'Inclusive Travel',
-    image: 'https://images.unsplash.com/photo-1534008897995-27a23e859048?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    slug: 'accessible-safaris-inclusive-africa'
-  },
-  {
-    id: 3,
-    title: '5 Reasons Uganda Should Be Your Next Destination',
-    excerpt: 'Beyond gorillas, discover the stunning landscapes, vibrant culture, and diverse wildlife of the Pearl of Africa.',
-    author: 'Michael K.',
-    date: 'Sep 10, 2025',
-    category: 'Destination Spotlight',
-    image: 'https://images.unsplash.com/photo-1574709756113-58134eb92404?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    slug: '5-reasons-to-visit-uganda'
-  },
-  {
-    id: 4,
-    title: 'Wildlife Spotlight: The African Elephant',
-    excerpt: 'Learn about the complex social structures, immense intelligence, and conservation status of these gentle giants.',
-    author: 'Jane G.',
-    date: 'Aug 22, 2025',
-    category: 'Wildlife & Conservation',
-    image: 'https://images.unsplash.com/photo-1549366021-9f761d450615?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    slug: 'wildlife-spotlight-african-elephant'
-  }
-];
 
 const Blog: React.FC = () => {
   const { openQuoteModal } = useStore();
   const [searchTerm, setSearchTerm] = useState('');
+  const [allPosts, setAllPosts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const filteredPosts = MOCK_POSTS.filter(post => 
-    post.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-    post.category.toLowerCase().includes(searchTerm.toLowerCase())
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/articles`)
+      .then(res => res.json())
+      .then(data => {
+        setAllPosts(Array.isArray(data) ? data : []);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
+
+  const filteredPosts = allPosts.filter(post =>
+    post.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    post.category?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -66,20 +36,20 @@ const Blog: React.FC = () => {
       </div>
 
       <div className="container section blog-layout">
-        
-        {/* Main Content */}
         <div className="blog-main">
-          {filteredPosts.length > 0 ? (
+          {loading ? (
+            <p className="text-center py-xl">Loading articles...</p>
+          ) : filteredPosts.length > 0 ? (
             <div className="posts-grid">
               {filteredPosts.map(post => (
-                <article key={post.id} className="blog-card">
+                <article key={post._id || post.id} className="blog-card">
                   <Link to={`/blog/${post.slug}`} className="blog-card-image-link">
                     <img src={post.image} alt={post.title} className="blog-card-image" />
                     <span className="blog-category-badge">{post.category}</span>
                   </Link>
                   <div className="blog-card-content">
                     <div className="blog-meta">
-                      <span><Calendar size={14} /> {post.date}</span>
+                      <span><Calendar size={14} /> {post.date || new Date(post.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
                       <span><User size={14} /> {post.author}</span>
                     </div>
                     <Link to={`/blog/${post.slug}`}>

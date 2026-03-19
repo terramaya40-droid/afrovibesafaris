@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout/Layout';
+import ProtectedRoute from './components/ProtectedRoute';
 import Home from './pages/Home';
 import Destinations from './pages/Destinations';
 import Country from './pages/Country';
@@ -9,22 +10,39 @@ import TripPlanner from './pages/TripPlanner';
 import VirtualSafari from './pages/VirtualSafari';
 import Blog from './pages/Blog';
 import Admin from './pages/Admin';
+import AdminLogin from './pages/AdminLogin';
 
 const App: React.FC = () => {
   return (
     <Router>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/destinations" element={<Destinations />} />
-          <Route path="/destinations/:country" element={<Country />} />
-          <Route path="/destinations/:country/:destinationId" element={<DestinationDetail />} />
-          <Route path="/trip-planner" element={<TripPlanner />} />
-          <Route path="/virtual-safari" element={<VirtualSafari />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/admin" element={<Admin />} />
-        </Routes>
-      </Layout>
+      <Routes>
+        {/* Admin login — outside Layout (full-screen) */}
+        <Route path="/admin/login" element={<AdminLogin />} />
+
+        {/* Protected admin dashboard — outside Layout */}
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute>
+              <Admin />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* All public pages inside the main Layout (Navbar + Footer) */}
+        <Route element={<Layout><></></Layout>} path="*">
+          <Route index element={<Layout><Home /></Layout>} />
+        </Route>
+
+        <Route path="/" element={<Layout><Home /></Layout>} />
+        <Route path="/destinations" element={<Layout><Destinations /></Layout>} />
+        <Route path="/destinations/:country" element={<Layout><Country /></Layout>} />
+        <Route path="/destinations/:country/:destinationId" element={<Layout><DestinationDetail /></Layout>} />
+        <Route path="/trip-planner" element={<Layout><TripPlanner /></Layout>} />
+        <Route path="/virtual-safari" element={<Layout><VirtualSafari /></Layout>} />
+        <Route path="/blog" element={<Layout><Blog /></Layout>} />
+        <Route path="/blog/:slug" element={<Layout><Blog /></Layout>} />
+      </Routes>
     </Router>
   );
 };

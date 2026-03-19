@@ -1,5 +1,6 @@
 import express from 'express';
 import Testimonial from '../models/Testimonial.js';
+import verifyToken from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -13,8 +14,8 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Get all testimonials (Admin Moderation)
-router.get('/admin', async (req, res) => {
+// Get all testimonials (Admin Moderation - Protected)
+router.get('/admin', verifyToken, async (req, res) => {
   try {
     const testimonials = await Testimonial.find({}).sort({ createdAt: -1 });
     res.json(testimonials);
@@ -34,8 +35,8 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Admin update status (Approve/Reject)
-router.patch('/:id/status', async (req, res) => {
+// Admin update status (Approve/Reject - Protected)
+router.patch('/:id/status', verifyToken, async (req, res) => {
   try {
     const { status } = req.body;
     const updated = await Testimonial.findByIdAndUpdate(
