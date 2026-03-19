@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard, Users, FileText, CheckCircle,
-  Trash2, Edit, Plus, X, LogOut, BookOpen
+  Trash2, Edit, Plus, X, LogOut, BookOpen, Map
 } from 'lucide-react';
 import { API_BASE_URL } from '../config';
 import './Admin.css';
@@ -20,8 +20,16 @@ const emptyPackage = {
   rating: 5.0, reviewCount: 0
 };
 const emptyArticle = {
-  title: '', slug: '', excerpt: '', body: '', author: 'AfriVibe Team',
-  category: 'Destination Spotlight', image: '', country: '', published: true
+  title: '', slug: '', excerpt: '', body: '', author: '',
+  category: 'Travel Tips', country: '', image: '', published: false
+};
+
+const emptyDestination = {
+  id: '', name: '', subtitle: '', description: '', image: ''
+};
+
+const emptyGalleryItem = {
+  image: '', title: '', location: ''
 };
 
 // ——— PACKAGE FORM MODAL ——————————————————————————————————————————
@@ -183,19 +191,121 @@ const ArticleModal: React.FC<{ article: any; onClose: () => void; onSave: () => 
   );
 };
 
+const DestinationModal: React.FC<{ dest: any; onClose: () => void; onSave: () => void }> = ({ dest, onClose, onSave }) => {
+  const [form, setForm] = useState(dest);
+  const [saving, setSaving] = useState(false);
+  const isEdit = !!dest._id;
+  const set = (field: string, val: any) => setForm((p: any) => ({ ...p, [field]: val }));
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onloadend = () => set('image', reader.result as string);
+    reader.readAsDataURL(file);
+  };
+
+  const handleSave = async () => {
+    setSaving(true);
+    await fetch(`${API_BASE_URL}/destinations`, { method: 'POST', headers: getAuthHeader(), body: JSON.stringify(form) });
+    setSaving(false);
+    onSave();
+    onClose();
+  };
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content cms-modal" onClick={e => e.stopPropagation()}>
+        <div className="cms-modal-header"><h3>{isEdit ? 'Edit Destination' : 'Add Destination'}</h3><button onClick={onClose}><X size={20} /></button></div>
+        <div className="cms-modal-body">
+          <div className="form-group"><label>ID (slug)</label><input value={form.id} onChange={e => set('id', e.target.value)} placeholder="kenya" disabled={isEdit} /></div>
+          <div className="form-group"><label>Name</label><input value={form.name} onChange={e => set('name', e.target.value)} placeholder="Kenya" /></div>
+          <div className="form-group"><label>Subtitle</label><input value={form.subtitle} onChange={e => set('subtitle', e.target.value)} placeholder="The Pride of Africa" /></div>
+          <div className="form-group"><label>Description</label><textarea rows={3} value={form.description} onChange={e => set('description', e.target.value)} /></div>
+          <div className="form-group">
+            <label>Banner Image</label>
+            <div className="image-upload-wrapper">
+              <input type="file" accept="image/*" onChange={handleImageUpload} className="file-input" />
+              <div className="or-divider"><span>OR</span></div>
+              <input value={form.image} onChange={e => set('image', e.target.value)} placeholder="URL..." className="url-input" />
+            </div>
+          </div>
+          {form.image && <img src={form.image} alt="preview" className="img-preview" />}
+        </div>
+        <div className="cms-modal-footer">
+          <button className="btn-outline" onClick={onClose}>Cancel</button>
+          <button className="btn-primary" onClick={handleSave} disabled={saving}>{saving ? 'Saving...' : 'Save'}</button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const GalleryModal: React.FC<{ item: any; onClose: () => void; onSave: () => void }> = ({ item, onClose, onSave }) => {
+  const [form, setForm] = useState(item);
+  const [saving, setSaving] = useState(false);
+  const isEdit = !!item._id;
+  const set = (field: string, val: any) => setForm((p: any) => ({ ...p, [field]: val }));
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onloadend = () => set('image', reader.result as string);
+    reader.readAsDataURL(file);
+  };
+
+  const handleSave = async () => {
+    setSaving(true);
+    await fetch(`${API_BASE_URL}/gallery`, { method: 'POST', headers: getAuthHeader(), body: JSON.stringify(form) });
+    setSaving(false);
+    onSave();
+    onClose();
+  };
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content cms-modal" onClick={e => e.stopPropagation()}>
+        <div className="cms-modal-header"><h3>{isEdit ? 'Edit Gallery Item' : 'Add Photo'}</h3><button onClick={onClose}><X size={20} /></button></div>
+        <div className="cms-modal-body">
+          <div className="form-group"><label>Title</label><input value={form.title} onChange={e => set('title', e.target.value)} /></div>
+          <div className="form-group"><label>Location</label><input value={form.location} onChange={e => set('location', e.target.value)} /></div>
+          <div className="form-group">
+            <label>Photo</label>
+            <div className="image-upload-wrapper">
+              <input type="file" accept="image/*" onChange={handleImageUpload} className="file-input" />
+              <div className="or-divider"><span>OR</span></div>
+              <input value={form.image} onChange={e => set('image', e.target.value)} placeholder="URL..." className="url-input" />
+            </div>
+          </div>
+          {form.image && <img src={form.image} alt="preview" className="img-preview" />}
+        </div>
+        <div className="cms-modal-footer">
+          <button className="btn-outline" onClick={onClose}>Cancel</button>
+          <button className="btn-primary" onClick={handleSave} disabled={saving}>{saving ? 'Saving...' : 'Save'}</button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // ——— MAIN ADMIN PAGE ——————————————————————————————————————————————
 const Admin: React.FC = () => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState('quotes');
+  const [activeTab, setActiveTab] = useState<'quotes' | 'reviews' | 'packages' | 'articles' | 'destinations' | 'gallery'>('quotes');
   const [quotes, setQuotes] = useState<any[]>([]);
   const [reviews, setReviews] = useState<any[]>([]);
   const [packages, setPackages] = useState<any[]>([]);
   const [articles, setArticles] = useState<any[]>([]);
+  const [destinations, setDestinations] = useState<any[]>([]);
+  const [gallery, setGallery] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
   // Modals
   const [pkgModal, setPkgModal] = useState<any>(null);
   const [artModal, setArtModal] = useState<any>(null);
+  const [destModal, setDestModal] = useState<any>(null);
+  const [galleryModal, setGalleryModal] = useState<any>(null);
 
   const fetchTab = useCallback(async (tab: string) => {
     setLoading(true);
@@ -212,6 +322,12 @@ const Admin: React.FC = () => {
       } else if (tab === 'articles') {
         const r = await fetch(`${API_BASE_URL}/articles/admin/all`, { headers: getAuthHeader() });
         setArticles(await r.json());
+      } else if (tab === 'destinations') {
+        const r = await fetch(`${API_BASE_URL}/destinations`);
+        setDestinations(await r.json());
+      } else if (tab === 'gallery') {
+        const r = await fetch(`${API_BASE_URL}/gallery`);
+        setGallery(await r.json());
       }
     } catch (err) {
       console.error(err);
@@ -224,7 +340,7 @@ const Admin: React.FC = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('afrivibe_token');
-    navigate('/admin/login');
+    navigate('/001/admin/login');
   };
 
   const updateQuoteStatus = async (id: string, status: string) => {
@@ -254,6 +370,8 @@ const Admin: React.FC = () => {
       {/* Modals */}
       {pkgModal && <PackageModal pkg={pkgModal} onClose={() => setPkgModal(null)} onSave={() => fetchTab('packages')} />}
       {artModal && <ArticleModal article={artModal} onClose={() => setArtModal(null)} onSave={() => fetchTab('articles')} />}
+      {destModal && <DestinationModal dest={destModal} onClose={() => setDestModal(null)} onSave={() => fetchTab('destinations')} />}
+      {galleryModal && <GalleryModal item={galleryModal} onClose={() => setGalleryModal(null)} onSave={() => fetchTab('gallery')} />}
 
       <div className="admin-sidebar">
         <h2 className="admin-logo">AfriVibe <span>Admin</span></h2>
@@ -270,6 +388,12 @@ const Admin: React.FC = () => {
           <button className={`admin-nav-item ${activeTab === 'articles' ? 'active' : ''}`} onClick={() => setActiveTab('articles')}>
             <BookOpen size={20} /> Blog Articles
           </button>
+          <button className={`admin-nav-item ${activeTab === 'destinations' ? 'active' : ''}`} onClick={() => setActiveTab('destinations')}>
+            <Map size={20} /> Destinations
+          </button>
+          <button className={`admin-nav-item ${activeTab === 'gallery' ? 'active' : ''}`} onClick={() => setActiveTab('gallery')}>
+            <Users size={20} /> Gallery
+          </button>
         </nav>
         <button className="admin-nav-item logout-btn" onClick={handleLogout}>
           <LogOut size={20} /> Logout
@@ -278,7 +402,14 @@ const Admin: React.FC = () => {
 
       <div className="admin-content">
         <div className="admin-header">
-          <h2>{activeTab === 'quotes' ? 'Quote Requests' : activeTab === 'reviews' ? 'Review Moderation' : activeTab === 'packages' ? 'Package Manager' : 'Blog Articles'}</h2>
+          <h2>
+            {activeTab === 'quotes' ? 'Quote Requests' 
+             : activeTab === 'reviews' ? 'Review Moderation' 
+             : activeTab === 'packages' ? 'Package Manager' 
+             : activeTab === 'articles' ? 'Blog Articles' 
+             : activeTab === 'destinations' ? 'Destination Manager' 
+             : 'Gallery Manager'}
+          </h2>
           <div className="admin-user"><Users size={20} /> Admin</div>
         </div>
 
@@ -404,6 +535,72 @@ const Admin: React.FC = () => {
                           <td className="actions-cell">
                             <button className="btn-sm btn-outline" onClick={() => setArtModal(a)}><Edit size={14} /></button>
                             <button className="btn-sm btn-outline text-red" onClick={() => deleteArticle(a._id)}><Trash2 size={14} /></button>
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          {/* ——— DESTINATIONS ——— */}
+          {activeTab === 'destinations' && (
+            <div className="admin-panel animation-fade">
+              <div className="panel-toolbar">
+                <p className="text-gray-500">Manage destination header content and banner images.</p>
+                <button className="btn-primary btn-sm" onClick={() => setDestModal({ ...emptyDestination })}>
+                  <Plus size={16} /> Add Destination
+                </button>
+              </div>
+              <div className="table-wrapper">
+                <table className="admin-table">
+                  <thead><tr><th>Image</th><th>Name</th><th>Subtitle</th><th>Actions</th></tr></thead>
+                  <tbody>
+                    {loading ? <tr><td colSpan={4} className="text-center">Loading...</td></tr>
+                      : destinations.length === 0 ? <tr><td colSpan={4} className="text-center">No destinations yet.</td></tr>
+                      : destinations.map(d => (
+                        <tr key={d._id}>
+                          <td><img src={d.image} alt={d.name} className="table-thumb" /></td>
+                          <td><strong>{d.name}</strong><br /><span className="text-sm text-gray-500">/{d.id}</span></td>
+                          <td>{d.subtitle}</td>
+                          <td className="actions-cell">
+                            <button className="btn-sm btn-outline" onClick={() => setDestModal(d)}><Edit size={14} /></button>
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          {/* ——— GALLERY ——— */}
+          {activeTab === 'gallery' && (
+            <div className="admin-panel animation-fade">
+              <div className="panel-toolbar">
+                <p className="text-gray-500">Manage the public gallery photos.</p>
+                <button className="btn-primary btn-sm" onClick={() => setGalleryModal({ ...emptyGalleryItem })}>
+                  <Plus size={16} /> Add Photo
+                </button>
+              </div>
+              <div className="table-wrapper">
+                <table className="admin-table">
+                  <thead><tr><th>Photo</th><th>Title</th><th>Location</th><th>Actions</th></tr></thead>
+                  <tbody>
+                    {loading ? <tr><td colSpan={4} className="text-center">Loading...</td></tr>
+                      : gallery.length === 0 ? <tr><td colSpan={4} className="text-center">No photos yet.</td></tr>
+                      : gallery.map(g => (
+                        <tr key={g._id}>
+                          <td><img src={g.image} alt={g.title} className="table-thumb" /></td>
+                          <td><strong>{g.title}</strong></td>
+                          <td>{g.location}</td>
+                          <td className="actions-cell">
+                            <button className="btn-sm btn-outline text-red" onClick={async () => {
+                              if (!confirm('Delete this photo?')) return;
+                              await fetch(`${API_BASE_URL}/gallery/${g._id}`, { method: 'DELETE', headers: getAuthHeader() });
+                              fetchTab('gallery');
+                            }}><Trash2 size={14} /></button>
                           </td>
                         </tr>
                       ))}

@@ -5,116 +5,59 @@ import { API_BASE_URL } from '../config';
 import './Country.css';
 
 // Mock data specific to a country
-const countryData: Record<string, any> = {
-  kenya: {
-    name: 'Kenya',
-    image: 'https://images.unsplash.com/photo-1547471080-7fc2dd0102ad?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
-    description: 'The undisputed heart of safari. From the iconic Maasai Mara to the pristine beaches of Diani.',
-    packages: [
-      {
-        id: 'mara-migration',
-        country: 'Kenya',
-        title: 'Maasai Mara Migration',
-        image: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?ixlib=rb-4.0.3',
-        description: 'Experience the great wildebeest migration in the world-famous Maasai Mara reserve.',
-        pricing: { 'Resident': 'KES 45,000', 'Citizen': 'KES 35,000', 'Non-Resident': '$1,200' },
-        rating: 4.9,
-        reviewCount: 128,
-        packageType: 'Classical',
-        category: 'Safari'
-      },
-      {
-        id: ' Amboseli-elephants',
-        country: 'Kenya',
-        title: 'Amboseli Elephant Safaris',
-        image: 'https://images.unsplash.com/photo-1549366021-9f761d450615?ixlib=rb-4.0.3',
-        description: 'Large herds of elephants with the majestic Mount Kilimanjaro as your backdrop.',
-        pricing: { 'Resident': 'KES 38,000', 'Citizen': 'KES 28,000', 'Non-Resident': '$950' },
-        rating: 4.8,
-        reviewCount: 84,
-        packageType: 'Family',
-        category: 'Safari'
-      },
-      {
-        id: 'diani-beach',
-        country: 'Kenya',
-        title: 'Diani Beach Retreat',
-        image: 'https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?ixlib=rb-4.0.3',
-        description: 'Relax on the white sandy beaches of the Indian Ocean after your safari adventure.',
-        pricing: { 'Resident': 'KES 25,000', 'Citizen': 'KES 20,000', 'Non-Resident': '$600' },
-        rating: 4.7,
-        reviewCount: 200,
-        packageType: 'Couple',
-        category: 'Beach'
-      },
-      {
-        id: 'inclusive-nairobi',
-        country: 'Kenya',
-        title: 'Accessible Nairobi Park',
-        image: 'https://images.unsplash.com/photo-1534008897995-27a23e859048?ixlib=rb-4.0.3',
-        description: 'A fully guided, wheelchair-accessible game drive in Nairobi National Park.',
-        pricing: { 'Resident': 'KES 15,000', 'Citizen': 'KES 10,000', 'Non-Resident': '$300' },
-        rating: 4.9,
-        reviewCount: 45,
-        packageType: 'Inclusive',
-        category: 'Safari'
-      }
-    ]
-  }
-};
-
 const Country: React.FC = () => {
   const { country } = useParams<{ country: string }>();
-  // Keep static banner info
-  const data = countryData[country?.toLowerCase() || 'kenya'] || {
-    name: country,
-    image: 'https://images.unsplash.com/photo-1547471080-7fc2dd0102ad?ixlib=rb-4.0.3',
-    description: `Explore the beautiful wildlife and sceneries of ${country}.`
-  };
-
+  const [destInfo, setDestInfo] = useState<any>(null);
   const [activeCategory, setActiveCategory] = useState('All');
   const [activeType, setActiveType] = useState('All');
   const [dbPackages, setDbPackages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/packages/${country || 'kenya'}`)
-      .then(res => res.json())
-      .then(data => {
-        setDbPackages(data);
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const [dRes, pRes] = await Promise.all([
+          fetch(`${API_BASE_URL}/destinations/${country || 'kenya'}`),
+          fetch(`${API_BASE_URL}/packages/${country || 'kenya'}`)
+        ]);
+        const [dData, pData] = await Promise.all([dRes.json(), pRes.json()]);
+        setDestInfo(dData);
+        setDbPackages(pData);
+      } catch (err) {
+        console.error('Error fetching data:', err);
+      } finally {
         setLoading(false);
-      })
-      .catch(err => {
-        console.error('Error fetching country packages:', err);
-        setLoading(false);
-      });
+      }
+    };
+    fetchData();
   }, [country]);
 
-  if (!data) {
+  if (!loading && !destInfo) {
     return (
       <div className="container section text-center">
-        <h2>Country Not Found</h2>
+        <h2>Destination Not Found</h2>
         <Link to="/destinations" className="btn-primary mt-md">Back to Destinations</Link>
       </div>
     );
   }
 
-  const filteredPackages = dbPackages.filter((pkg: any) => {
+  const filteredPackages = Array.isArray(dbPackages) ? dbPackages.filter((pkg: any) => {
     // Currently API doesn't have 'category' built in, we can fallback or skip category filter.
     // For demo map all active categories if available
     const matchCategory = activeCategory === 'All' || pkg.category === activeCategory;
     const matchType = activeType === 'All' || pkg.packageType === activeType;
     return matchCategory && matchType;
-  });
+  }) : [];
 
   return (
     <div className="country-page">
       {/* Dynamic Banner */}
-      <div className="country-banner" style={{ backgroundImage: `url(${data.image})` }}>
+      <div className="country-banner" style={{ backgroundImage: `url(${destInfo.image})` }}>
         <div className="banner-overlay"></div>
         <div className="container banner-content">
-          <h1>Welcome to {data.name}</h1>
-          <p>{data.description}</p>
+          <h1 className="capitalize">Welcome to {destInfo.name}</h1>
+          <p>{destInfo.description}</p>
         </div>
       </div>
 
@@ -154,7 +97,7 @@ const Country: React.FC = () => {
 
         {/* Packages Grid */}
         <div className="packages-header">
-          <h2>Experiences in {data.name}</h2>
+          <h2 className="capitalize">Experiences in {destInfo.name}</h2>
           <p>Showing {filteredPackages.length} packages tailored to your interests.</p>
         </div>
 

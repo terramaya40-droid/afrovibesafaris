@@ -14,6 +14,17 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Get single package by ID
+router.get('/id/:id', async (req, res) => {
+  try {
+    const pkg = await Package.findById(req.params.id);
+    if (!pkg) return res.status(404).json({ message: 'Package not found' });
+    res.json(pkg);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching package', error: error.message });
+  }
+});
+
 // Get packages by country
 router.get('/:country', async (req, res) => {
   try {

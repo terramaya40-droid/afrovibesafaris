@@ -1,44 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useStore } from '../store/useStore';
 import { Star, MapPin, Calendar, Users, Camera, ChevronLeft, ChevronRight } from 'lucide-react';
+import { API_BASE_URL } from '../config';
 import './DestinationDetail.css';
 
-const mockDetailData = {
-  id: 'mara-migration',
-  title: 'Maasai Mara Migration',
-  country: 'Kenya',
-  description: 'The Maasai Mara National Reserve is one of the most famous and important wildlife conservation and wilderness areas in Africa, world-renowned for its exceptional populations of lion, African leopard, cheetah and African bush elephant. It is perhaps most famous for the Great Migration, one of the Seven Natural Wonders of Africa.',
-  images: [
-    'https://images.unsplash.com/photo-1516426122078-c23e76319801?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-    'https://images.unsplash.com/photo-1547471080-7fc2dd0102ad?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    'https://images.unsplash.com/photo-1618683526006-25916d801111?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
-  ],
-  pricingTable: [
-    { type: 'Classical', nonRes: '$1,200', res: 'KES 45,000', cit: 'KES 35,000' },
-    { type: 'Luxury', nonRes: '$2,500', res: 'KES 120,000', cit: 'KES 90,000' },
-    { type: 'Family (4 pax)', nonRes: '$4,000', res: 'KES 150,000', cit: 'KES 110,000' }
-  ],
-  reviews: [
-    { id: 1, user: 'John D.', rating: 5, date: 'Oct 2025', text: 'An absolute dream! The migration was breathtaking.' },
-    { id: 2, user: 'Sarah W.', rating: 4, date: 'Sep 2025', text: 'Incredible wildlife viewing, though the camps were a bit crowded.' },
-    { id: 3, user: 'Marcus L.', rating: 5, date: 'Aug 2025', text: 'Top notch service from AfriVibe. The hot air balloon ride is a must.' }
-  ]
-};
-
 const DestinationDetail: React.FC = () => {
-  const { country } = useParams<{ country: string }>();
+  const { country, destinationId } = useParams<{ country: string; destinationId: string }>();
   const { userType, openQuoteModal } = useStore();
+  const [data, setData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
   const [currentImageIdx, setCurrentImageIdx] = useState(0);
 
-  const data = mockDetailData; // Using mock for all IDs just for prototype
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/packages/id/${destinationId}`)
+      .then(res => res.json())
+      .then(d => {
+        setData(d);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, [destinationId]);
+
+  if (loading) return <div className="container section text-center">Loading...</div>;
+  if (!data) return <div className="container section text-center">Package not found</div>;
+
+  // Use package images if available, else fallback to main image
+  const images = data.images && data.images.length > 0 ? data.images : [data.image];
 
   const nextImage = () => {
-    setCurrentImageIdx((prev) => (prev + 1) % data.images.length);
+    setCurrentImageIdx((prev) => (prev + 1) % images.length);
   };
 
   const prevImage = () => {
-    setCurrentImageIdx((prev) => (prev - 1 + data.images.length) % data.images.length);
+    setCurrentImageIdx((prev) => (prev - 1 + images.length) % images.length);
   };
 
   return (
@@ -64,10 +59,10 @@ const DestinationDetail: React.FC = () => {
           {/* Image Gallery */}
           <div id="destination-gallery" className="gallery-slider">
             <button className="slider-btn prev" onClick={prevImage}><ChevronLeft size={32} /></button>
-            <img src={data.images[currentImageIdx]} alt={`${data.title} - ${currentImageIdx + 1}`} className="gallery-main-img" />
+            <img src={images[currentImageIdx]} alt={`${data.title} - ${currentImageIdx + 1}`} className="gallery-main-img" />
             <button className="slider-btn next" onClick={nextImage}><ChevronRight size={32} /></button>
             <div className="gallery-thumbs">
-              {data.images.map((img, idx) => (
+              {images.map((img: string, idx: number) => (
                 <img 
                   key={idx} 
                   src={img} 
@@ -99,11 +94,11 @@ const DestinationDetail: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {data.pricingTable.map((pkg, idx) => {
+                  {(Array.isArray(data.pricingTable) ? data.pricingTable : [{ type: data.packageType, nonRes: data.pricing?.nonRes, res: data.pricing?.res, cit: data.pricing?.cit }]).map((pkg: any, idx: number) => {
                     let displayedPrice = '';
                     if (userType === 'Non-Resident') displayedPrice = pkg.nonRes;
-                    if (userType === 'Resident') displayedPrice = pkg.res;
-                    if (userType === 'Citizen') displayedPrice = pkg.cit;
+                    else if (userType === 'Resident') displayedPrice = pkg.res;
+                    else displayedPrice = pkg.cit;
 
                     return (
                       <tr key={idx}>
@@ -137,7 +132,7 @@ const DestinationDetail: React.FC = () => {
           <div className="reviews-section mt-xl">
             <h2>Guest Reviews</h2>
             <div className="reviews-list mt-md">
-              {data.reviews.map(review => (
+              {Array.isArray(data.reviews) && data.reviews.map((review: any) => (
                 <div key={review.id} className="review-item">
                   <div className="review-header">
                     <h4>{review.user}</h4>
