@@ -30,10 +30,6 @@ const App: React.FC = () => {
         />
 
         {/* All public pages inside the main Layout (Navbar + Footer) */}
-        <Route element={<Layout><></></Layout>} path="*">
-          <Route index element={<Layout><Home /></Layout>} />
-        </Route>
-
         <Route path="/" element={<Layout><Home /></Layout>} />
         <Route path="/destinations" element={<Layout><Destinations /></Layout>} />
         <Route path="/destinations/:country" element={<Layout><Country /></Layout>} />

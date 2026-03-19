@@ -6,7 +6,7 @@ import Admin from './models/Admin.js';
 // NOTE: Quotes and Testimonials are NOT deleted — they are user-generated data
 // This seed only manages: Packages, Articles, and the Admin user
 
-dotenv.config();
+dotenv.config({ path: './backend/.env' });
 
 // ============================================================
 // 15 PACKAGES ACROSS 5 COUNTRIES (3 per country)
