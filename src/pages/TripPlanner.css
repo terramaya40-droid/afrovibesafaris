@@ -1,0 +1,215 @@
+.planner-header {
+  background-color: var(--color-dark);
+  color: var(--color-white);
+  padding: var(--spacing-xl) 0;
+  background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1547471080-7fc2dd0102ad?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+  background-size: cover;
+  background-position: center;
+}
+
+.planner-container {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  overflow: hidden;
+  min-height: 500px;
+}
+
+@media (max-width: 768px) {
+  .planner-container {
+    flex-direction: column;
+  }
+}
+
+.planner-progress {
+  background: var(--color-gray-100);
+  width: 250px;
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  border-right: 1px solid var(--color-gray-200);
+}
+
+@media (max-width: 768px) {
+  .planner-progress {
+    width: 100%;
+    flex-direction: row;
+    overflow-x: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--color-gray-200);
+    padding: var(--spacing-md);
+  }
+}
+
+.progress-step {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  color: var(--color-gray-500);
+  opacity: 0.7;
+  transition: all var(--transition-fast);
+}
+
+.progress-step.active {
+  color: var(--color-primary);
+  font-weight: 600;
+  opacity: 1;
+}
+
+.progress-step.completed {
+  color: var(--color-secondary);
+  opacity: 1;
+}
+
+.step-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--color-white);
+  border: 2px solid var(--color-gray-300);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.progress-step.active .step-circle {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: var(--color-white);
+}
+
+.progress-step.completed .step-circle {
+  border-color: var(--color-secondary);
+  background: var(--color-secondary);
+  color: var(--color-white);
+}
+
+.planner-content {
+  flex-grow: 1;
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+}
+
+.wizard-step {
+  flex-grow: 1;
+}
+
+.wizard-step h2 {
+  color: var(--color-dark);
+  margin-bottom: var(--spacing-xs);
+}
+
+.step-desc {
+  color: var(--color-gray-500);
+  margin-bottom: var(--spacing-lg);
+}
+
+.selection-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: var(--spacing-md);
+}
+
+.select-card {
+  background: var(--color-white);
+  border: 2px solid var(--color-gray-200);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg) var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  color: var(--color-gray-800);
+  font-weight: 500;
+}
+
+.select-card:hover {
+  border-color: var(--color-primary);
+  background: rgba(193, 92, 61, 0.05); /* very light primary */
+}
+
+.select-card.selected {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: var(--color-white);
+  box-shadow: 0 4px 12px rgba(193, 92, 61, 0.3);
+}
+
+.card-icon {
+  color: var(--color-secondary);
+}
+
+.select-card.selected .card-icon {
+  color: var(--color-white);
+}
+
+.package-card {
+  padding: var(--spacing-md);
+  text-align: center;
+}
+
+.summary-box {
+  background: var(--color-gray-100);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+}
+
+.summary-item {
+  margin-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 1px solid var(--color-gray-200);
+}
+
+.summary-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.summary-item h4 {
+  color: var(--color-secondary);
+  margin-bottom: var(--spacing-xs);
+  font-size: 0.875rem;
+  text-transform: uppercase;
+}
+
+.summary-item p {
+  color: var(--color-dark);
+  font-weight: 600;
+  font-size: 1.125rem;
+}
+
+.wizard-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: var(--spacing-xl);
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid var(--color-gray-200);
+}
+
+.step-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.step-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.animation-fade {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

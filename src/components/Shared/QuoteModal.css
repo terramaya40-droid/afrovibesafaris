@@ -1,0 +1,113 @@
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: var(--spacing-md);
+  backdrop-filter: blur(4px);
+}
+
+.modal-content {
+  background-color: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: var(--shadow-lg);
+}
+
+.modal-close {
+  position: absolute;
+  top: var(--spacing-md);
+  right: var(--spacing-md);
+  color: var(--color-gray-500);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.modal-close:hover {
+  color: var(--color-dark);
+}
+
+.modal-header {
+  margin-bottom: var(--spacing-lg);
+  text-align: center;
+}
+
+.modal-header h2 {
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.modal-header p {
+  color: var(--color-gray-500);
+}
+
+.quote-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  flex: 1;
+}
+
+.form-group-row {
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+.quote-form label {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--color-gray-800);
+}
+
+.quote-form input,
+.quote-form select,
+.quote-form textarea {
+  padding: 0.75rem;
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  transition: border-color var(--transition-fast);
+}
+
+.quote-form input:focus,
+.quote-form select:focus,
+.quote-form textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.disabled-input {
+  background-color: var(--color-gray-100);
+  color: var(--color-gray-500);
+  cursor: not-allowed;
+}
+
+.w-full {
+  width: 100%;
+}
+
+@media (max-width: 600px) {
+  .form-group-row {
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+}

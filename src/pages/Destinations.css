@@ -1,0 +1,211 @@
+.destinations-banner {
+  position: relative;
+  height: 40vh;
+  min-height: 300px;
+  background-image: url('https://images.unsplash.com/photo-1549366021-9f761d450615?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+}
+
+.banner-overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.banner-content {
+  position: relative;
+  z-index: 2;
+  color: var(--color-white);
+  text-align: center;
+}
+
+.banner-content h1 {
+  color: var(--color-white);
+  font-size: clamp(2.5rem, 4vw, 4rem);
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  margin-bottom: var(--spacing-sm);
+}
+
+.banner-content p {
+  font-size: 1.125rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Layout */
+.layout-grid {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: var(--spacing-xl);
+}
+
+@media (max-width: 900px) {
+  .layout-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Sidebar */
+.filters-sidebar {
+  position: sticky;
+  top: 100px;
+  height: fit-content;
+}
+
+.filter-box {
+  background: var(--color-white);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-gray-200);
+}
+
+.filter-box h3 {
+  font-family: var(--font-body);
+  font-size: 1.125rem;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 1px solid var(--color-gray-100);
+}
+
+.filter-box ul {
+  list-style: none;
+}
+
+.filter-btn {
+  width: 100%;
+  text-align: left;
+  padding: 0.5rem;
+  border-radius: var(--radius-sm);
+  color: var(--color-gray-500);
+  font-weight: 500;
+  transition: all var(--transition-fast);
+}
+
+.filter-btn:hover {
+  background: var(--color-gray-100);
+  color: var(--color-dark);
+}
+
+.filter-btn.active {
+  background: var(--color-primary);
+  color: var(--color-white);
+}
+
+/* Map Placeholder */
+.interactive-map-container {
+  background: var(--color-gray-100);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  margin-bottom: var(--spacing-xl);
+  text-align: center;
+  border: 2px dashed var(--color-gray-200);
+}
+
+.map-placeholder h3 {
+  color: var(--color-secondary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.map-dots {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+  margin-top: var(--spacing-md);
+}
+
+.map-dot {
+  background: var(--color-primary);
+  color: var(--color-white);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.map-dot:hover {
+  background: var(--color-primary-dark);
+  transform: translateY(-2px);
+}
+
+/* Country Grid */
+.countries-header {
+  margin-bottom: var(--spacing-lg);
+}
+
+.country-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.country-card {
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-medium);
+}
+
+.country-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.cc-image-wrapper {
+  height: 200px;
+  overflow: hidden;
+}
+
+.cc-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-slow);
+}
+
+.country-card:hover .cc-image {
+  transform: scale(1.05);
+}
+
+.cc-content {
+  padding: var(--spacing-md);
+}
+
+.cc-content h3 {
+  margin-bottom: var(--spacing-xs);
+}
+
+.cc-content p {
+  color: var(--color-gray-500);
+  font-size: 0.95rem;
+  margin-bottom: var(--spacing-md);
+  min-height: 44px;
+}
+
+.cc-tags {
+  display: flex;
+  gap: var(--spacing-xs);
+  flex-wrap: wrap;
+  margin-bottom: var(--spacing-md);
+}
+
+.cc-tag {
+  background: var(--color-gray-100);
+  color: var(--color-gray-500);
+  font-size: 0.75rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-sm);
+}
+
+.cc-btn {
+  display: block;
+  text-align: center;
+  width: 100%;
+}
