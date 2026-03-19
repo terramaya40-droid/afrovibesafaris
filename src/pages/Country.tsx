@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import DestinationCard from '../components/Shared/DestinationCard';
+import { API_BASE_URL } from '../config';
 import './Country.css';
 
 // Mock data specific to a country
@@ -77,7 +78,7 @@ const Country: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/packages/${country || 'kenya'}`)
+    fetch(`${API_BASE_URL}/packages/${country || 'kenya'}`)
       .then(res => res.json())
       .then(data => {
         setDbPackages(data);

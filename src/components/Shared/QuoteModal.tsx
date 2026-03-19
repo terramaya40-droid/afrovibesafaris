@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useStore } from '../../store/useStore';
 import { X } from 'lucide-react';
+import { API_BASE_URL } from '../../config';
 import './QuoteModal.css';
 
 const QuoteModal: React.FC = () => {
@@ -36,7 +37,7 @@ const QuoteModal: React.FC = () => {
     setIsSubmitting(true);
     
     try {
-      const response = await fetch('http://localhost:5000/api/quotes', {
+      const response = await fetch(`${API_BASE_URL}/quotes`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

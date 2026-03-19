@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useStore } from '../store/useStore';
+import { API_BASE_URL } from '../config';
 import type { UserType } from '../store/useStore';
 import DestinationCard from '../components/Shared/DestinationCard';
 import './Home.css';
@@ -30,7 +31,7 @@ const Home: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/packages')
+    fetch(`${API_BASE_URL}/packages`)
       .then(res => res.json())
       .then(data => {
         // Just take the first 3 for the featured section

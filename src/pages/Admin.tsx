@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { LayoutDashboard, Users, FileText, CheckCircle, Trash2, Edit } from 'lucide-react';
+import { API_BASE_URL } from '../config';
 import './Admin.css';
 
 const Admin: React.FC = () => {
@@ -12,13 +13,13 @@ const Admin: React.FC = () => {
     // Determine which API to fetch based on activeTab
     if (activeTab === 'quotes') {
       setLoading(true);
-      fetch('http://localhost:5000/api/quotes')
+      fetch(`${API_BASE_URL}/quotes`)
         .then(res => res.json())
         .then(data => { setQuotes(data); setLoading(false); })
         .catch(err => { console.error(err); setLoading(false); });
     } else if (activeTab === 'reviews') {
       setLoading(true);
-      fetch('http://localhost:5000/api/testimonials/admin')
+      fetch(`${API_BASE_URL}/testimonials/admin`)
         .then(res => res.json())
         .then(data => { setReviews(data); setLoading(false); })
         .catch(err => { console.error(err); setLoading(false); });
