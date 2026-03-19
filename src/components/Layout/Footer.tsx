@@ -7,9 +7,12 @@ const Footer: React.FC = () => {
     <footer className="footer">
       <div className="container footer-content">
         <div className="footer-col">
-          <h3 className="footer-logo">Afri<span className="text-accent">Vibe</span></h3>
+          <div className="footer-logo-wrapper">
+            <img src="/logo.jpg" alt="AfriVibe Safaris Logo" className="footer-logo-img" />
+            <h3 className="footer-logo">AfriVibe <span className="text-secondary">Safaris</span></h3>
+          </div>
           <p className="footer-desc">
-            Connecting people to Africa through authentic, inclusive, and unforgettable safari experiences.
+            AfriVibe Safaris connects people to Africa through authentic, inclusive, and unforgettable safari experiences.
           </p>
           <div className="social-links">
             <a href="#" aria-label="LinkedIn"><Linkedin size={20} /></a>

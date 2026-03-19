@@ -20,7 +20,7 @@ interface PackageData {
 }
 
 const mockReviews = [
-  { id: 1, name: "Sarah Jenkins", text: "AfriVibe organized the most magical honeymoon for us in Tanzania. Every detail was perfect!", rating: 5 },
+  { id: 1, name: "Sarah Jenkins", text: "AfriVibe Safaris organized the most magical honeymoon for us in Tanzania. Every detail was perfect!", rating: 5 },
   { id: 2, name: "The Patel Family", text: "Our family safari in Kenya was unforgettable. The inclusive package catered to my father's mobility needs flawlessly.", rating: 5 },
   { id: 3, name: "Mark T.", text: "Gorilla trekking in Uganda was a life-changing experience. Highly recommend their knowledgeable guides.", rating: 5 }
 ];
@@ -78,7 +78,7 @@ const Home: React.FC = () => {
       {/* Quick Links / Features */}
       <section className="features section container">
         <div className="section-header text-center">
-          <h2>Why Journey With AfriVibe?</h2>
+          <h2>Why Journey With AfriVibe Safaris?</h2>
           <p>We believe the magic of Africa should be accessible to everyone.</p>
         </div>
         <div className="features-grid">

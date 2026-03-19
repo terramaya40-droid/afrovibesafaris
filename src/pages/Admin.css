@@ -18,17 +18,38 @@
   flex-direction: column;
 }
 
-.admin-logo {
-  font-family: var(--font-heading);
-  font-size: 1.5rem;
+.admin-sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
   margin-bottom: var(--spacing-xl);
-  color: var(--color-white);
   padding-bottom: var(--spacing-md);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+.admin-sidebar-logo {
+  height: 40px;
+  width: auto;
+  border-radius: 4px;
+}
+
+.admin-logo {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  margin-bottom: 0;
+  color: var(--color-white);
+  padding-bottom: 0;
+  border-bottom: none;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
 .admin-logo span {
-  color: var(--color-accent);
+  color: var(--color-secondary);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .admin-nav {

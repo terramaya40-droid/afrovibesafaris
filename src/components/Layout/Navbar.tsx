@@ -15,7 +15,8 @@ const Navbar: React.FC = () => {
     <nav className="navbar">
       <div className="container nav-content">
         <Link to="/" className="nav-logo">
-          Afri<span className="text-primary">Vibe</span>
+          <img src="/logo.jpg" alt="AfriVibe Safaris Logo" className="logo-img" />
+          <span className="logo-text">AfriVibe <span className="text-secondary">Safaris</span></span>
         </Link>
         
         {/* Desktop Menu */}

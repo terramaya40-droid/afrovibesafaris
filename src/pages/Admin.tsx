@@ -374,7 +374,10 @@ const Admin: React.FC = () => {
       {galleryModal && <GalleryModal item={galleryModal} onClose={() => setGalleryModal(null)} onSave={() => fetchTab('gallery')} />}
 
       <div className="admin-sidebar">
-        <h2 className="admin-logo">AfriVibe <span>Admin</span></h2>
+        <div className="admin-sidebar-header">
+          <img src="/logo.jpg" alt="Logo" className="admin-sidebar-logo" />
+          <h2 className="admin-logo">AfriVibe <span>Safaris Admin</span></h2>
+        </div>
         <nav className="admin-nav">
           <button className={`admin-nav-item ${activeTab === 'quotes' ? 'active' : ''}`} onClick={() => setActiveTab('quotes')}>
             <FileText size={20} /> Quote Requests

@@ -1,12 +1,12 @@
 :root {
-  /* Color Palette - Premium earthy and elegant tones */
-  --color-primary: #C15C3D;    /* Terracotta */
-  --color-primary-dark: #A04A30;
-  --color-secondary: #70825B;  /* Sage Green */
-  --color-secondary-dark: #5A6A48;
-  --color-accent: #E3B23C;     /* Golden Savannah (Yellow) */
-  --color-dark: #2B2E33;       /* Twilight/Dark Grey */
-  --color-light: #F7EEE3;      /* Sand/Off-white */
+  /* Color Palette - Jungle Green & Earthly Tones */
+  --color-primary: #1B3022;    /* Jungle Green */
+  --color-primary-dark: #0F1D15;
+  --color-secondary: #E3B23C;  /* Sunset Orange (from logo) */
+  --color-secondary-dark: #C69A33;
+  --color-accent: #A04A30;     /* Earthly Terracotta */
+  --color-dark: #1A1C19;       /* Deep Forest */
+  --color-light: #FDFBFA;      /* Logo Cream Background */
   --color-white: #FFFFFF;
   --color-gray-100: #F3F4F6;
   --color-gray-200: #E5E7EB;
