@@ -69,6 +69,15 @@
   background-color: var(--color-primary);
 }
 
+.whatsapp-link {
+  color: #25D366 !important; /* WhatsApp Green */
+}
+
+.whatsapp-link:hover {
+  background-color: #25D366 !important;
+  color: white !important;
+}
+
 .footer-col h4 {
   color: var(--color-white);
   margin-bottom: var(--spacing-md);

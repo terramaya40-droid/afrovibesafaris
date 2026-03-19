@@ -25,6 +25,7 @@ const Navbar: React.FC = () => {
           <Link to="/trip-planner" className="nav-link">Trip Planner</Link>
           <Link to="/virtual-safari" className="nav-link">Virtual Safari</Link>
           <Link to="/blog" className="nav-link">Blog</Link>
+          <Link to="/gallery" className="nav-link">Gallery</Link>
           
           
           <select 
@@ -51,6 +52,7 @@ const Navbar: React.FC = () => {
           <Link to="/trip-planner" onClick={toggleMenu}>Trip Planner</Link>
           <Link to="/virtual-safari" onClick={toggleMenu}>Virtual Safari</Link>
           <Link to="/blog" onClick={toggleMenu}>Blog</Link>
+          <Link to="/gallery" onClick={toggleMenu}>Gallery</Link>
           <div className="mobile-user-type">
             <label>Pricing For:</label>
             <select 

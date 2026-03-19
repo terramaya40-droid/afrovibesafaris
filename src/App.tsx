@@ -9,6 +9,7 @@ import DestinationDetail from './pages/DestinationDetail';
 import TripPlanner from './pages/TripPlanner';
 import VirtualSafari from './pages/VirtualSafari';
 import Blog from './pages/Blog';
+import Gallery from './pages/Gallery';
 import Admin from './pages/Admin';
 import AdminLogin from './pages/AdminLogin';
 
@@ -38,6 +39,7 @@ const App: React.FC = () => {
         <Route path="/virtual-safari" element={<Layout><VirtualSafari /></Layout>} />
         <Route path="/blog" element={<Layout><Blog /></Layout>} />
         <Route path="/blog/:slug" element={<Layout><Blog /></Layout>} />
+        <Route path="/gallery" element={<Layout><Gallery /></Layout>} />
       </Routes>
     </Router>
   );

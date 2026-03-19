@@ -1,25 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useStore } from '../store/useStore';
 import { Map, Filter } from 'lucide-react';
+import { API_BASE_URL } from '../config';
 import './Destinations.css';
-
-const countries = [
-  { id: 'kenya', name: 'Kenya', image: 'https://images.unsplash.com/photo-1547471080-7fc2dd0102ad?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', desc: 'The heart of safari, home to the Maasai Mara.', categories: ['Safari', 'Beach', 'Nature'] },
-  { id: 'tanzania', name: 'Tanzania', image: 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', desc: 'Serengeti plains and the peak of Mount Kilimanjaro.', categories: ['Safari', 'Hiking', 'Nature'] },
-  { id: 'uganda', name: 'Uganda', image: 'https://images.unsplash.com/photo-1574709756113-58134eb92404?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', desc: 'The Pearl of Africa, known for mountain gorillas.', categories: ['Safari', 'Hiking', 'Nature'] },
-  { id: 'rwanda', name: 'Rwanda', image: 'https://images.unsplash.com/photo-1580211831872-386d382103f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', desc: 'Pristine rainforests and rich cultural experiences.', categories: ['Safari', 'Nature', 'Experiences'] },
-  { id: 'botswana', name: 'Botswana', image: 'https://images.unsplash.com/photo-1618683526006-25916d801111?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', desc: 'Okavango Delta and uncrowded luxury wilderness.', categories: ['Safari', 'Nature'] }
-];
 
 const Destinations: React.FC = () => {
   const { openQuoteModal } = useStore();
   const [activeCategory, setActiveCategory] = useState('All');
   const [activeSafariType, setActiveSafariType] = useState('All');
+  const [countries, setCountries] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/destinations`)
+      .then(res => res.json())
+      .then(data => {
+        setCountries(Array.isArray(data) ? data : []);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
 
   const filteredCountries = countries.filter(c => {
     if (activeCategory === 'All') return true;
-    return c.categories.includes(activeCategory);
+    // Map backend categories if they exist, or fallback
+    return c.categories?.includes(activeCategory) || c.category === activeCategory;
   });
 
   return (
@@ -93,25 +99,31 @@ const Destinations: React.FC = () => {
             </button>
           </div>
 
-          <div className="country-grid">
-            {filteredCountries.map(country => (
-              <div key={country.id} className="country-card">
-                <div className="cc-image-wrapper">
-                  <img src={country.image} alt={country.name} className="cc-image" />
-                </div>
-                <div className="cc-content">
-                  <h3>{country.name}</h3>
-                  <p>{country.desc}</p>
-                  <div className="cc-tags">
-                    {country.categories.map(cat => (
-                      <span key={cat} className="cc-tag">{cat}</span>
-                    ))}
+          {loading ? (
+            <div className="loading-state text-center py-xl">
+              <p>Loading amazing destinations...</p>
+            </div>
+          ) : (
+            <div className="country-grid">
+              {filteredCountries.map(country => (
+                <div key={country.id} className="country-card">
+                  <div className="cc-image-wrapper">
+                    <img src={country.image} alt={country.name} className="cc-image" />
                   </div>
-                  <Link to={`/destinations/${country.id}`} className="btn-primary cc-btn">Explore {country.name}</Link>
+                  <div className="cc-content">
+                    <h3>{country.name}</h3>
+                    <p>{country.desc}</p>
+                    <div className="cc-tags">
+                      {country.categories?.map((cat: string) => (
+                        <span key={cat} className="cc-tag">{cat}</span>
+                      ))}
+                    </div>
+                    <Link to={`/destinations/${country.id}`} className="btn-primary cc-btn">Explore {country.name}</Link>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>
