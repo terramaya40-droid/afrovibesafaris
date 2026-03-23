@@ -1,5 +1,5 @@
 .home-page {
-  /* Scope styles */
+  overflow-x: hidden;
 }
 
 /* Hero Slider */
@@ -137,6 +137,26 @@
   display: flex;
   gap: var(--spacing-md);
   margin-bottom: var(--spacing-xl);
+}
+
+@media (max-width: 600px) {
+  .hero-title {
+    font-size: 2.5rem !important;
+    line-height: 1.1;
+  }
+  .hero-subtitle {
+    font-size: 1rem;
+    margin-bottom: var(--spacing-md);
+  }
+  .hero-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+  .hero-actions .btn-primary, .hero-actions .btn-outline {
+    width: 100%;
+    text-align: center;
+    padding: 0.85rem;
+  }
 }
 
 .hero-btn {
@@ -329,10 +349,22 @@
   }
   .selector-group {
     flex-direction: column;
+    width: 100%;
+  }
+  .selector-btn {
+    width: 100%;
+    text-align: center;
   }
   .flex-between {
     flex-direction: column;
     align-items: flex-start;
     gap: var(--spacing-md);
+  }
+  .hero-user-selector {
+    width: 100%;
+  }
+  .section {
+    padding-top: var(--spacing-lg);
+    padding-bottom: var(--spacing-lg);
   }
 }
