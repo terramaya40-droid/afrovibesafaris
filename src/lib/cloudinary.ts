@@ -10,6 +10,9 @@ export const getImageUrl = (path: string) => {
   // If it's already a full URL (Unsplash, etc.), return as is
   if (path.startsWith('http')) return path;
   
+  // If it's a base64 encoded image, return as is
+  if (path.startsWith('data:image/')) return path;
+
   // If it's a root-relative local path, return as is
   if (path.startsWith('/')) return path;
 
