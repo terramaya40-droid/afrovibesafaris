@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useStore } from '../../store/useStore';
 import type { UserType } from '../../store/useStore';
-import { getImageUrl } from '../../lib/cloudinary';
 import { Menu, X } from 'lucide-react';
 import './Navbar.css';
 
