@@ -1,6 +1,7 @@
 import express from 'express';
 const router = express.Router();
 import Destination from '../models/Destination.js';
+import verifyToken from '../middleware/auth.js';
 
 // Get all destinations
 router.get('/', async (req, res) => {
@@ -23,16 +24,24 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// Admin: Create or Update
-router.post('/', async (req, res) => {
+// Admin: Create 
+router.post('/', verifyToken, async (req, res) => {
   try {
     const { id, name, subtitle, description, image } = req.body;
-    const destination = await Destination.findOneAndUpdate(
-      { id },
-      { name, subtitle, description, image },
-      { upsert: true, new: true }
-    );
-    res.status(201).json(destination);
+    const destination = new Destination({ id, name, subtitle, description, image });
+    const saved = await destination.save();
+    res.status(201).json(saved);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+// Admin: Update
+router.put('/:id', verifyToken, async (req, res) => {
+  try {
+    const updated = await Destination.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!updated) return res.status(404).json({ message: 'Destination not found' });
+    res.json(updated);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
