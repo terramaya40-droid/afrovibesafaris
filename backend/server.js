@@ -9,6 +9,7 @@ import articlesRouter from './routes/articles.js';
 import destinationsRouter from './routes/destinations.js';
 import galleryRouter from './routes/gallery.js';
 import authRouter from './routes/auth.js';
+import settingsRouter from './routes/settings.js';
 
 dotenv.config();
 
@@ -50,6 +51,7 @@ app.use('/api/testimonials', testimonialsRouter);
 app.use('/api/articles', articlesRouter);
 app.use('/api/destinations', destinationsRouter);
 app.use('/api/gallery', galleryRouter);
+app.use('/api/settings', settingsRouter);
 
 import Package from './models/Package.js';
 import Article from './models/Article.js';
