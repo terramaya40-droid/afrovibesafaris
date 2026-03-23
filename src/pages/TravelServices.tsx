@@ -1,19 +1,28 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useStore } from '../store/useStore';
+import { API_BASE_URL } from '../config';
 import { Plane, FileCheck, HelpCircle } from 'lucide-react';
 import './TravelServices.css';
 
 const TravelServices: React.FC = () => {
   const { openQuoteModal } = useStore();
+  const [settings, setSettings] = useState<any>(null);
+
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/settings`)
+      .then(res => res.json())
+      .then(data => setSettings(data.travelServices))
+      .catch(console.error);
+  }, []);
 
   return (
     <div className="travel-services-page">
-      <section className="services-hero" style={{ backgroundImage: `url(https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&q=80&w=2000)` }}>
+      <section className="services-hero" style={{ backgroundImage: `url(${settings?.bannerImage || 'https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&q=80&w=2000'})` }}>
         <div className="hero-overlay"></div>
         <div className="container services-hero-content text-center">
-          <h1>Complete Travel Solutions</h1>
+          <h1>{settings?.title || 'Complete Travel Solutions'}</h1>
           <p className="max-w-2xl mx-auto">
-            From your ticket to your visa, we've got you covered. AfriVibe Safaris provides end-to-end support for a seamless journey.
+            {settings?.subtitle || "From your ticket to your visa, we've got you covered. AfriVibe Safaris provides end-to-end support for a seamless journey."}
           </p>
           <button className="btn-primary mt-lg" onClick={() => openQuoteModal()}>Request Consultation</button>
         </div>

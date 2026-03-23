@@ -50,4 +50,18 @@ router.patch('/:id/status', verifyToken, async (req, res) => {
   }
 });
 
+// Admin update full review content (Protected)
+router.put('/:id', verifyToken, async (req, res) => {
+  try {
+    const updated = await Testimonial.findByIdAndUpdate(
+      req.params.id, 
+      req.body, 
+      { new: true }
+    );
+    res.json(updated);
+  } catch (error) {
+    res.status(400).json({ message: 'Error updating testimonial', error: error.message });
+  }
+});
+
 export default router;

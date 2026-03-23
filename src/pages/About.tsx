@@ -1,25 +1,33 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { API_BASE_URL } from '../config';
 import './About.css';
 
 const About: React.FC = () => {
+  const [settings, setSettings] = useState<any>(null);
+
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/settings`)
+      .then(res => res.json())
+      .then(data => setSettings(data.about))
+      .catch(console.error);
+  }, []);
+
   return (
     <div className="about-page">
-      <section className="about-hero" style={{ backgroundImage: `url(https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&q=80&w=2000)` }}>
+      <section className="about-hero" style={{ backgroundImage: `url(${settings?.bannerImage || 'https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&q=80&w=2000'})` }}>
         <div className="hero-overlay"></div>
         <div className="container about-hero-content">
           <h1>AfriVibe Safaris — About Us</h1>
-          <p>A bridge between Africa and the world.</p>
+          <p>{settings?.subtitle || 'A bridge between Africa and the world.'}</p>
         </div>
       </section>
 
       <section className="about-section container py-xl">
         <div className="about-grid">
           <div className="about-content">
-            <h2 className="section-title">Who We Are</h2>
+            <h2 className="section-title">{settings?.title || 'Who We Are'}</h2>
             <p>
-              AfriVibe Safaris is an African-led travel and wellbeing platform acting as a bridge between Africa and the world. 
-              We connect global communities to Africa through nature, culture, and human-centered experiences, both physically and virtually. 
-              Our goal is to make Africa more accessible, better understood, and meaningfully experienced.
+              {settings?.body || 'AfriVibe Safaris is an African-led travel and wellbeing platform acting as a bridge between Africa and the world. We connect global communities to Africa through nature, culture, and human-centered experiences, both physically and virtually. Our goal is to make Africa more accessible, better understood, and meaningfully experienced.'}
             </p>
             <p className="mt-md">
               We go beyond traditional tourism by integrating mental wellbeing, inclusive access, and authentic African storytelling into every experience. 

@@ -58,11 +58,12 @@ const FALLBACK_PACKAGES: PackageData[] = [
   }
 ];
 
-const mockReviews = [
-  { id: 1, name: "Sarah Jenkins", text: "AfriVibe Safaris organized the most magical honeymoon for us in Tanzania. Every detail was perfect!", rating: 5 },
-  { id: 2, name: "The Patel Family", text: "Our family safari in Kenya was unforgettable. The inclusive package catered to my father's mobility needs flawlessly.", rating: 5 },
-  { id: 3, name: "Mark T.", text: "Gorilla trekking in Uganda was a life-changing experience. Highly recommend their knowledgeable guides.", rating: 5 }
+const defaultHeroSlides = [
+  { image: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&q=80&w=2000', title: 'Beyond Journeys, Into Memories' },
+  { image: 'https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&q=80&w=2000', title: 'Experience the Soul of Africa' },
+  { image: 'https://images.unsplash.com/photo-1523805081730-61444927f07c?auto=format&fit=crop&q=80&w=2000', title: 'Your African Adventure Awaits' }
 ];
+
 
 const Home: React.FC = () => {
   const { userType, setUserType, openQuoteModal } = useStore();
@@ -70,15 +71,15 @@ const Home: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  const heroSlides = [
-    { image: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&q=80&w=2000', title: 'Beyond Journeys, Into Memories' },
-    { image: 'https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&q=80&w=2000', title: 'Experience the Soul of Africa' },
-    { image: 'https://images.unsplash.com/photo-1523805081730-61444927f07c?auto=format&fit=crop&q=80&w=2000', title: 'Your African Adventure Awaits' }
-  ];
+  const [settings, setSettings] = useState<any>(null);
+  const [reviews, setReviews] = useState<any[]>([]);
+
+  const activeSlides = settings?.home?.heroSlides?.length > 0 ? settings.home.heroSlides : defaultHeroSlides;
+
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+      setCurrentSlide((prev) => (prev + 1) % activeSlides.length);
     }, 5000);
     return () => clearInterval(timer);
   }, []);
@@ -92,9 +93,19 @@ const Home: React.FC = () => {
         }
         setIsLoading(false);
       })
-      .catch(() => {
-        setIsLoading(false);
-      });
+      .catch(() => setIsLoading(false));
+
+    fetch(`${API_BASE_URL}/settings`)
+      .then(res => res.json())
+      .then(data => setSettings(data))
+      .catch(console.error);
+
+    fetch(`${API_BASE_URL}/testimonials`)
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) setReviews(data);
+      })
+      .catch(console.error);
   }, []);
 
   const services = [
@@ -109,7 +120,7 @@ const Home: React.FC = () => {
     <div className="home-page">
       {/* Hero Section with Slider */}
       <section className="hero-slider">
-        {heroSlides.map((slide, index) => (
+        {activeSlides.map((slide: any, index: number) => (
           <div
             key={index}
             className={`hero-slide ${index === currentSlide ? 'active' : ''}`}
@@ -118,7 +129,7 @@ const Home: React.FC = () => {
             <div className="hero-overlay"></div>
             <div className="container hero-content">
               <h1 className="hero-title">{slide.title}</h1>
-              <p className="hero-subtitle">Discover Africa through curated safaris, wellness experiences, and complete travel solutions — from flights to unforgettable adventures.</p>
+              <p className="hero-subtitle">{settings?.home?.heroSubtitle || 'Discover Africa through curated safaris, wellness experiences, and complete travel solutions — from flights to unforgettable adventures.'}</p>
               
               <div className="hero-actions">
                 <Link to="/destinations" className="btn-primary hero-btn">Explore Packages</Link>
@@ -145,7 +156,7 @@ const Home: React.FC = () => {
 
         {/* Slider Navigation Dots */}
         <div className="hero-dots">
-          {heroSlides.map((_, index) => (
+          {activeSlides.map((_: any, index: number) => (
             <button
               key={index}
               className={`hero-dot ${index === currentSlide ? 'active' : ''}`}
@@ -156,11 +167,10 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Our Services Section */}
       <section className="services-section section container">
         <div className="section-header text-center">
-          <h2>Our Services</h2>
-          <p>Complete travel solutions for your African journey.</p>
+          <h2>{settings?.home?.servicesTitle || 'Our Services'}</h2>
+          <p>{settings?.home?.servicesSubtitle || 'Complete travel solutions for your African journey.'}</p>
         </div>
         <div className="services-grid">
           {services.map(service => (
@@ -246,13 +256,13 @@ const Home: React.FC = () => {
           <p>Read what our adventurers have to say.</p>
         </div>
         <div className="testimonials-grid">
-          {mockReviews.map(review => (
-            <div key={review.id} className="testimonial-card">
+          {reviews.slice(0, 3).map(review => (
+            <div key={review._id} className="testimonial-card">
               <div className="stars">
                 {[...Array(5)].map((_, i) => <Star key={i} size={16} fill={i < review.rating ? "#E3B23C" : "none"} color="#E3B23C" />)}
               </div>
-              <p className="testimonial-text">"{review.text}"</p>
-              <p className="testimonial-author">- {review.name}</p>
+              <p className="testimonial-text">"{review.reviewText}"</p>
+              <p className="testimonial-author">- {review.userName}</p>
             </div>
           ))}
         </div>
@@ -261,8 +271,8 @@ const Home: React.FC = () => {
       {/* CTA Section */}
       <section className="cta-section section text-center">
         <div className="container cta-content">
-          <h2>Ready to answer the call of the wild?</h2>
-          <p>Let our safari experts craft your perfect, personalized itinerary today.</p>
+          <h2>{settings?.home?.ctaTitle || 'Ready to answer the call of the wild?'}</h2>
+          <p>{settings?.home?.ctaSubtitle || 'Let our safari experts craft your perfect, personalized itinerary today.'}</p>
           <button className="btn-primary mt-lg" onClick={() => openQuoteModal()}>Plan My Custom Trip</button>
         </div>
       </section>

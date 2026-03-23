@@ -2,8 +2,9 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard, Users, FileText, CheckCircle,
-  Trash2, Edit, Plus, X, LogOut, BookOpen, Map
+  Trash2, Edit, Plus, X, LogOut, BookOpen, Map, Settings
 } from 'lucide-react';
+import SiteSettingsEditor from '../components/Admin/SiteSettingsEditor';
 import { API_BASE_URL } from '../config';
 import './Admin.css';
 
@@ -289,10 +290,42 @@ const GalleryModal: React.FC<{ item: any; onClose: () => void; onSave: () => voi
   );
 };
 
+const ReviewModal: React.FC<{ review: any; onClose: () => void; onSave: () => void }> = ({ review, onClose, onSave }) => {
+  const [form, setForm] = useState(review);
+  const [saving, setSaving] = useState(false);
+  const set = (field: string, val: any) => setForm((p: any) => ({ ...p, [field]: val }));
+
+  const handleSave = async () => {
+    setSaving(true);
+    await fetch(`${API_BASE_URL}/testimonials/${review._id}`, { method: 'PUT', headers: getAuthHeader(), body: JSON.stringify(form) });
+    setSaving(false);
+    onSave();
+    onClose();
+  };
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content cms-modal" style={{ maxWidth: '500px' }} onClick={e => e.stopPropagation()}>
+        <div className="cms-modal-header"><h3>Edit Review</h3><button onClick={onClose}><X size={20} /></button></div>
+        <div className="cms-modal-body">
+          <div className="form-group"><label>User Name</label><input value={form.userName} onChange={e => set('userName', e.target.value)} /></div>
+          <div className="form-group"><label>Package Title (optional)</label><input value={form.packageTitle || ''} onChange={e => set('packageTitle', e.target.value)} /></div>
+          <div className="form-group"><label>Rating (1-5)</label><input type="number" min="1" max="5" value={form.rating} onChange={e => set('rating', Number(e.target.value))} /></div>
+          <div className="form-group"><label>Review Text</label><textarea rows={4} value={form.reviewText} onChange={e => set('reviewText', e.target.value)} /></div>
+        </div>
+        <div className="cms-modal-footer">
+          <button className="btn-outline" onClick={onClose}>Cancel</button>
+          <button className="btn-primary" onClick={handleSave} disabled={saving}>{saving ? 'Saving...' : 'Save'}</button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // ——— MAIN ADMIN PAGE ——————————————————————————————————————————————
 const Admin: React.FC = () => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<'quotes' | 'reviews' | 'packages' | 'articles' | 'destinations' | 'gallery'>('quotes');
+  const [activeTab, setActiveTab] = useState<'quotes' | 'reviews' | 'packages' | 'articles' | 'destinations' | 'gallery' | 'settings'>('quotes');
   const [quotes, setQuotes] = useState<any[]>([]);
   const [reviews, setReviews] = useState<any[]>([]);
   const [packages, setPackages] = useState<any[]>([]);
@@ -306,6 +339,7 @@ const Admin: React.FC = () => {
   const [artModal, setArtModal] = useState<any>(null);
   const [destModal, setDestModal] = useState<any>(null);
   const [galleryModal, setGalleryModal] = useState<any>(null);
+  const [reviewModal, setReviewModal] = useState<any>(null);
 
   const fetchTab = useCallback(async (tab: string) => {
     setLoading(true);
@@ -372,6 +406,7 @@ const Admin: React.FC = () => {
       {artModal && <ArticleModal article={artModal} onClose={() => setArtModal(null)} onSave={() => fetchTab('articles')} />}
       {destModal && <DestinationModal dest={destModal} onClose={() => setDestModal(null)} onSave={() => fetchTab('destinations')} />}
       {galleryModal && <GalleryModal item={galleryModal} onClose={() => setGalleryModal(null)} onSave={() => fetchTab('gallery')} />}
+      {reviewModal && <ReviewModal review={reviewModal} onClose={() => setReviewModal(null)} onSave={() => fetchTab('reviews')} />}
 
       <div className="admin-sidebar">
         <div className="admin-sidebar-header">
@@ -397,6 +432,9 @@ const Admin: React.FC = () => {
           <button className={`admin-nav-item ${activeTab === 'gallery' ? 'active' : ''}`} onClick={() => setActiveTab('gallery')}>
             <Users size={20} /> Gallery
           </button>
+          <button className={`admin-nav-item ${activeTab === 'settings' ? 'active' : ''}`} onClick={() => setActiveTab('settings')}>
+            <Settings size={20} /> Site Content
+          </button>
         </nav>
         <button className="admin-nav-item logout-btn" onClick={handleLogout}>
           <LogOut size={20} /> Logout
@@ -411,6 +449,7 @@ const Admin: React.FC = () => {
              : activeTab === 'packages' ? 'Package Manager' 
              : activeTab === 'articles' ? 'Blog Articles' 
              : activeTab === 'destinations' ? 'Destination Manager' 
+             : activeTab === 'settings' ? 'Site Content Database' 
              : 'Gallery Manager'}
           </h2>
           <div className="admin-user"><Users size={20} /> Admin</div>
@@ -467,6 +506,7 @@ const Admin: React.FC = () => {
                           <td className="review-cell">"{r.reviewText}"</td>
                           <td><span className={`status-badge ${r.status === 'Approved' ? 'status-booked' : 'status-pending'}`}>{r.status}</span></td>
                           <td className="actions-cell">
+                            <button className="btn-sm btn-outline" onClick={() => setReviewModal(r)}><Edit size={14} /></button>
                             {r.status !== 'Approved' && <button className="btn-sm btn-primary" onClick={() => updateReviewStatus(r._id, 'Approved')}>Approve</button>}
                             {r.status === 'Approved' && <button className="btn-sm btn-outline" onClick={() => updateReviewStatus(r._id, 'Pending Approval')}>Unpublish</button>}
                             <button className="btn-sm btn-outline text-red" onClick={() => updateReviewStatus(r._id, 'Rejected')}><Trash2 size={14} /></button>
@@ -599,6 +639,7 @@ const Admin: React.FC = () => {
                           <td><strong>{g.title}</strong></td>
                           <td>{g.location}</td>
                           <td className="actions-cell">
+                            <button className="btn-sm btn-outline" onClick={() => setGalleryModal(g)}><Edit size={14} /></button>
                             <button className="btn-sm btn-outline text-red" onClick={async () => {
                               if (!confirm('Delete this photo?')) return;
                               await fetch(`${API_BASE_URL}/gallery/${g._id}`, { method: 'DELETE', headers: getAuthHeader() });
@@ -612,6 +653,9 @@ const Admin: React.FC = () => {
               </div>
             </div>
           )}
+
+          {/* ——— SITE SETTINGS ——— */}
+          {activeTab === 'settings' && <SiteSettingsEditor />}
 
         </div>
       </div>
