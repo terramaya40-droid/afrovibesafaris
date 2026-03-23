@@ -16,7 +16,7 @@ const Navbar: React.FC = () => {
     <nav className="navbar">
       <div className="container nav-content">
         <Link to="/" className="nav-logo">
-          <img src={getImageUrl('afrovibesafaris/logo')} alt="AfriVibe Safaris Logo" className="logo-img" />
+          <img src="/logo.jpg" alt="AfriVibe Safaris Logo" className="logo-img" />
           <span className="logo-text">AfriVibe <span className="text-secondary">Safaris</span></span>
         </Link>
         

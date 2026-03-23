@@ -33,9 +33,9 @@ const Home: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const heroSlides = [
-    { image: getImageUrl('afrovibesafaris/hero/1'), title: 'Beyond Journeys, Into Memories' },
-    { image: getImageUrl('afrovibesafaris/hero/2'), title: 'Experience the Soul of Africa' },
-    { image: getImageUrl('afrovibesafaris/hero/3'), title: 'Your African Adventure Awaits' }
+    { image: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&q=80&w=2000', title: 'Beyond Journeys, Into Memories' },
+    { image: 'https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&q=80&w=2000', title: 'Experience the Soul of Africa' },
+    { image: 'https://images.unsplash.com/photo-1523805081730-61444927f07c?auto=format&fit=crop&q=80&w=2000', title: 'Your African Adventure Awaits' }
   ];
 
   useEffect(() => {
@@ -43,14 +43,17 @@ const Home: React.FC = () => {
       setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
     }, 5000);
     return () => clearInterval(timer);
-  }, []);
+  }, [heroSlides.length]);
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/packages`)
       .then(res => res.json())
       .then(data => {
-        // Just take the first 3 for the featured section
-        setFeaturedPackages(data.slice(0, 3));
+        if (Array.isArray(data)) {
+          setFeaturedPackages(data.slice(0, 3));
+        } else {
+          setFeaturedPackages([]);
+        }
         setIsLoading(false);
       })
       .catch(err => {
@@ -169,7 +172,7 @@ const Home: React.FC = () => {
           <div className="destinations-grid">
           {isLoading ? (
             <p style={{ textAlign: 'center', width: '100%' }}>Loading packages...</p>
-          ) : featuredPackages.length > 0 ? (
+          ) : Array.isArray(featuredPackages) && featuredPackages.length > 0 ? (
             featuredPackages.map((dest) => (
               <DestinationCard
                 key={dest._id}
@@ -190,6 +193,7 @@ const Home: React.FC = () => {
         </div>
         </div>
       </section>
+>
 
       {/* Testimonials */}
       <section className="testimonials section bg-light container">

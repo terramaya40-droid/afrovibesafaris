@@ -11,7 +11,7 @@ const Gallery: React.FC = () => {
     fetch(`${API_BASE_URL}/gallery`)
       .then(res => res.json())
       .then(data => {
-        setImages(data);
+        setImages(Array.isArray(data) ? data : []);
         setIsLoading(false);
       })
       .catch(err => {

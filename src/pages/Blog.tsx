@@ -20,7 +20,11 @@ const Blog: React.FC = () => {
       fetch(`${API_BASE_URL}/articles/${slug}`)
         .then(res => res.json())
         .then(data => {
-          setCurrentPost(data);
+          if (data && !data.message) {
+            setCurrentPost(data);
+          } else {
+            setCurrentPost(null);
+          }
           setLoading(false);
           window.scrollTo(0, 0);
         })

@@ -1,20 +1,18 @@
 import React from 'react';
 import './Footer.css';
 import { Facebook, Instagram, Twitter, Phone, Linkedin } from 'lucide-react';
-import { getImageUrl } from '../../lib/cloudinary';
+import { Link } from 'react-router-dom';
 
 const Footer: React.FC = () => {
   return (
     <footer className="footer">
-      <div className="container footer-content">
-        <div className="footer-col">
-          <div className="footer-logo-wrapper">
-            <img src={getImageUrl('afrovibesafaris/logo')} alt="AfriVibe Safaris Logo" className="footer-logo-img" />
-            <h3 className="footer-logo">AfriVibe <span className="text-secondary">Safaris</span></h3>
-          </div>
-          <p className="footer-desc">
-            AfriVibe Safaris connects people to Africa through authentic, inclusive, and unforgettable safari experiences.
-          </p>
+      <div className="container footer-grid">
+        <div className="footer-brand">
+          <Link to="/" className="nav-logo">
+            <img src="/logo.jpg" alt="AfriVibe Safaris Logo" className="logo-img" />
+            <span className="logo-text">AfriVibe <span className="text-secondary">Safaris</span></span>
+          </Link>
+          <p className="footer-tagline">Your bridge between Africa and the world. Connecting global communities through nature, culture, and human-centered experiences.</p>
           <div className="social-links">
             <a href="#" aria-label="LinkedIn"><Linkedin size={20} /></a>
             <a href="#" aria-label="Facebook"><Facebook size={20} /></a>
