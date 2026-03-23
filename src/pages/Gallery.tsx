@@ -58,7 +58,7 @@ const Gallery: React.FC = () => {
           {images.map((img, idx) => (
             <div key={img._id || idx} className="gallery-item" onClick={() => setSelectedImage(img)}>
               <img src={getImg(img.image)} alt={img.title} loading="lazy" />
-              <div className="gallery-info">
+              <div className="gallery-item-overlay">
                 <h3>{img.title}</h3>
                 <p>{img.location}</p>
               </div>
