@@ -30,6 +30,18 @@ app.get('/api/health', (req, res) => {
   res.status(200).json({ status: 'ok', message: 'AfriVibe Backend is running' });
 });
 
+// DB Status API to debug connection issues
+app.get('/api/db-status', (req, res) => {
+  const uri = process.env.MONGO_URI || '';
+  const maskedUri = uri ? uri.replace(/:([^:@]+)@/, ':****@') : 'MISSING_MONGO_URI';
+  
+  res.status(200).json({
+    readyState: mongoose.connection.readyState,
+    statusText: ['Disconnected', 'Connected', 'Connecting', 'Disconnecting'][mongoose.connection.readyState] || 'Unknown',
+    maskedUri: maskedUri,
+  });
+});
+
 // Routes
 app.use('/api/auth', authRouter);
 app.use('/api/packages', packagesRouter);
