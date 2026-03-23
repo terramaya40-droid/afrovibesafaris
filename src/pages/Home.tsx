@@ -4,7 +4,6 @@ import { useStore } from '../store/useStore';
 import { API_BASE_URL } from '../config';
 import type { UserType } from '../store/useStore';
 import DestinationCard from '../components/Shared/DestinationCard';
-import { getImageUrl } from '../lib/cloudinary';
 import './Home.css';
 import { Compass, Camera, Globe, Heart, ArrowRight, Star } from 'lucide-react';
 
@@ -20,6 +19,36 @@ interface PackageData {
   pricing: { nonRes: string; res: string; cit: string };
 }
 
+const FALLBACK_PACKAGES: PackageData[] = [
+  {
+    _id: 'fallback-1',
+    title: 'Luxury Safari Experience',
+    country: 'Tanzania',
+    description: 'Witness the Great Migration from five-star tented camps. Private game drives with expert guides and sunset sundowners over the Serengeti plains.',
+    image: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&q=80&w=1600',
+    rating: 5.0, reviewCount: 84, packageType: 'Luxury',
+    pricing: { nonRes: '$8,500', res: 'TZS 12,000,000', cit: 'TZS 8,500,000' }
+  },
+  {
+    _id: 'fallback-2',
+    title: 'Maasai Mara Safari',
+    country: 'Kenya',
+    description: 'Adventure meets comfort across Kenya\'s most iconic parks. From the red elephants of Tsavo to the big cats of the Maasai Mara.',
+    image: 'https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&q=80&w=1600',
+    rating: 4.8, reviewCount: 156, packageType: 'Classic',
+    pricing: { nonRes: '$3,800', res: 'KES 145,000', cit: 'KES 95,000' }
+  },
+  {
+    _id: 'fallback-3',
+    title: 'Gorilla Trekking Adventure',
+    country: 'Uganda',
+    description: 'An intimate encounter with mountain gorillas in Bwindi Impenetrable Forest, guided by expert trackers and conservationists.',
+    image: 'https://images.unsplash.com/photo-1535083311013-bc12b80cf166?auto=format&fit=crop&q=80&w=1600',
+    rating: 4.9, reviewCount: 42, packageType: 'Classic',
+    pricing: { nonRes: '$4,200', res: 'UGX 5,500,000', cit: 'UGX 4,000,000' }
+  }
+];
+
 const mockReviews = [
   { id: 1, name: "Sarah Jenkins", text: "AfriVibe Safaris organized the most magical honeymoon for us in Tanzania. Every detail was perfect!", rating: 5 },
   { id: 2, name: "The Patel Family", text: "Our family safari in Kenya was unforgettable. The inclusive package catered to my father's mobility needs flawlessly.", rating: 5 },
@@ -28,7 +57,7 @@ const mockReviews = [
 
 const Home: React.FC = () => {
   const { userType, setUserType, openQuoteModal } = useStore();
-  const [featuredPackages, setFeaturedPackages] = useState<PackageData[]>([]);
+  const [featuredPackages, setFeaturedPackages] = useState<PackageData[]>(FALLBACK_PACKAGES);
   const [isLoading, setIsLoading] = useState(true);
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -43,21 +72,18 @@ const Home: React.FC = () => {
       setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
     }, 5000);
     return () => clearInterval(timer);
-  }, [heroSlides.length]);
+  }, []);
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/packages`)
       .then(res => res.json())
       .then(data => {
-        if (Array.isArray(data)) {
+        if (Array.isArray(data) && data.length > 0) {
           setFeaturedPackages(data.slice(0, 3));
-        } else {
-          setFeaturedPackages([]);
         }
         setIsLoading(false);
       })
-      .catch(err => {
-        console.error('Error fetching packages:', err);
+      .catch(() => {
         setIsLoading(false);
       });
   }, []);
@@ -75,10 +101,10 @@ const Home: React.FC = () => {
       {/* Hero Section with Slider */}
       <section className="hero-slider">
         {heroSlides.map((slide, index) => (
-          <div 
-            key={index} 
+          <div
+            key={index}
             className={`hero-slide ${index === currentSlide ? 'active' : ''}`}
-            style={{ backgroundImage: `url(${slide.image})` }}
+            style={{ backgroundImage: `url('${slide.image}')` }}
           >
             <div className="hero-overlay"></div>
             <div className="container hero-content">
@@ -94,7 +120,7 @@ const Home: React.FC = () => {
                 <p>Show me pricing for:</p>
                 <div className="selector-group">
                   {(['Non-Resident', 'Resident', 'Citizen'] as UserType[]).map(type => (
-                    <button 
+                    <button
                       key={type}
                       className={`selector-btn ${userType === type ? 'active' : ''}`}
                       onClick={() => setUserType(type)}
@@ -107,6 +133,18 @@ const Home: React.FC = () => {
             </div>
           </div>
         ))}
+
+        {/* Slider Navigation Dots */}
+        <div className="hero-dots">
+          {heroSlides.map((_, index) => (
+            <button
+              key={index}
+              className={`hero-dot ${index === currentSlide ? 'active' : ''}`}
+              onClick={() => setCurrentSlide(index)}
+              aria-label={`Slide ${index + 1}`}
+            />
+          ))}
+        </div>
       </section>
 
       {/* Our Services Section */}
@@ -126,7 +164,7 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Features grid (now focused on values) */}
+      {/* Features grid */}
       <section className="features section container">
         <div className="section-header text-center">
           <h2>Why Journey With AfriVibe Safaris?</h2>
@@ -170,30 +208,27 @@ const Home: React.FC = () => {
           </div>
           
           <div className="destinations-grid">
-          {isLoading ? (
-            <p style={{ textAlign: 'center', width: '100%' }}>Loading packages...</p>
-          ) : Array.isArray(featuredPackages) && featuredPackages.length > 0 ? (
-            featuredPackages.map((dest) => (
-              <DestinationCard
-                key={dest._id}
-                _id={dest._id}
-                title={dest.title}
-                country={dest.country}
-                description={dest.description}
-                image={dest.image}
-                rating={dest.rating}
-                reviewCount={dest.reviewCount}
-                pricing={dest.pricing as any}
-                packageType={dest.packageType}
-              />
-            ))
-          ) : (
-            <p style={{ textAlign: 'center', width: '100%' }}>No packages found. Please check your database connection.</p>
-          )}
-        </div>
+            {isLoading ? (
+              <p style={{ textAlign: 'center', width: '100%' }}>Loading packages...</p>
+            ) : (
+              featuredPackages.map((dest) => (
+                <DestinationCard
+                  key={dest._id}
+                  _id={dest._id}
+                  title={dest.title}
+                  country={dest.country}
+                  description={dest.description}
+                  image={dest.image}
+                  rating={dest.rating}
+                  reviewCount={dest.reviewCount}
+                  pricing={dest.pricing as any}
+                  packageType={dest.packageType}
+                />
+              ))
+            )}
+          </div>
         </div>
       </section>
->
 
       {/* Testimonials */}
       <section className="testimonials section bg-light container">

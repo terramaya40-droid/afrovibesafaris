@@ -1,5 +1,4 @@
 import React from 'react';
-import { getImageUrl } from '../lib/cloudinary';
 import './About.css';
 
 const About: React.FC = () => {

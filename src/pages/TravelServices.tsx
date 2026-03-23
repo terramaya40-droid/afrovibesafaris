@@ -1,5 +1,4 @@
 import React from 'react';
-import { getImageUrl } from '../lib/cloudinary';
 import { useStore } from '../store/useStore';
 import { Plane, FileCheck, HelpCircle } from 'lucide-react';
 import './TravelServices.css';

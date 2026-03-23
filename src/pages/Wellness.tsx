@@ -1,5 +1,4 @@
 import React from 'react';
-import { getImageUrl } from '../lib/cloudinary';
 import { useStore } from '../store/useStore';
 import { Heart, Sun, Ghost, Coffee } from 'lucide-react';
 import './Wellness.css';
