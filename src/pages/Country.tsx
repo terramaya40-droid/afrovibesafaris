@@ -98,7 +98,7 @@ const Country: React.FC = () => {
 
         {/* Packages Grid */}
         <div className="packages-header">
-          <h2 className="capitalize">Experiences in {destInfo.name}</h2>
+          <h2 className="capitalize">Experiences in {destInfo?.name || 'this Destination'}</h2>
           <p>Showing {filteredPackages.length} packages tailored to your interests.</p>
         </div>
 

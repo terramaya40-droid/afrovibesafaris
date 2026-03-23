@@ -42,10 +42,19 @@ const FALLBACK_PACKAGES: PackageData[] = [
     _id: 'fallback-3',
     title: 'Gorilla Trekking Adventure',
     country: 'Uganda',
-    description: 'An intimate encounter with mountain gorillas in Bwindi Impenetrable Forest, guided by expert trackers and conservationists.',
-    image: 'https://images.unsplash.com/photo-1535083311013-bc12b80cf166?auto=format&fit=crop&q=80&w=1600',
+    description: 'An intimate encounter with mountain gorillas in Bwindi Impenetrable Forest, guided by expert conservationists.',
+    image: 'https://images.unsplash.com/photo-1711198583409-b3dba6a7e144?auto=format&fit=crop&q=80&w=1600',
     rating: 4.9, reviewCount: 42, packageType: 'Classic',
-    pricing: { nonRes: '$4,200', res: 'UGX 5,500,000', cit: 'UGX 4,000,000' }
+    pricing: { nonRes: '$4,200', res: 'UGX 5.5M', cit: 'UGX 4M' }
+  },
+  {
+    _id: 'fallback-4',
+    title: 'Rwanda Golden Gorillas',
+    country: 'Rwanda',
+    description: 'Luxury lodge accommodation combined with exclusive morning gorilla permits in the misty volcanic highlands.',
+    image: 'https://images.unsplash.com/photo-1557050543-4d5f4e07ef46?auto=format&fit=crop&q=80&w=1600',
+    rating: 4.9, reviewCount: 28, packageType: 'Luxury',
+    pricing: { nonRes: '$5,800', res: 'RWF 3.8M', cit: 'RWF 2.5M' }
   }
 ];
 

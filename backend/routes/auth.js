@@ -24,7 +24,7 @@ router.post('/login', async (req, res) => {
 
     const token = jwt.sign(
       { id: admin._id, username: admin.username },
-      process.env.JWT_SECRET,
+      process.env.JWT_SECRET || 'afrivibe_emergency_secret_2026',
       { expiresIn: '8h' }
     );
 
@@ -40,7 +40,7 @@ router.get('/me', async (req, res) => {
   if (!token) return res.status(401).json({ message: 'No token.' });
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'afrivibe_emergency_secret_2026');
     res.json({ username: decoded.username });
   } catch {
     res.status(403).json({ message: 'Invalid token.' });
