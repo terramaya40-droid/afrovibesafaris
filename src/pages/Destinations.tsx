@@ -112,7 +112,7 @@ const Destinations: React.FC = () => {
                   </div>
                   <div className="cc-content">
                     <h3>{country.name}</h3>
-                    <p>{country.desc}</p>
+                    <p>{country.description}</p>
                     <div className="cc-tags">
                       {country.categories?.map((cat: string) => (
                         <span key={cat} className="cc-tag">{cat}</span>

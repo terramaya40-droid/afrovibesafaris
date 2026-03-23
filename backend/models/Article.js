@@ -8,7 +8,7 @@ const articleSchema = new mongoose.Schema({
   author: { type: String, required: true, default: 'AfriVibe Team' },
   category: {
     type: String,
-    enum: ['Travel Tips', 'Destination Spotlight', 'Wildlife & Conservation', 'Inclusive Travel', 'Safari Guide'],
+    enum: ['Travel Tips', 'Destination Spotlight', 'Wildlife & Conservation', 'Inclusive Travel', 'Safari Guide', 'Packing Guide', 'Conservation', 'Safety'],
     required: true
   },
   image: { type: String, required: true },
