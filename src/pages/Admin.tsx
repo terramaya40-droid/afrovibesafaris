@@ -51,13 +51,28 @@ const PackageModal: React.FC<{ pkg: any; onClose: () => void; onSave: () => void
   };
 
   const handleSave = async () => {
+    if (!form.title || !form.country || !form.pricing?.nonRes) {
+      alert("Please fill in at least Title, Country, and Non-Res Pricing.");
+      return;
+    }
     setSaving(true);
     const url = isEdit ? `${API_BASE_URL}/packages/${pkg._id}` : `${API_BASE_URL}/packages`;
     const method = isEdit ? 'PUT' : 'POST';
-    await fetch(url, { method, headers: getAuthHeader(), body: JSON.stringify(form) });
-    setSaving(false);
-    onSave();
-    onClose();
+    try {
+      const res = await fetch(url, { method, headers: getAuthHeader(), body: JSON.stringify(form) });
+      if (!res.ok) {
+        const errorData = await res.json();
+        alert(`Error saving package: ${errorData.message}`);
+        setSaving(false);
+        return;
+      }
+      onSave();
+      onClose();
+    } catch (e) {
+      alert("Network error.");
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -136,10 +151,21 @@ const ArticleModal: React.FC<{ article: any; onClose: () => void; onSave: () => 
     setSaving(true);
     const url = isEdit ? `${API_BASE_URL}/articles/${article._id}` : `${API_BASE_URL}/articles`;
     const method = isEdit ? 'PUT' : 'POST';
-    await fetch(url, { method, headers: getAuthHeader(), body: JSON.stringify(form) });
-    setSaving(false);
-    onSave();
-    onClose();
+    try {
+      const res = await fetch(url, { method, headers: getAuthHeader(), body: JSON.stringify(form) });
+      if (!res.ok) {
+        const errorData = await res.json();
+        alert(`Error saving article: ${errorData.message}`);
+        setSaving(false);
+        return;
+      }
+      onSave();
+      onClose();
+    } catch (e) {
+      alert("Network error.");
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -208,10 +234,23 @@ const DestinationModal: React.FC<{ dest: any; onClose: () => void; onSave: () =>
 
   const handleSave = async () => {
     setSaving(true);
-    await fetch(`${API_BASE_URL}/destinations`, { method: 'POST', headers: getAuthHeader(), body: JSON.stringify(form) });
-    setSaving(false);
-    onSave();
-    onClose();
+    const url = isEdit ? `${API_BASE_URL}/destinations/${dest._id}` : `${API_BASE_URL}/destinations`;
+    const method = isEdit ? 'PUT' : 'POST';
+    try {
+      const res = await fetch(url, { method, headers: getAuthHeader(), body: JSON.stringify(form) });
+      if (!res.ok) {
+        const errorData = await res.json();
+        alert(`Error saving destination: ${errorData.message}`);
+        setSaving(false);
+        return;
+      }
+      onSave();
+      onClose();
+    } catch (e) {
+      alert("Network error.");
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -258,10 +297,21 @@ const GalleryModal: React.FC<{ item: any; onClose: () => void; onSave: () => voi
 
   const handleSave = async () => {
     setSaving(true);
-    await fetch(`${API_BASE_URL}/gallery`, { method: 'POST', headers: getAuthHeader(), body: JSON.stringify(form) });
-    setSaving(false);
-    onSave();
-    onClose();
+    try {
+      const res = await fetch(`${API_BASE_URL}/gallery`, { method: 'POST', headers: getAuthHeader(), body: JSON.stringify(form) });
+      if (!res.ok) {
+        const errorData = await res.json();
+        alert(`Error saving photo: ${errorData.message}`);
+        setSaving(false);
+        return;
+      }
+      onSave();
+      onClose();
+    } catch (e) {
+      alert("Network error.");
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -297,10 +347,21 @@ const ReviewModal: React.FC<{ review: any; onClose: () => void; onSave: () => vo
 
   const handleSave = async () => {
     setSaving(true);
-    await fetch(`${API_BASE_URL}/testimonials/${review._id}`, { method: 'PUT', headers: getAuthHeader(), body: JSON.stringify(form) });
-    setSaving(false);
-    onSave();
-    onClose();
+    try {
+      const res = await fetch(`${API_BASE_URL}/testimonials/${review._id}`, { method: 'PUT', headers: getAuthHeader(), body: JSON.stringify(form) });
+      if (!res.ok) {
+        const errorData = await res.json();
+        alert(`Error saving review: ${errorData.message}`);
+        setSaving(false);
+        return;
+      }
+      onSave();
+      onClose();
+    } catch (e) {
+      alert("Network error.");
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
