@@ -15,7 +15,7 @@ const getAuthHeader = () => ({
 
 // ——— EMPTY FORM TEMPLATES ——————————————————————————————————————
 const emptyPackage = {
-  title: '', country: '', description: '', image: '', packageType: 'Classical',
+  title: '', country: '', description: '', image: '', images: [] as string[], packageType: 'Classical',
   category: 'Safari', duration: '5 Nights',
   pricing: { nonRes: '', res: '', cit: '' },
   rating: 5.0, reviewCount: 0
@@ -42,12 +42,27 @@ const PackageModal: React.FC<{ pkg: any; onClose: () => void; onSave: () => void
   const set = (field: string, val: any) => setForm((p: any) => ({ ...p, [field]: val }));
   const setPricing = (key: string, val: string) => setForm((p: any) => ({ ...p, pricing: { ...p.pricing, [key]: val } }));
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = (idx: number | 'main', e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     const reader = new FileReader();
-    reader.onloadend = () => set('image', reader.result as string);
+    reader.onloadend = () => {
+      if (idx === 'main') set('image', reader.result as string);
+      else {
+        const newImgs = [...(form.images || [])];
+        newImgs[idx] = reader.result as string;
+        set('images', newImgs);
+      }
+    };
     reader.readAsDataURL(file);
+  };
+
+  const addImage = () => set('images', [...(form.images || []), '']);
+  const removeImage = (idx: number) => set('images', (form.images || []).filter((_: any, i: number) => i !== idx));
+  const updateImage = (idx: number, val: string) => {
+    const newImgs = [...(form.images || [])];
+    newImgs[idx] = val;
+    set('images', newImgs);
   };
 
   const handleSave = async () => {
@@ -107,14 +122,31 @@ const PackageModal: React.FC<{ pkg: any; onClose: () => void; onSave: () => void
           </div>
           <div className="form-group"><label>Description</label><textarea rows={3} value={form.description} onChange={e => set('description', e.target.value)} /></div>
           <div className="form-group">
-            <label>Package Image</label>
+            <label>Cover Image (Required)</label>
             <div className="image-upload-wrapper">
-              <input type="file" accept="image/*" onChange={handleImageUpload} className="file-input" />
+              <input type="file" accept="image/*" onChange={e => handleImageUpload('main', e)} className="file-input" />
               <div className="or-divider"><span>OR</span></div>
-              <input value={form.image} onChange={e => set('image', e.target.value)} placeholder="Paste URL instead..." className="url-input" />
+              <input value={form.image} onChange={e => set('image', e.target.value)} placeholder="Main URL..." className="url-input" />
             </div>
+            {form.image && <img src={form.image} alt="preview" className="img-preview" />}
           </div>
-          {form.image && <img src={form.image} alt="preview" className="img-preview" />}
+
+          <div className="form-section-header flex-between">
+            <p className="form-section-label">Gallery Images (Optional)</p>
+            <button type="button" className="btn-sm btn-outline" onClick={addImage}><Plus size={14} /> Add Gallery Image</button>
+          </div>
+          
+          {(form.images || []).map((img: string, idx: number) => (
+            <div key={idx} className="gallery-field-row mt-sm">
+              <div className="image-upload-wrapper">
+                <input type="file" accept="image/*" onChange={e => handleImageUpload(idx, e)} className="file-input" />
+                <div className="or-divider"><span>OR</span></div>
+                <input value={img} onChange={e => updateImage(idx, e.target.value)} placeholder="Gallery URL..." className="url-input" />
+                <button className="btn-sm text-red" onClick={() => removeImage(idx)}><Trash2 size={14} /></button>
+              </div>
+              {img && <img src={img} alt={`preview-${idx}`} className="img-preview sm" />}
+            </div>
+          ))}
           <p className="form-section-label">Pricing Tiers</p>
           <div className="form-group-row">
             <div className="form-group"><label>Non-Resident (USD)</label><input value={form.pricing.nonRes} onChange={e => setPricing('nonRes', e.target.value)} placeholder="$2,500" /></div>

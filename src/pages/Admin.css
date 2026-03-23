@@ -323,3 +323,28 @@
   }
 }
 
+.gallery-field-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: #fdfdfd;
+  border: 1px solid #eee;
+  border-radius: 8px;
+}
+
+.img-preview.sm {
+  max-height: 100px;
+  width: auto;
+  max-width: 200px;
+  margin-top: 0.5rem;
+}
+
+.form-section-header {
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #eee;
+}
+
+

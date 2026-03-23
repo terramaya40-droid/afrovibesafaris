@@ -5,6 +5,7 @@ const packageSchema = new mongoose.Schema({
   country: { type: String, required: true },
   description: { type: String, required: true },
   image: { type: String, required: true },
+  images: [{ type: String }],
   rating: { type: Number, default: 5.0 },
   reviewCount: { type: Number, default: 0 },
   packageType: { type: String, required: true },
