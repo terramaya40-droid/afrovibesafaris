@@ -54,11 +54,11 @@ const Country: React.FC = () => {
   return (
     <div className="country-page">
       {/* Dynamic Banner */}
-      <div className="country-banner" style={{ backgroundImage: `url(${getImageUrl(destInfo.image)})` }}>
+      <div className="country-banner" style={{ backgroundImage: destInfo?.image ? `url(${getImageUrl(destInfo.image)})` : `url(https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&q=80&w=2000)` }}>
         <div className="banner-overlay"></div>
         <div className="container banner-content">
-          <h1 className="capitalize">Welcome to {destInfo.name}</h1>
-          <p>{destInfo.description}</p>
+          <h1 className="capitalize">Welcome to {destInfo?.name || 'Africa'}</h1>
+          <p>{destInfo?.description || 'Explore our amazing safari packages.'}</p>
         </div>
       </div>
 

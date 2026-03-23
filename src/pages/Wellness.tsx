@@ -9,7 +9,7 @@ const Wellness: React.FC = () => {
 
   return (
     <div className="wellness-page">
-      <section className="wellness-hero" style={{ backgroundImage: `url(${getImageUrl('afrovibesafaris/wellness/hero')})` }}>
+      <section className="wellness-hero" style={{ backgroundImage: `url(https://images.unsplash.com/photo-1523805081730-61444927f07c?auto=format&fit=crop&q=80&w=2000)` }}>
         <div className="hero-overlay"></div>
         <div className="container wellness-hero-content text-center">
           <h1>AfriVibe Wellness Safari</h1>

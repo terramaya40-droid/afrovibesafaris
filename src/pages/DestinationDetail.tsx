@@ -159,7 +159,7 @@ const DestinationDetail: React.FC = () => {
               <li><Camera size={18} /> Focus: Wildlife, Photography</li>
             </ul>
             <div className="booking-card-cta">
-              <p className="price-from">From <strong>{data.pricingTable[0].nonRes}</strong></p>
+              <p className="price-from">From <strong>{data.pricingTable?.[0]?.nonRes || data.pricing?.nonRes || 'Inquire'}</strong></p>
               <button 
                 className="btn-primary w-full mt-sm"
                 onClick={() => openQuoteModal({ destination: data.title })}

@@ -5,7 +5,7 @@ import './About.css';
 const About: React.FC = () => {
   return (
     <div className="about-page">
-      <section className="about-hero" style={{ backgroundImage: `url(${getImageUrl('afrovibesafaris/about/hero')})` }}>
+      <section className="about-hero" style={{ backgroundImage: `url(https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&q=80&w=2000)` }}>
         <div className="hero-overlay"></div>
         <div className="container about-hero-content">
           <h1>AfriVibe Safaris — About Us</h1>
@@ -28,7 +28,7 @@ const About: React.FC = () => {
             </p>
           </div>
           <div className="about-image">
-            <img src={getImageUrl('afrovibesafaris/about/who-we-are')} alt="Who We Are" className="rounded shadow-lg" />
+            <img src="https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&q=80&w=2000" alt="Who We Are" className="rounded shadow-lg" />
           </div>
         </div>
       </section>
@@ -37,7 +37,7 @@ const About: React.FC = () => {
         <div className="container">
           <div className="about-grid reverse">
             <div className="about-image">
-              <img src={getImageUrl('afrovibesafaris/about/story')} alt="Our Story" className="rounded shadow-lg" />
+              <img src="https://images.unsplash.com/photo-1501705388883-4ed8a543392c?auto=format&fit=crop&q=80&w=2000" alt="Our Story" className="rounded shadow-lg" />
             </div>
             <div className="about-content">
               <h2 className="section-title">Our Story</h2>

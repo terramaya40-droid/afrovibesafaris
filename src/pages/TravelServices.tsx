@@ -9,7 +9,7 @@ const TravelServices: React.FC = () => {
 
   return (
     <div className="travel-services-page">
-      <section className="services-hero" style={{ backgroundImage: `url(${getImageUrl('afrovibesafaris/services/hero')})` }}>
+      <section className="services-hero" style={{ backgroundImage: `url(https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&q=80&w=2000)` }}>
         <div className="hero-overlay"></div>
         <div className="container services-hero-content text-center">
           <h1>Complete Travel Solutions</h1>
