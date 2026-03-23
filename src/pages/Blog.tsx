@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { useStore } from '../store/useStore';
 import { Search, ChevronRight, Calendar, User } from 'lucide-react';
 import { API_BASE_URL } from '../config';
+import { getImageUrl } from '../lib/cloudinary';
 import './Blog.css';
 
 const Blog: React.FC = () => {
@@ -56,7 +57,7 @@ const Blog: React.FC = () => {
   if (slug && currentPost) {
     return (
       <div className="blog-page">
-        <div className="blog-detail-header py-xl" style={{ backgroundImage: `url(${currentPost.image})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+        <div className="blog-detail-header py-xl" style={{ backgroundImage: `url(${getImageUrl(currentPost.image)})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
           <div className="header-overlay"></div>
           <div className="container relative z-10 text-white text-center">
             <span className="blog-category-badge mb-md inline-block">{currentPost.category}</span>
@@ -114,7 +115,7 @@ const Blog: React.FC = () => {
               {filteredPosts.map(post => (
                 <article key={post._id || post.id} className="blog-card">
                   <Link to={`/blog/${post.slug}`} className="blog-card-image-link">
-                    <img src={post.image} alt={post.title} className="blog-card-image" />
+                    <img src={getImageUrl(post.image)} alt={post.title} className="blog-card-image" />
                     <span className="blog-category-badge">{post.category}</span>
                   </Link>
                   <div className="blog-card-content">

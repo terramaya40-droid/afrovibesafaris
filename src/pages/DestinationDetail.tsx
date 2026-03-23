@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { useStore } from '../store/useStore';
 import { Star, MapPin, Calendar, Users, Camera, ChevronLeft, ChevronRight } from 'lucide-react';
 import { API_BASE_URL } from '../config';
+import { getImageUrl } from '../lib/cloudinary';
 import './DestinationDetail.css';
 
 const DestinationDetail: React.FC = () => {
@@ -59,13 +60,13 @@ const DestinationDetail: React.FC = () => {
           {/* Image Gallery */}
           <div id="destination-gallery" className="gallery-slider">
             <button className="slider-btn prev" onClick={prevImage}><ChevronLeft size={32} /></button>
-            <img src={images[currentImageIdx]} alt={`${data.title} - ${currentImageIdx + 1}`} className="gallery-main-img" />
+            <img src={getImageUrl(images[currentImageIdx])} alt={`${data.title} - ${currentImageIdx + 1}`} className="gallery-main-img" />
             <button className="slider-btn next" onClick={nextImage}><ChevronRight size={32} /></button>
             <div className="gallery-thumbs">
               {images.map((img: string, idx: number) => (
                 <img 
                   key={idx} 
-                  src={img} 
+                  src={getImageUrl(img)} 
                   className={`thumb ${idx === currentImageIdx ? 'active' : ''}`}
                   onClick={() => setCurrentImageIdx(idx)}
                   alt="Thumbnail"

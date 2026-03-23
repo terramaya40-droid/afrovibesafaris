@@ -4,6 +4,7 @@ import { useStore } from '../store/useStore';
 import { API_BASE_URL } from '../config';
 import type { UserType } from '../store/useStore';
 import DestinationCard from '../components/Shared/DestinationCard';
+import { getImageUrl } from '../lib/cloudinary';
 import './Home.css';
 import { Compass, Camera, Globe, Heart, ArrowRight, Star } from 'lucide-react';
 
@@ -29,6 +30,20 @@ const Home: React.FC = () => {
   const { userType, setUserType, openQuoteModal } = useStore();
   const [featuredPackages, setFeaturedPackages] = useState<PackageData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const heroSlides = [
+    { image: getImageUrl('afrovibesafaris/hero/1'), title: 'Beyond Journeys, Into Memories' },
+    { image: getImageUrl('afrovibesafaris/hero/2'), title: 'Experience the Soul of Africa' },
+    { image: getImageUrl('afrovibesafaris/hero/3'), title: 'Your African Adventure Awaits' }
+  ];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/packages`)
@@ -44,42 +59,75 @@ const Home: React.FC = () => {
       });
   }, []);
 
+  const services = [
+    { id: 'safaris', title: 'Safaris & Tours', icon: <Compass size={32} />, link: '/destinations', desc: 'Curated wildlife adventures.' },
+    { id: 'virtual', title: 'Virtual Safaris', icon: <Globe size={32} />, link: '/virtual-safari', desc: 'Remote African experiences.' },
+    { id: 'wellness', title: 'Wellness Experiences', icon: <Heart size={32} />, link: '/wellness', desc: 'Reconnect with nature and self.' },
+    { id: 'flights', title: 'Flight Booking', icon: <Compass size={32} />, link: '/travel-services', desc: 'Domestic & international flights.' },
+    { id: 'visa', title: 'Visa Assistance', icon: <Globe size={32} />, link: '/travel-services', desc: 'Expert guidance for your journey.' }
+  ];
+
   return (
     <div className="home-page">
-      {/* Hero Section */}
-      <section className="hero">
-        <div className="hero-overlay"></div>
-        <div className="container hero-content">
-          <h1 className="hero-title">Experience the Soul of Africa</h1>
-          <p className="hero-subtitle">Authentic, inclusive, and unforgettable safari adventures tailored just for you.</p>
-          
-          <div className="hero-actions">
-            <Link to="/destinations" className="btn-primary hero-btn">Explore Destinations</Link>
-            <button className="btn-outline hero-btn-outline" onClick={() => openQuoteModal()}>Request a Custom Quote</button>
-          </div>
+      {/* Hero Section with Slider */}
+      <section className="hero-slider">
+        {heroSlides.map((slide, index) => (
+          <div 
+            key={index} 
+            className={`hero-slide ${index === currentSlide ? 'active' : ''}`}
+            style={{ backgroundImage: `url(${slide.image})` }}
+          >
+            <div className="hero-overlay"></div>
+            <div className="container hero-content">
+              <h1 className="hero-title">{slide.title}</h1>
+              <p className="hero-subtitle">Discover Africa through curated safaris, wellness experiences, and complete travel solutions — from flights to unforgettable adventures.</p>
+              
+              <div className="hero-actions">
+                <Link to="/destinations" className="btn-primary hero-btn">Explore Packages</Link>
+                <button className="btn-outline hero-btn-outline" onClick={() => openQuoteModal()}>Request a Quote</button>
+              </div>
 
-          <div className="hero-user-selector">
-            <p>Show me pricing for:</p>
-            <div className="selector-group">
-              {(['Non-Resident', 'Resident', 'Citizen'] as UserType[]).map(type => (
-                <button 
-                  key={type}
-                  className={`selector-btn ${userType === type ? 'active' : ''}`}
-                  onClick={() => setUserType(type)}
-                >
-                  {type}
-                </button>
-              ))}
+              <div className="hero-user-selector">
+                <p>Show me pricing for:</p>
+                <div className="selector-group">
+                  {(['Non-Resident', 'Resident', 'Citizen'] as UserType[]).map(type => (
+                    <button 
+                      key={type}
+                      className={`selector-btn ${userType === type ? 'active' : ''}`}
+                      onClick={() => setUserType(type)}
+                    >
+                      {type}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
+        ))}
+      </section>
+
+      {/* Our Services Section */}
+      <section className="services-section section container">
+        <div className="section-header text-center">
+          <h2>Our Services</h2>
+          <p>Complete travel solutions for your African journey.</p>
+        </div>
+        <div className="services-grid">
+          {services.map(service => (
+            <Link key={service.id} to={service.link} className="service-block">
+              <div className="service-icon">{service.icon}</div>
+              <h3>{service.title}</h3>
+              <p>{service.desc}</p>
+            </Link>
+          ))}
         </div>
       </section>
 
-      {/* Quick Links / Features */}
+      {/* Features grid (now focused on values) */}
       <section className="features section container">
         <div className="section-header text-center">
           <h2>Why Journey With AfriVibe Safaris?</h2>
-          <p>We believe the magic of Africa should be accessible to everyone.</p>
+          <p>We are a connection platform bridging Africa and the world.</p>
         </div>
         <div className="features-grid">
           <Link to="/destinations" className="feature-card">
@@ -125,7 +173,7 @@ const Home: React.FC = () => {
             featuredPackages.map((dest) => (
               <DestinationCard
                 key={dest._id}
-                id={dest._id}
+                _id={dest._id}
                 title={dest.title}
                 country={dest.country}
                 description={dest.description}

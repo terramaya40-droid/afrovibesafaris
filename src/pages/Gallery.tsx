@@ -1,52 +1,49 @@
 import React, { useState, useEffect } from 'react';
 import { API_BASE_URL } from '../config';
+import { getImageUrl } from '../lib/cloudinary';
 import './Gallery.css';
 
 const Gallery: React.FC = () => {
   const [images, setImages] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     fetch(`${API_BASE_URL}/gallery`)
       .then(res => res.json())
       .then(data => {
-        setImages(Array.isArray(data) ? data : []);
-        setLoading(false);
+        setImages(data);
+        setIsLoading(false);
       })
-      .catch(() => setLoading(false));
+      .catch(err => {
+        console.error('Error fetching gallery:', err);
+        setIsLoading(false);
+      });
   }, []);
 
   return (
-    <div className="gallery-page">
-      <div className="gallery-header py-xl text-center">
-        <div className="container">
-          <h1>Capturing the Wild</h1>
-          <p>A glimpse into the breathtaking moments captured on our safaris.</p>
-        </div>
+    <div className="gallery-page p-3 sm:p-5">
+      <div className="gallery-header text-center mb-5">
+        <h1>Our Gallery</h1>
+        <p>A glimpse into the magic of AfriVibe Safaris.</p>
       </div>
 
-      <div className="container section">
-        {loading ? (
-          <p className="text-center py-xl">Loading gallery...</p>
-        ) : images.length > 0 ? (
-          <div className="gallery-grid">
-            {images.map((img, i) => (
-              <div key={img._id || i} className="gallery-item">
-                <img src={img.image} alt={img.title} loading="lazy" />
-                <div className="gallery-item-overlay">
-                  <p>{img.title}</p>
-                  <span>{img.location}</span>
-                </div>
+      {isLoading ? (
+        <div className="text-center py-20">Loading magic...</div>
+      ) : (
+        <div className="gallery-grid">
+          {images.map((img, idx) => (
+            <div key={idx} className="gallery-item">
+              <img src={getImageUrl(img.image)} alt={img.title} />
+              <div className="gallery-info">
+                <h3>{img.title}</h3>
+                <p>{img.location}</p>
               </div>
-            ))}
-          </div>
-        ) : (
-          <p className="text-center py-xl">No images found in the gallery.</p>
-        )}
-      </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
-
 
 export default Gallery;

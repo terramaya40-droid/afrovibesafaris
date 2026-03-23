@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import DestinationCard from '../components/Shared/DestinationCard';
 import { API_BASE_URL } from '../config';
+import { getImageUrl } from '../lib/cloudinary';
 import './Country.css';
 
 // Mock data specific to a country
@@ -53,7 +54,7 @@ const Country: React.FC = () => {
   return (
     <div className="country-page">
       {/* Dynamic Banner */}
-      <div className="country-banner" style={{ backgroundImage: `url(${destInfo.image})` }}>
+      <div className="country-banner" style={{ backgroundImage: `url(${getImageUrl(destInfo.image)})` }}>
         <div className="banner-overlay"></div>
         <div className="container banner-content">
           <h1 className="capitalize">Welcome to {destInfo.name}</h1>
@@ -108,7 +109,7 @@ const Country: React.FC = () => {
             {filteredPackages.map((pkg: any) => (
               <DestinationCard 
                 key={pkg._id} 
-                id={pkg._id}
+                _id={pkg._id}
                 title={pkg.title}
                 country={pkg.country}
                 description={pkg.description}

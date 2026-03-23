@@ -1,0 +1,68 @@
+.travel-services-page {
+  background-color: var(--color-white);
+}
+
+.services-hero {
+  height: 50vh;
+  min-height: 400px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  display: flex;
+  align-items: center;
+  color: var(--color-white);
+}
+
+.services-hero-content {
+  position: relative;
+  z-index: 2;
+}
+
+.services-hero h1 {
+  font-size: clamp(2.5rem, 4vw, 4rem);
+  margin-bottom: var(--spacing-sm);
+}
+
+.services-layout {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-xl);
+}
+
+.service-detail-card {
+  padding: var(--spacing-xl);
+  border: 1px solid var(--color-gray-100);
+  border-radius: var(--radius-md);
+  text-align: left;
+  transition: box-shadow var(--transition-medium);
+}
+
+.service-detail-card:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-secondary);
+}
+
+.service-detail-icon {
+  color: var(--color-secondary);
+  margin-bottom: var(--spacing-md);
+}
+
+.service-detail-card h3 {
+  margin-bottom: var(--spacing-md);
+  font-size: 1.5rem;
+  color: var(--color-primary);
+}
+
+.service-detail-card p {
+  color: var(--color-gray-500);
+  line-height: 1.7;
+}
+
+.cta-box {
+  background-color: var(--color-gray-100);
+  border-radius: var(--radius-md);
+}
+
+.py-xxl { padding: var(--spacing-xxl) 0; }
+.mb-xl { margin-bottom: var(--spacing-xl); }
+.text-gray-500 { color: var(--color-gray-500); }

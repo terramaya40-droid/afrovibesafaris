@@ -1,0 +1,73 @@
+.wellness-page {
+  background-color: var(--color-light);
+}
+
+.wellness-hero {
+  height: 60vh;
+  min-height: 500px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  display: flex;
+  align-items: center;
+  color: var(--color-white);
+}
+
+.wellness-hero-content {
+  position: relative;
+  z-index: 2;
+}
+
+.wellness-hero h1 {
+  font-size: clamp(3rem, 5vw, 5rem);
+  margin-bottom: var(--spacing-md);
+}
+
+.wellness-hero p {
+  font-size: 1.25rem;
+  color: var(--color-gray-100);
+}
+
+.wellness-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-xl);
+}
+
+.well-feature {
+  background: var(--color-white);
+  padding: var(--spacing-xl) var(--spacing-lg);
+  border-radius: var(--radius-md);
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-fast);
+}
+
+.well-feature:hover {
+  transform: translateY(-5px);
+}
+
+.well-icon {
+  color: var(--color-secondary);
+  margin-bottom: var(--spacing-md);
+}
+
+.well-feature h3 {
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-primary);
+}
+
+.well-feature p {
+  color: var(--color-gray-500);
+  line-height: 1.6;
+}
+
+.wellness-cta {
+  padding: var(--spacing-xxl) 0;
+}
+
+.max-w-2xl { max-width: 42rem; }
+.mx-auto { margin-left: auto; margin-right: auto; }
+.mt-lg { margin-top: var(--spacing-lg); }
+.mb-md { margin-bottom: var(--spacing-md); }
+.text-center { text-align: center; }

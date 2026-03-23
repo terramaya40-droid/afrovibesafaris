@@ -10,6 +10,9 @@ import TripPlanner from './pages/TripPlanner';
 import VirtualSafari from './pages/VirtualSafari';
 import Blog from './pages/Blog';
 import Gallery from './pages/Gallery';
+import About from './pages/About';
+import Wellness from './pages/Wellness';
+import TravelServices from './pages/TravelServices';
 import Admin from './pages/Admin';
 import AdminLogin from './pages/AdminLogin';
 
@@ -40,6 +43,9 @@ const App: React.FC = () => {
         <Route path="/blog" element={<Layout><Blog /></Layout>} />
         <Route path="/blog/:slug" element={<Layout><Blog /></Layout>} />
         <Route path="/gallery" element={<Layout><Gallery /></Layout>} />
+        <Route path="/about" element={<Layout><About /></Layout>} />
+        <Route path="/wellness" element={<Layout><Wellness /></Layout>} />
+        <Route path="/travel-services" element={<Layout><TravelServices /></Layout>} />
       </Routes>
     </Router>
   );

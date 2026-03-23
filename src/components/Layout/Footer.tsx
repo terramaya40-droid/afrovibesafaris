@@ -1,6 +1,7 @@
 import React from 'react';
 import './Footer.css';
 import { Facebook, Instagram, Twitter, Phone, Linkedin } from 'lucide-react';
+import { getImageUrl } from '../../lib/cloudinary';
 
 const Footer: React.FC = () => {
   return (
@@ -8,7 +9,7 @@ const Footer: React.FC = () => {
       <div className="container footer-content">
         <div className="footer-col">
           <div className="footer-logo-wrapper">
-            <img src="/logo.jpg" alt="AfriVibe Safaris Logo" className="footer-logo-img" />
+            <img src={getImageUrl('afrovibesafaris/logo')} alt="AfriVibe Safaris Logo" className="footer-logo-img" />
             <h3 className="footer-logo">AfriVibe <span className="text-secondary">Safaris</span></h3>
           </div>
           <p className="footer-desc">
@@ -27,9 +28,13 @@ const Footer: React.FC = () => {
           <h4>Quick Links</h4>
           <ul>
             <li><a href="/destinations">Destinations</a></li>
+            <li><a href="/about">About Us</a></li>
+            <li><a href="/wellness">Wellness Safari</a></li>
+            <li><a href="/travel-services">Travel Services</a></li>
             <li><a href="/trip-planner">Trip Planner</a></li>
             <li><a href="/virtual-safari">Virtual Safaris</a></li>
             <li><a href="/blog">Blog & Learning</a></li>
+            <li><a href="/gallery">Gallery</a></li>
           </ul>
         </div>
 

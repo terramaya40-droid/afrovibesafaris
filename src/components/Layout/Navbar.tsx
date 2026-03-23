@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useStore } from '../../store/useStore';
 import type { UserType } from '../../store/useStore';
+import { getImageUrl } from '../../lib/cloudinary';
 import { Menu, X } from 'lucide-react';
 import './Navbar.css';
 
@@ -15,13 +16,16 @@ const Navbar: React.FC = () => {
     <nav className="navbar">
       <div className="container nav-content">
         <Link to="/" className="nav-logo">
-          <img src="/logo.jpg" alt="AfriVibe Safaris Logo" className="logo-img" />
+          <img src={getImageUrl('afrovibesafaris/logo')} alt="AfriVibe Safaris Logo" className="logo-img" />
           <span className="logo-text">AfriVibe <span className="text-secondary">Safaris</span></span>
         </Link>
         
         {/* Desktop Menu */}
         <div className="nav-links">
           <Link to="/destinations" className="nav-link">Destinations</Link>
+          <Link to="/about" className="nav-link">About</Link>
+          <Link to="/wellness" className="nav-link">Wellness</Link>
+          <Link to="/travel-services" className="nav-link">Services</Link>
           <Link to="/trip-planner" className="nav-link">Trip Planner</Link>
           <Link to="/virtual-safari" className="nav-link">Virtual Safari</Link>
           <Link to="/blog" className="nav-link">Blog</Link>
@@ -49,6 +53,9 @@ const Navbar: React.FC = () => {
       {isMobileMenuOpen && (
         <div className="mobile-menu">
           <Link to="/destinations" onClick={toggleMenu}>Destinations</Link>
+          <Link to="/about" onClick={toggleMenu}>About</Link>
+          <Link to="/wellness" onClick={toggleMenu}>Wellness</Link>
+          <Link to="/travel-services" onClick={toggleMenu}>Services</Link>
           <Link to="/trip-planner" onClick={toggleMenu}>Trip Planner</Link>
           <Link to="/virtual-safari" onClick={toggleMenu}>Virtual Safari</Link>
           <Link to="/blog" onClick={toggleMenu}>Blog</Link>
