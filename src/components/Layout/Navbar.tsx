@@ -23,9 +23,12 @@ const Navbar: React.FC = () => {
   }, []);
 
   const isActive = (path: string) => location.pathname === path;
+  
+  const isHeroPage = location.pathname === '/' || location.pathname === '/testimonials';
+  const shouldBeSolid = !isHeroPage || isScrolled;
 
   return (
-    <nav className={`navbar ${isScrolled ? 'nav-scrolled' : ''}`}>
+    <nav className={`navbar ${shouldBeSolid ? 'nav-scrolled' : ''}`}>
       <div className="container nav-content">
         <Link to="/" className="nav-logo">
           <img src="/logo.jpg" alt="AfriVibe Safaris Logo" className="logo-img" />

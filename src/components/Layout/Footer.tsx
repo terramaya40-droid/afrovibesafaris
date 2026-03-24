@@ -2,13 +2,20 @@ import React from 'react';
 import './Footer.css';
 import { Facebook, Instagram, Phone, Mail, Youtube } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useScrollReveal } from '../../hooks/useScrollReveal';
 
 const Footer: React.FC = () => {
+  const footerRef = useScrollReveal<HTMLElement>(0.1);
+  const col1Ref = useScrollReveal<HTMLDivElement>(0.1);
+  const col2Ref = useScrollReveal<HTMLDivElement>(0.1);
+  const col3Ref = useScrollReveal<HTMLDivElement>(0.1);
+  const col4Ref = useScrollReveal<HTMLDivElement>(0.1);
+
   return (
-    <footer className="footer reveal">
+    <footer className="footer reveal" ref={footerRef}>
       <div className="container footer-grid">
         {/* Brand */}
-        <div className="footer-brand reveal">
+        <div className="footer-brand reveal" ref={col1Ref}>
           <Link to="/" className="footer-logo-link">
             <img src="/logo.jpg" alt="AfriVibe Safaris" className="footer-logo-img" />
           </Link>
@@ -22,7 +29,7 @@ const Footer: React.FC = () => {
         </div>
 
         {/* Explore */}
-        <div className="footer-col reveal" style={{ animationDelay: '0.1s' }}>
+        <div className="footer-col reveal" ref={col2Ref} style={{ transitionDelay: '0.1s' }}>
           <h4>EXPLORE</h4>
           <ul>
             <li><Link to="/destinations">Destinations</Link></li>
@@ -35,7 +42,7 @@ const Footer: React.FC = () => {
         </div>
 
         {/* Company */}
-        <div className="footer-col reveal" style={{ animationDelay: '0.2s' }}>
+        <div className="footer-col reveal" ref={col3Ref} style={{ transitionDelay: '0.2s' }}>
           <h4>COMPANY</h4>
           <ul>
             <li><Link to="/about">About Us</Link></li>
@@ -48,7 +55,7 @@ const Footer: React.FC = () => {
         </div>
 
         {/* Contact & Trust */}
-        <div className="footer-col reveal" style={{ animationDelay: '0.3s' }}>
+        <div className="footer-col reveal" ref={col4Ref} style={{ transitionDelay: '0.3s' }}>
           <h4>GET IN TOUCH</h4>
           <ul className="contact-list">
             <li><Phone size={14} /><a href="tel:+254700000000">+254 XXX XXX XXX</a></li>
