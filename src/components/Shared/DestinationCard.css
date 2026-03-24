@@ -2,16 +2,16 @@
   display: flex;
   flex-direction: column;
   background-color: var(--color-white);
-  border-radius: var(--radius-md);
+  border-radius: 4px;
   overflow: hidden;
-  box-shadow: var(--shadow-sm);
-  transition: transform var(--transition-medium), box-shadow var(--transition-medium);
+  box-shadow: var(--shadow-md);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
   height: 100%;
 }
 
 .destination-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-xl);
 }
 
 .card-image-wrapper {
@@ -24,25 +24,25 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform var(--transition-slow);
+  transition: transform 0.6s ease;
 }
 
 .destination-card:hover .card-image {
-  transform: scale(1.05);
+  transform: scale(1.08);
 }
 
 .card-badge {
   position: absolute;
   top: var(--spacing-md);
   left: var(--spacing-md);
-  background-color: var(--color-primary);
-  color: var(--color-white);
+  background: linear-gradient(135deg, var(--color-secondary), #E8B820);
+  color: var(--color-dark);
   padding: 0.25rem 0.75rem;
-  border-radius: var(--radius-sm);
-  font-size: 0.75rem;
-  font-weight: 600;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.8px;
 }
 
 .card-content {
@@ -107,14 +107,15 @@
 }
 
 .price-label {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   color: var(--color-gray-500);
   text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.price-amount {
+.price-value, .price-amount {
   font-size: 1.25rem;
-  font-weight: 700;
+  font-weight: 800;
   color: var(--color-primary);
   line-height: 1.2;
 }

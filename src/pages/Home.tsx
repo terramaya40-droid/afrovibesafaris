@@ -3,10 +3,12 @@ import { Link } from 'react-router-dom';
 import { useStore } from '../store/useStore';
 import { API_BASE_URL } from '../config';
 import type { UserType } from '../store/useStore';
+import { useScrollReveal } from '../hooks/useScrollReveal';
 import DestinationCard from '../components/Shared/DestinationCard';
+import TestimonialCard from '../components/Shared/TestimonialCard';
 import './Home.css';
 import { getImageUrl } from '../lib/cloudinary';
-import { Compass, Camera, Globe, Heart, ArrowRight, Star } from 'lucide-react';
+import { Compass, Camera, Globe, Heart, ArrowRight } from 'lucide-react';
 
 interface PackageData {
   _id: string;
@@ -77,12 +79,28 @@ const Home: React.FC = () => {
 
   const activeSlides = settings?.home?.heroSlides?.length > 0 ? settings.home.heroSlides : defaultHeroSlides;
 
+  const servicesRef = useScrollReveal<HTMLElement>();
+  const featuresRef = useScrollReveal<HTMLElement>();
+  const destinationsRef = useScrollReveal<HTMLElement>();
+  const testimonialsRef = useScrollReveal<HTMLElement>();
+  const ctaRef = useScrollReveal<HTMLElement>();
+
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % activeSlides.length);
     }, 5000);
-    return () => clearInterval(timer);
+
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 100);
+    };
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      clearInterval(timer);
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   useEffect(() => {
@@ -125,35 +143,44 @@ const Home: React.FC = () => {
           <div
             key={index}
             className={`hero-slide ${index === currentSlide ? 'active' : ''}`}
-            style={{ backgroundImage: `url('${getImageUrl(slide.image, 1600)}')` }}
           >
+            <div className="hero-bg" style={{ backgroundImage: `url('${getImageUrl(slide.image, 1600)}')` }}></div>
             <div className="hero-overlay"></div>
-            <div className="container hero-content">
+            
+            <div className="container hero-content parallax-content">
+              <span className="hero-label">EAST AFRICA'S FINEST SAFARIS</span>
               <h1 className="hero-title">{slide.title}</h1>
-              <p className="hero-subtitle">{settings?.home?.heroSubtitle || 'Discover Africa through curated safaris, wellness experiences, and complete travel solutions — from flights to unforgettable adventures.'}</p>
+              <p className="hero-subtitle">{settings?.home?.heroSubtitle || 'Curated safaris across Kenya, Tanzania, Uganda & Beyond'}</p>
               
-              <div className="hero-actions">
-                <Link to="/destinations" className="btn-primary hero-btn">Explore Packages</Link>
-                <button className="btn-outline hero-btn-outline" onClick={() => openQuoteModal()}>Request a Quote</button>
+              <div className="hero-ctas">
+                <button className="btn-hero-primary" onClick={() => openQuoteModal()}>Plan My Safari</button>
+                <Link to="/destinations" className="btn-hero-secondary">Explore Destinations</Link>
               </div>
 
-              <div className="hero-user-selector">
-                <p>Show me pricing for:</p>
-                <div className="selector-group">
-                  {(['Non-Resident', 'Resident', 'Citizen'] as UserType[]).map(type => (
-                    <button
-                      key={type}
-                      className={`selector-btn ${userType === type ? 'active' : ''}`}
-                      onClick={() => setUserType(type)}
-                    >
-                      {type}
-                    </button>
-                  ))}
+              <div className="hero-bar">
+                <div className="hero-user-selector">
+                  <p>Show me pricing for:</p>
+                  <div className="selector-group">
+                    {(['Non-Resident', 'Resident', 'Citizen'] as UserType[]).map(type => (
+                      <button
+                        key={type}
+                        className={`selector-btn ${userType === type ? 'active' : ''}`}
+                        onClick={() => setUserType(type)}
+                      >
+                        {type}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         ))}
+
+        <div className={`scroll-indicator ${scrolled ? 'hidden-scroll' : ''}`}>
+          <div className="scroll-line"></div>
+          <span>scroll to explore</span>
+        </div>
 
         {/* Slider Navigation Dots */}
         <div className="hero-dots">
@@ -168,10 +195,12 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      <section className="services-section section container">
+      {/* Services section */}
+      <section className="services-section section container reveal" ref={servicesRef}>
         <div className="section-header text-center">
-          <h2>{settings?.home?.servicesTitle || 'Our Services'}</h2>
-          <p>{settings?.home?.servicesSubtitle || 'Complete travel solutions for your African journey.'}</p>
+          <h2 className="section-label">Our Services</h2>
+          <h3 className="mt-xs">{settings?.home?.servicesTitle || 'Complete Travel Solutions'}</h3>
+          <p>{settings?.home?.servicesSubtitle || 'Everything you need for your African journey.'}</p>
         </div>
         <div className="services-grid">
           {services.map(service => (
@@ -185,9 +214,10 @@ const Home: React.FC = () => {
       </section>
 
       {/* Features grid */}
-      <section className="features section container">
+      <section className="features section container reveal" ref={featuresRef}>
         <div className="section-header text-center">
-          <h2>Why Journey With AfriVibe Safaris?</h2>
+          <h2 className="section-label">Why Choose Us</h2>
+          <h3 className="mt-xs">Why Journey With AfriVibe Safaris?</h3>
           <p>We are a connection platform bridging Africa and the world.</p>
         </div>
         <div className="features-grid">
@@ -215,11 +245,12 @@ const Home: React.FC = () => {
       </section>
 
       {/* Featured Destinations */}
-      <section className="featured-destinations section">
+      <section className="featured-destinations section reveal" ref={destinationsRef}>
         <div className="container">
           <div className="section-header flex-between">
             <div>
-              <h2>Featured Adventures</h2>
+              <h2 className="section-label">Destinations</h2>
+              <h3 className="mt-xs">Featured Adventures</h3>
               <p>Hand-picked experiences across the continent.</p>
             </div>
             <Link to="/destinations" className="view-all-link">
@@ -251,29 +282,38 @@ const Home: React.FC = () => {
       </section>
 
       {/* Testimonials */}
-      <section className="testimonials section bg-light container">
+      <section className="testimonials section bg-light container reveal" ref={testimonialsRef}>
         <div className="section-header text-center">
-          <h2>Voices of the Wild</h2>
+          <h2 className="section-label">Community</h2>
+          <h3 className="mt-xs">Voices of the Wild</h3>
           <p>Read what our adventurers have to say.</p>
         </div>
-        <div className="testimonials-grid">
-          {reviews.slice(0, 3).map(review => (
-            <div key={review._id} className="testimonial-card">
-              <div className="stars">
-                {[...Array(5)].map((_, i) => <Star key={i} size={16} fill={i < review.rating ? "#E3B23C" : "none"} color="#E3B23C" />)}
-              </div>
-              <p className="testimonial-text">"{review.reviewText}"</p>
-              <p className="testimonial-author">- {review.userName}</p>
-            </div>
+        <div className="testimonials-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 'var(--space-xl)' }}>
+          {reviews.slice(0, 3).map((review) => (
+            <TestimonialCard 
+              key={review._id}
+              _id={review._id}
+              userName={review.userName}
+              userLocation={review.userLocation || 'Global'}
+              packageTitle={review.packageTitle}
+              rating={review.rating}
+              reviewText={review.reviewText}
+              sharedPhotos={review.sharedPhotos}
+              createdAt={review.createdAt || new Date().toISOString()}
+            />
           ))}
+        </div>
+        <div className="text-center mt-xl">
+          <Link to="/testimonials" className="btn-secondary">Read More Stories</Link>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="cta-section section text-center">
+      <section className="cta-section section text-center reveal" ref={ctaRef}>
         <div className="container cta-content">
-          <h2>{settings?.home?.ctaTitle || 'Ready to answer the call of the wild?'}</h2>
-          <p>{settings?.home?.ctaSubtitle || 'Let our safari experts craft your perfect, personalized itinerary today.'}</p>
+          <h2 className="section-label text-white" style={{opacity: 0.8}}>Your Journey Starts Here</h2>
+          <h3 className="mt-xs text-white" style={{fontSize: '2.5rem'}}>{settings?.home?.ctaTitle || 'Ready to answer the call of the wild?'}</h3>
+          <p className="text-white" style={{opacity: 0.9}}>{settings?.home?.ctaSubtitle || 'Let our safari experts craft your perfect, personalized itinerary today.'}</p>
           <button className="btn-primary mt-lg" onClick={() => openQuoteModal()}>Plan My Custom Trip</button>
         </div>
       </section>

@@ -13,6 +13,7 @@ import Gallery from './pages/Gallery';
 import About from './pages/About';
 import Wellness from './pages/Wellness';
 import TravelServices from './pages/TravelServices';
+import Testimonials from './pages/Testimonials';
 import Admin from './pages/Admin';
 import AdminLogin from './pages/AdminLogin';
 
@@ -46,6 +47,7 @@ const App: React.FC = () => {
         <Route path="/about" element={<Layout><About /></Layout>} />
         <Route path="/wellness" element={<Layout><Wellness /></Layout>} />
         <Route path="/travel-services" element={<Layout><TravelServices /></Layout>} />
+        <Route path="/testimonials" element={<Layout><Testimonials /></Layout>} />
       </Routes>
     </Router>
   );

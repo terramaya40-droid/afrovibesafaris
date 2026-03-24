@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { useStore } from '../../store/useStore';
 import type { UserType } from '../../store/useStore';
 import { Menu, X } from 'lucide-react';
@@ -7,12 +7,25 @@ import './Navbar.css';
 
 const Navbar: React.FC = () => {
   const { userType, setUserType } = useStore();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const location = useLocation();
 
   const toggleMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 80);
+    };
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Check on initial load
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const isActive = (path: string) => location.pathname === path;
+
   return (
-    <nav className="navbar">
+    <nav className={`navbar ${isScrolled ? 'nav-scrolled' : ''}`}>
       <div className="container nav-content">
         <Link to="/" className="nav-logo">
           <img src="/logo.jpg" alt="AfriVibe Safaris Logo" className="logo-img" />
@@ -21,14 +34,14 @@ const Navbar: React.FC = () => {
         
         {/* Desktop Menu */}
         <div className="nav-links">
-          <Link to="/destinations" className="nav-link">Destinations</Link>
-          <Link to="/about" className="nav-link">About</Link>
-          <Link to="/wellness" className="nav-link">Wellness</Link>
-          <Link to="/travel-services" className="nav-link">Services</Link>
-          <Link to="/trip-planner" className="nav-link">Trip Planner</Link>
-          <Link to="/virtual-safari" className="nav-link">Virtual Safari</Link>
-          <Link to="/blog" className="nav-link">Blog</Link>
-          <Link to="/gallery" className="nav-link">Gallery</Link>
+          <Link to="/destinations" className={`nav-link ${isActive('/destinations') ? 'active' : ''}`}>Destinations</Link>
+          <Link to="/about" className={`nav-link ${isActive('/about') ? 'active' : ''}`}>About</Link>
+          <Link to="/wellness" className={`nav-link ${isActive('/wellness') ? 'active' : ''}`}>Wellness</Link>
+          <Link to="/travel-services" className={`nav-link ${isActive('/travel-services') ? 'active' : ''}`}>Services</Link>
+          <Link to="/trip-planner" className={`nav-link ${isActive('/trip-planner') ? 'active' : ''}`}>Trip Planner</Link>
+          <Link to="/virtual-safari" className={`nav-link ${isActive('/virtual-safari') ? 'active' : ''}`}>Virtual Safari</Link>
+          <Link to="/blog" className={`nav-link ${isActive('/blog') ? 'active' : ''}`}>Blog</Link>
+          <Link to="/gallery" className={`nav-link ${isActive('/gallery') ? 'active' : ''}`}>Gallery</Link>
           
           
           <select 

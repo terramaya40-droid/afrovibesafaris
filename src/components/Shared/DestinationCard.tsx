@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useStore } from '../../store/useStore';
 import { Star, MapPin } from 'lucide-react';
 import { getImageUrl } from '../../lib/cloudinary';
+import LazyImage from './LazyImage';
 import './DestinationCard.css';
 
 interface DestinationCardProps {
@@ -42,7 +43,7 @@ const DestinationCard: React.FC<DestinationCardProps> = ({
   return (
     <Link to={`/destinations/${country.toLowerCase()}/${_id}`} className="destination-card">
       <div className="card-image-wrapper">
-        <img src={getImageUrl(image, 600)} alt={title} className="card-image" loading="lazy" />
+        <LazyImage src={getImageUrl(image, 600)} alt={title} className="card-image" />
         {packageType && <span className="card-badge">{packageType}</span>}
       </div>
       <div className="card-content">
