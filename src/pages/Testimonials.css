@@ -102,3 +102,17 @@
   gap: var(--space-xl);
   align-items: start;
 }
+
+@media (max-width: 768px) {
+  .testimonials-masonry {
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+  }
+  .testimonials-hero {
+    height: 50vh;
+    min-height: 400px;
+  }
+  .hero-title {
+    font-size: 2.2rem;
+  }
+}

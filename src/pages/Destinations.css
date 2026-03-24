@@ -12,7 +12,7 @@
 .banner-overlay {
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--overlay-gradient);
 }
 
 .banner-content {
@@ -169,8 +169,20 @@
   border-radius: var(--radius-sm);
 }
 
-.cc-btn {
-  display: block;
-  text-align: center;
-  width: 100%;
+@media (max-width: 768px) {
+  .destinations-banner {
+    height: 30vh;
+    min-height: 250px;
+  }
+  .banner-content h1 {
+    font-size: 2.2rem;
+  }
+  .layout-grid {
+    gap: var(--space-lg);
+  }
+  .filters-sidebar {
+    position: relative;
+    top: 0;
+    margin-bottom: var(--space-lg);
+  }
 }

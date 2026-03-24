@@ -21,8 +21,8 @@ const Footer: React.FC = () => {
           </Link>
           <p className="footer-tagline">Authentic African Experiences,<br />Curated With Care</p>
           <div className="social-links">
-            <a href="#" aria-label="Instagram"><Instagram size={18} /></a>
-            <a href="#" aria-label="Facebook"><Facebook size={18} /></a>
+            <a href="https://instagram.com/afrovibesafaris" target="_blank" rel="noreferrer" aria-label="Instagram"><Instagram size={18} /></a>
+            <a href="https://facebook.com/afrovibesafaris" target="_blank" rel="noreferrer" aria-label="Facebook"><Facebook size={18} /></a>
             <a href="#" aria-label="TripAdvisor" className="text-sm font-bold px-1">TA</a>
             <a href="#" aria-label="YouTube"><Youtube size={18} /></a>
           </div>
@@ -33,11 +33,10 @@ const Footer: React.FC = () => {
           <h4>EXPLORE</h4>
           <ul>
             <li><Link to="/destinations">Destinations</Link></li>
-            <li><Link to="/destinations?type=Safari">Safari Packages</Link></li>
-            <li><Link to="/destinations?type=Trekking">Trekking</Link></li>
-            <li><Link to="/wellness">Experiences</Link></li>
-            <li><Link to="/trip-planner">Trip Planner</Link></li>
-            <li><Link to="/virtual-safari">Virtual Safari</Link></li>
+            <li><Link to="/destinations">Safari Packages</Link></li>
+            <li><Link to="/gallery">Gallery</Link></li>
+            <li><Link to="/blog">Blog</Link></li>
+            <li><Link to="/trip-planner">Book Now</Link></li>
           </ul>
         </div>
 
@@ -58,11 +57,11 @@ const Footer: React.FC = () => {
         <div className="footer-col reveal" ref={col4Ref} style={{ transitionDelay: '0.3s' }}>
           <h4>GET IN TOUCH</h4>
           <ul className="contact-list">
-            <li><Phone size={14} /><a href="tel:+254700000000">+254 XXX XXX XXX</a></li>
-            <li><Mail size={14} /><a href="mailto:info@afrovibesafaris.com">info@afrovibesafaris.com</a></li>
+            <li><Phone size={14} /><a href="tel:+254742009497">+254 742 009 497</a></li>
+            <li><Mail size={14} /><a href="mailto:info@afrivibesafaris.com">info@afrivibesafaris.com</a></li>
           </ul>
           <a
-            href="https://wa.me/254700000000?text=Hello%20AfriVibe%20Safaris!"
+            href="https://wa.me/254742009497?text=Hello%20AfriVibe%20Safaris!"
             target="_blank"
             rel="noreferrer"
             className="whatsapp-cta-btn mt-xs mb-lg inline-block"
