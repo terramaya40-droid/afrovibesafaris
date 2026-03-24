@@ -7,7 +7,10 @@ const router = express.Router();
 // Get all packages
 router.get('/', async (req, res) => {
   try {
-    const packages = await Package.find({});
+    const packages = await Package.find({})
+      .lean()
+      .select('title country description image rating reviewCount packageType category duration pricing');
+    res.set('Cache-Control', 'public, max-age=3600');
     res.json(packages);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching packages', error: error.message });
@@ -17,8 +20,9 @@ router.get('/', async (req, res) => {
 // Get single package by ID
 router.get('/id/:id', async (req, res) => {
   try {
-    const pkg = await Package.findById(req.params.id);
+    const pkg = await Package.findById(req.params.id).lean();
     if (!pkg) return res.status(404).json({ message: 'Package not found' });
+    res.set('Cache-Control', 'public, max-age=3600');
     res.json(pkg);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching package', error: error.message });
@@ -28,7 +32,10 @@ router.get('/id/:id', async (req, res) => {
 // Get packages by country
 router.get('/:country', async (req, res) => {
   try {
-    const packages = await Package.find({ country: new RegExp(req.params.country, 'i') });
+    const packages = await Package.find({ country: new RegExp(req.params.country, 'i') })
+      .lean()
+      .select('title country description image rating reviewCount packageType category duration pricing');
+    res.set('Cache-Control', 'public, max-age=3600');
     res.json(packages);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching country packages', error: error.message });

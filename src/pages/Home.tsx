@@ -5,6 +5,7 @@ import { API_BASE_URL } from '../config';
 import type { UserType } from '../store/useStore';
 import DestinationCard from '../components/Shared/DestinationCard';
 import './Home.css';
+import { getImageUrl } from '../lib/cloudinary';
 import { Compass, Camera, Globe, Heart, ArrowRight, Star } from 'lucide-react';
 
 interface PackageData {
@@ -124,7 +125,7 @@ const Home: React.FC = () => {
           <div
             key={index}
             className={`hero-slide ${index === currentSlide ? 'active' : ''}`}
-            style={{ backgroundImage: `url('${slide.image}')` }}
+            style={{ backgroundImage: `url('${getImageUrl(slide.image, 1600)}')` }}
           >
             <div className="hero-overlay"></div>
             <div className="container hero-content">

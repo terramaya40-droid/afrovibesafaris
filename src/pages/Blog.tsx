@@ -108,10 +108,9 @@ const Blog: React.FC = () => {
     });
   };
 
-  const getImg = (img: string) => {
+  const getImg = (img: string, width?: number) => {
     if (!img) return FALLBACK_ARTICLES[0].image;
-    if (img.startsWith('http')) return img;
-    return getImageUrl(img);
+    return getImageUrl(img, width);
   };
 
   if (slug && currentPost) {
@@ -175,7 +174,7 @@ const Blog: React.FC = () => {
               {filteredPosts.map(post => (
                 <article key={post._id || post.id} className="blog-card">
                   <Link to={`/blog/${post.slug}`} className="blog-card-image-link">
-                    <img src={getImg(post.image)} alt={post.title} className="blog-card-image" />
+                    <img src={getImg(post.image, 600)} alt={post.title} className="blog-card-image" loading="lazy" />
                     <span className="blog-category-badge">{post.category}</span>
                   </Link>
                   <div className="blog-card-content">

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useStore } from '../store/useStore';
 import { Filter } from 'lucide-react';
 import { API_BASE_URL } from '../config';
+import { getImageUrl } from '../lib/cloudinary';
 import './Destinations.css';
 
 const FALLBACK_COUNTRIES = [
@@ -124,7 +125,7 @@ const Destinations: React.FC = () => {
               {filteredCountries.map(country => (
                 <div key={country.id} className="country-card">
                   <div className="cc-image-wrapper">
-                    <img src={country.image} alt={country.name} className="cc-image" />
+                    <img src={getImageUrl(country.image, 800)} alt={country.name} className="cc-image" loading="lazy" />
                   </div>
                   <div className="cc-content">
                     <h3>{country.name}</h3>

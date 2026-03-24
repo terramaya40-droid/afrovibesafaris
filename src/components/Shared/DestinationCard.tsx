@@ -42,7 +42,7 @@ const DestinationCard: React.FC<DestinationCardProps> = ({
   return (
     <Link to={`/destinations/${country.toLowerCase()}/${_id}`} className="destination-card">
       <div className="card-image-wrapper">
-        <img src={getImageUrl(image)} alt={title} className="card-image" />
+        <img src={getImageUrl(image, 600)} alt={title} className="card-image" loading="lazy" />
         {packageType && <span className="card-badge">{packageType}</span>}
       </div>
       <div className="card-content">

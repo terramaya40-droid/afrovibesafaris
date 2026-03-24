@@ -7,7 +7,11 @@ const router = express.Router();
 // GET all published articles (Public)
 router.get('/', async (req, res) => {
   try {
-    const articles = await Article.find({ published: true }).sort({ createdAt: -1 });
+    const articles = await Article.find({ published: true })
+      .sort({ createdAt: -1 })
+      .lean()
+      .select('title slug excerpt author category image country createdAt');
+    res.set('Cache-Control', 'public, max-age=3600');
     res.json(articles);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching articles', error: error.message });
@@ -17,8 +21,9 @@ router.get('/', async (req, res) => {
 // GET single article by slug (Public)
 router.get('/:slug', async (req, res) => {
   try {
-    const article = await Article.findOne({ slug: req.params.slug, published: true });
+    const article = await Article.findOne({ slug: req.params.slug, published: true }).lean();
     if (!article) return res.status(404).json({ message: 'Article not found' });
+    res.set('Cache-Control', 'public, max-age=3600');
     res.json(article);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching article', error: error.message });
@@ -28,7 +33,7 @@ router.get('/:slug', async (req, res) => {
 // GET all articles including drafts (Admin only)
 router.get('/admin/all', verifyToken, async (req, res) => {
   try {
-    const articles = await Article.find({}).sort({ createdAt: -1 });
+    const articles = await Article.find({}).sort({ createdAt: -1 }).lean();
     res.json(articles);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching all articles', error: error.message });

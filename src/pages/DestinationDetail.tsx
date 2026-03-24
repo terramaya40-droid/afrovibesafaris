@@ -60,16 +60,21 @@ const DestinationDetail: React.FC = () => {
           {/* Image Gallery */}
           <div id="destination-gallery" className="gallery-slider">
             <button className="slider-btn prev" onClick={prevImage}><ChevronLeft size={32} /></button>
-            <img src={getImageUrl(images[currentImageIdx])} alt={`${data.title} - ${currentImageIdx + 1}`} className="gallery-main-img" />
+            <img 
+              src={getImageUrl(images[currentImageIdx], 1200)} 
+              alt={`${data.title} - ${currentImageIdx + 1}`} 
+              className="gallery-main-img" 
+            />
             <button className="slider-btn next" onClick={nextImage}><ChevronRight size={32} /></button>
             <div className="gallery-thumbs">
               {images.map((img: string, idx: number) => (
                 <img 
                   key={idx} 
-                  src={getImageUrl(img)} 
+                  src={getImageUrl(img, 200)} 
                   className={`thumb ${idx === currentImageIdx ? 'active' : ''}`}
                   onClick={() => setCurrentImageIdx(idx)}
                   alt="Thumbnail"
+                  loading="lazy"
                 />
               ))}
             </div>
