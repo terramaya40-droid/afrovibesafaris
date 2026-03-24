@@ -7,8 +7,23 @@ const router = express.Router();
 // Get approved testimonials (Public)
 router.get('/', async (req, res) => {
   try {
-    const testimonials = await Testimonial.find({ status: 'Approved' }).sort({ createdAt: -1 });
-    res.json(testimonials);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    const testimonials = await Testimonial.find({ status: 'Approved' })
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    const total = await Testimonial.countDocuments({ status: 'Approved' });
+    
+    res.json({
+      testimonials,
+      totalPages: Math.ceil(total / limit),
+      currentPage: page,
+      totalCount: total
+    });
   } catch (error) {
     res.status(500).json({ message: 'Error fetching testimonials', error: error.message });
   }

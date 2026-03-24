@@ -10,16 +10,26 @@ const Testimonials: React.FC = () => {
   const [testimonials, setTestimonials] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
 
   const heroRef = useScrollReveal<HTMLElement>();
   const statsRef = useScrollReveal<HTMLDivElement>();
   const gridRef = useScrollReveal<HTMLDivElement>();
 
-  const fetchTestimonials = async () => {
+  const fetchTestimonials = async (pageNum: number = 1, append: boolean = false) => {
     try {
-      const res = await fetch(`${API_BASE_URL}/testimonials`);
+      if (!append) setIsLoading(true);
+      const res = await fetch(`${API_BASE_URL}/testimonials?page=${pageNum}&limit=6`);
       const data = await res.json();
-      setTestimonials(data);
+      
+      if (append) {
+        setTestimonials(prev => [...prev, ...data.testimonials]);
+      } else {
+        setTestimonials(data.testimonials);
+      }
+      
+      setHasMore(data.currentPage < data.totalPages);
     } catch (err) {
       console.error(err);
     } finally {
@@ -27,8 +37,14 @@ const Testimonials: React.FC = () => {
     }
   };
 
+  const handleLoadMore = () => {
+    const nextPage = page + 1;
+    setPage(nextPage);
+    fetchTestimonials(nextPage, true);
+  };
+
   useEffect(() => {
-    fetchTestimonials();
+    fetchTestimonials(1);
   }, []);
 
   return (
@@ -103,21 +119,31 @@ const Testimonials: React.FC = () => {
               </button>
             </div>
           ) : (
-            <div className="testimonials-masonry">
-              {testimonials.map((t) => (
-                <TestimonialCard 
-                  key={t._id}
-                  _id={t._id}
-                  userName={t.userName}
-                  userLocation={t.userLocation}
-                  packageTitle={t.packageTitle}
-                  rating={t.rating}
-                  reviewText={t.reviewText}
-                  sharedPhotos={t.sharedPhotos}
-                  createdAt={t.createdAt}
-                />
-              ))}
-            </div>
+            <>
+              <div className="testimonials-masonry">
+                {testimonials.map((t) => (
+                  <TestimonialCard 
+                    key={t._id}
+                    _id={t._id}
+                    userName={t.userName}
+                    userLocation={t.userLocation}
+                    packageTitle={t.packageTitle}
+                    rating={t.rating}
+                    reviewText={t.reviewText}
+                    sharedPhotos={t.sharedPhotos}
+                    createdAt={t.createdAt}
+                  />
+                ))}
+              </div>
+              
+              {hasMore && (
+                <div className="text-center mt-2xl">
+                  <button className="btn-secondary" onClick={handleLoadMore}>
+                    Load More Stories
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </div>
       </section>
@@ -127,7 +153,8 @@ const Testimonials: React.FC = () => {
         <TestimonialFormModal 
           onClose={() => {
             setIsModalOpen(false);
-            fetchTestimonials();
+            setPage(1);
+            fetchTestimonials(1, false);
           }} 
         />
       )}

@@ -25,8 +25,49 @@ const TestimonialFormModal: React.FC<TestimonialFormModalProps> = ({ onClose }) 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [isCompressing, setIsCompressing] = useState(false);
 
-  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const compressImage = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (event) => {
+        const img = new Image();
+        img.src = event.target?.result as string;
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const MAX_WIDTH = 1000;
+          const MAX_HEIGHT = 1000;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height) {
+            if (width > MAX_WIDTH) {
+              height *= MAX_WIDTH / width;
+              width = MAX_WIDTH;
+            }
+          } else {
+            if (height > MAX_HEIGHT) {
+              width *= MAX_HEIGHT / height;
+              height = MAX_HEIGHT;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx?.drawImage(img, 0, 0, width, height);
+          
+          // Compress to 0.7 quality JPEG
+          resolve(canvas.toDataURL('image/jpeg', 0.7));
+        };
+        img.onerror = reject;
+      };
+      reader.onerror = reject;
+    });
+  };
+
+  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     if (files.length === 0) return;
     
@@ -36,22 +77,28 @@ const TestimonialFormModal: React.FC<TestimonialFormModalProps> = ({ onClose }) 
       return;
     }
 
-    files.forEach(file => {
-      // Basic size validation (max 5MB per photo)
-      if (file.size > 5 * 1024 * 1024) {
-        setErrorMsg('Each photo must be under 5MB.');
-        return;
-      }
+    setIsCompressing(true);
+    setErrorMsg('');
 
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setForm(prev => ({
-          ...prev,
-          sharedPhotos: [...prev.sharedPhotos, reader.result as string]
-        }));
-      };
-      reader.readAsDataURL(file);
-    });
+    try {
+      const compressedPhotos = await Promise.all(
+        files.map(async (file) => {
+          if (file.size > 10 * 1024 * 1024) { // 10MB limit for raw
+             throw new Error('Photo too large');
+          }
+          return await compressImage(file);
+        })
+      );
+
+      setForm(prev => ({
+        ...prev,
+        sharedPhotos: [...prev.sharedPhotos, ...compressedPhotos]
+      }));
+    } catch (err) {
+      setErrorMsg('Failed to process one or more images.');
+    } finally {
+      setIsCompressing(false);
+    }
   };
 
   const removePhoto = (index: number) => {
@@ -176,15 +223,15 @@ const TestimonialFormModal: React.FC<TestimonialFormModalProps> = ({ onClose }) 
             <label>Upload Photos (Max 3)</label>
             <div className="photo-upload-area">
               <div className="upload-btn-wrapper">
-                <button type="button" className="btn-outline-sm flex-center gap-xs">
-                  <Upload size={16} /> Choose Images
+                <button type="button" className="btn-outline-sm flex-center gap-xs" disabled={isCompressing}>
+                  <Upload size={16} /> {isCompressing ? 'Processing...' : 'Choose Images'}
                 </button>
                 <input 
                   type="file" 
                   accept="image/*" 
                   multiple 
                   onChange={handlePhotoUpload} 
-                  disabled={form.sharedPhotos.length >= 3}
+                  disabled={form.sharedPhotos.length >= 3 || isCompressing}
                 />
               </div>
               <span className="text-sm text-muted ml-sm">
