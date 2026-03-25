@@ -275,7 +275,7 @@
 
 /* Section Shared */
 .section-header {
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: var(--spacing-lg);
 }
 
 .section-header p {
@@ -399,14 +399,14 @@
 
 /* Services Image Cards */
 .services-section {
-  padding-bottom: var(--space-3xl);
+  padding-bottom: var(--space-xl);
 }
 
 .services-card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: var(--space-xl);
-  margin-top: var(--space-2xl);
+  gap: var(--space-lg);
+  margin-top: var(--space-lg);
 }
 
 .service-image-card {
@@ -542,8 +542,8 @@
     gap: var(--spacing-md);
   }
   .section {
-    padding-top: var(--space-2xl);
-    padding-bottom: var(--space-2xl);
+    padding-top: var(--space-xl);
+    padding-bottom: var(--space-xl);
   }
   .section-header h3 {
     font-size: 1.75rem;

@@ -228,8 +228,6 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Features grid */}
-... (rest of the file)
 
       <section className="features section container reveal" ref={featuresRef}>
         <div className="section-header text-center">
