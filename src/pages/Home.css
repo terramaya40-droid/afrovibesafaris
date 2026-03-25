@@ -5,10 +5,10 @@
 /* Hero Slider */
 .hero-slider {
   position: relative;
-  height: 80vh;
-  min-height: 500px;
+  height: 88vh; /* Elongated as requested */
+  min-height: 600px;
   overflow: hidden;
-  background-color: #0F0F0D; /* Fixed dark background to prevent light flashes during transitions */
+  background-color: #0F0F0D; 
 }
 
 .hero-slide {
@@ -187,8 +187,9 @@
 /* B6: Scroll Indicator */
 .scroll-indicator {
   position: absolute;
-  bottom: 2rem;
-  right: 2rem; /* Parallel to pricing selector on left */
+  bottom: 1.5rem; /* At the very bottom */
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -227,11 +228,15 @@
 
 .hero-bar {
   position: absolute;
-  bottom: 2rem;
-  left: 2rem; /* Anchored left */
+  bottom: 5.5rem; /* Stacked above the scroll indicator */
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 10;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  max-width: 400px;
+  align-items: center;
 }
 
 .hero-user-selector {
