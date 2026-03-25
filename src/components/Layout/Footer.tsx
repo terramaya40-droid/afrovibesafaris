@@ -69,10 +69,10 @@ const Footer: React.FC = () => {
             AfriVibe Safaris connects people to Africa through authentic, inclusive, and unforgettable safari experiences.
           </p>
           <div className="social-links mt-lg">
-            <a href="#" aria-label="LinkedIn"><Linkedin size={18} /></a>
             <a href={social.facebook} target="_blank" rel="noreferrer" aria-label="Facebook"><Facebook size={18} /></a>
             <a href={social.instagram} target="_blank" rel="noreferrer" aria-label="Instagram"><Instagram size={18} /></a>
-            <a href="#" aria-label="Twitter"><Twitter size={18} /></a>
+            <a href={social.youtube} target="_blank" rel="noreferrer" aria-label="YouTube"><Youtube size={18} /></a>
+            <a href="#" aria-label="LinkedIn"><Linkedin size={18} /></a>
             <a href={`https://wa.me/${whatsapp.phone}`} target="_blank" rel="noreferrer" className="whatsapp-icon-link"><Phone size={18} /></a>
           </div>
         </div>
@@ -93,15 +93,15 @@ const Footer: React.FC = () => {
           <h4>Contact Us</h4>
           <ul className="contact-list">
             <li>
-              <span className="text-white opacity-60">Email:</span>
+              <Mail size={14} className="opacity-60" />
               <a href={`mailto:${contact.email || 'info@afrivibesafaris.com'}`}>{contact.email || 'info@afrivibesafaris.com'}</a>
             </li>
             <li>
-              <span className="text-white opacity-60">Phone:</span>
+              <Phone size={14} className="opacity-60" />
               <a href={`tel:${contact.phone || '+254742009497'}`}>{contact.phone || '+254 742 009 497'}</a>
             </li>
             <li className="flex items-start">
-              <span>{contact.address || 'Nairobi, Kenya'}</span>
+              <span className="text-sm">{contact.address || 'Nairobi, Kenya'}</span>
             </li>
           </ul>
         </div>
