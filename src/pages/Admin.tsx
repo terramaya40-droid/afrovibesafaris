@@ -402,6 +402,7 @@ const ReviewModal: React.FC<{ review: any; onClose: () => void; onSave: () => vo
         <div className="cms-modal-header"><h3>Edit Review</h3><button onClick={onClose}><X size={20} /></button></div>
         <div className="cms-modal-body">
           <div className="form-group"><label>User Name</label><input value={form.userName} onChange={e => set('userName', e.target.value)} /></div>
+          <div className="form-group"><label>Email Address</label><input value={form.email} onChange={e => set('email', e.target.value)} /></div>
           <div className="form-group"><label>Package Title (optional)</label><input value={form.packageTitle || ''} onChange={e => set('packageTitle', e.target.value)} /></div>
           <div className="form-group"><label>Rating (1-5)</label><input type="number" min="1" max="5" value={form.rating} onChange={e => set('rating', Number(e.target.value))} /></div>
           <div className="form-group"><label>Review Text</label><textarea rows={4} value={form.reviewText} onChange={e => set('reviewText', e.target.value)} /></div>
@@ -593,7 +594,10 @@ const Admin: React.FC = () => {
                       : reviews.length === 0 ? <tr><td colSpan={6} className="text-center">No reviews yet.</td></tr>
                       : reviews.map(r => (
                         <tr key={r._id}>
-                          <td><strong>{r.userName}</strong></td>
+                          <td>
+                            <strong>{r.userName}</strong><br />
+                            <span className="text-sm text-gray-500">{r.email}</span>
+                          </td>
                           <td>{r.packageTitle || 'General'}</td>
                           <td>{'★'.repeat(r.rating)}</td>
                           <td className="review-cell">"{r.reviewText}"</td>
