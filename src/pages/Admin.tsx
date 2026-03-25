@@ -561,7 +561,7 @@ const Admin: React.FC = () => {
               <p className="text-gray-500 mb-lg">Manage incoming inquiries. Update their status as you process each quote.</p>
               <div className="table-wrapper">
                 <table className="admin-table">
-                  <thead><tr><th>ID</th><th>Client</th><th>Destination</th><th>Type</th><th>Arrival</th><th>Departure</th><th>Pricing</th><th>Status</th><th>Actions</th></tr></thead>
+                  <thead><tr><th>ID</th><th>Client</th><th>Destination</th><th>Type</th><th>Arrival</th><th>Departure</th><th>Pricing</th><th>Nationality</th><th>Status</th><th>Actions</th></tr></thead>
                   <tbody>
                     {loading ? <tr><td colSpan={7} className="text-center">Loading...</td></tr>
                       : quotes.length === 0 ? <tr><td colSpan={7} className="text-center">No quotes yet.</td></tr>

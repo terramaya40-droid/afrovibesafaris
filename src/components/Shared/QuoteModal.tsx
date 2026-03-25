@@ -13,10 +13,9 @@ const QuoteModal: React.FC = () => {
     travelers: '2',
     arrivalDate: '',
     departureDate: '',
-    destination: '',
-    safariType: '',
     specialRequests: '',
-    pricingTarget: 'Non-Resident'
+    pricingTarget: 'Non-Resident',
+    nationality: ''
   });
   const [destOptions, setDestOptions] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);

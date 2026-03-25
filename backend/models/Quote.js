@@ -10,6 +10,8 @@ const quoteSchema = new mongoose.Schema({
   destination: { type: String, required: true },
   safariType: { type: String, required: true },
   pricingTarget: { type: String, required: true },
+  nationality: { type: String },
+  numTravelers: { type: Number },
   specialRequests: { type: String },
   status: { 
     type: String, 

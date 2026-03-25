@@ -99,11 +99,16 @@ html { scroll-behavior: smooth; }
 
 html, body {
   font-family: var(--font-body);
-  color: var(--text-secondary);
-  background-color: var(--warm-white);
+  color: #000000;
+  background-color: #FFFFFF;
   line-height: var(--line-height-body);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+}
+
+/* Maintain warm background ONLY for Home page hero or specific sections if needed */
+.home-page {
+  background-color: var(--warm-white);
 }
 
 h1 {

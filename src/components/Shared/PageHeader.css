@@ -1,6 +1,6 @@
 .page-header {
-  height: 25vh;
-  min-height: 200px;
+  height: 18vh;
+  min-height: 150px;
   background-size: cover;
   background-position: center;
   display: flex;
@@ -47,7 +47,7 @@
 
 @media (max-width: 768px) {
   .page-header {
-    height: 20vh;
-    min-height: 180px;
+    height: 15vh;
+    min-height: 120px;
   }
 }
