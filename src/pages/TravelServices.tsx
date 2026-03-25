@@ -1,5 +1,5 @@
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useStore } from '../store/useStore';
 import { API_BASE_URL } from '../config';
 import { Plane, FileCheck, HelpCircle } from 'lucide-react';
 import PageHeader from '../components/Shared/PageHeader';
