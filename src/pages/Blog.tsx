@@ -4,6 +4,7 @@ import { useStore } from '../store/useStore';
 import { Search, ChevronRight, Calendar, User } from 'lucide-react';
 import { API_BASE_URL } from '../config';
 import { getImageUrl } from '../lib/cloudinary';
+import PageHeader from '../components/Shared/PageHeader';
 import './Blog.css';
 
 const FALLBACK_ARTICLES = [
@@ -116,17 +117,11 @@ const Blog: React.FC = () => {
   if (slug && currentPost) {
     return (
       <div className="blog-page">
-        <div className="blog-detail-header py-xl" style={{ backgroundImage: `url(${getImg(currentPost.image)})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
-          <div className="header-overlay"></div>
-          <div className="container relative z-10 text-white text-center">
-            <span className="blog-category-badge mb-md inline-block">{currentPost.category}</span>
-            <h1 className="text-white mb-md">{currentPost.title}</h1>
-            <div className="blog-meta text-white justify-center">
-              <span><Calendar size={14} /> {new Date(currentPost.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
-              <span><User size={14} /> {currentPost.author}</span>
-            </div>
-          </div>
-        </div>
+        <PageHeader 
+          title={currentPost.title}
+          subtitle={`${currentPost.author} • ${new Date(currentPost.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}`}
+          backgroundImage={getImg(currentPost.image)}
+        />
 
         <div className="container section">
           <div className="blog-detail-layout">
@@ -158,12 +153,11 @@ const Blog: React.FC = () => {
 
   return (
     <div className="blog-page">
-      <div className="blog-header py-xl text-center">
-        <div className="container">
-          <h1 className="mb-sm text-white">Stories from the Savannah</h1>
-          <p className="text-gray-300 max-w-2xl mx-auto">Discover travel tips, wildlife insights, and stories from our guides and guests across Africa.</p>
-        </div>
-      </div>
+      <PageHeader 
+        title="Stories from the Savannah"
+        subtitle="Discover travel tips, wildlife insights, and stories from our guides and guests across Africa."
+        backgroundImage="https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&q=80&w=2000"
+      />
 
       <div className="container section blog-layout">
         <div className="blog-main">

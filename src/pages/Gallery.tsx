@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { API_BASE_URL } from '../config';
 import { getImageUrl } from '../lib/cloudinary';
+import PageHeader from '../components/Shared/PageHeader';
 import './Gallery.css';
 
 const FALLBACK_GALLERY = [
@@ -46,10 +47,11 @@ const Gallery: React.FC = () => {
 
   return (
     <div className="gallery-page">
-      <div className="gallery-header text-center">
-        <h1>Our Gallery</h1>
-        <p>A glimpse into the magic of AfriVibe Safaris — the wildlife, landscapes, and moments that define Africa.</p>
-      </div>
+      <PageHeader 
+        title="Our Gallery"
+        subtitle="A glimpse into the magic of AfriVibe Safaris — the wildlife, landscapes, and moments that define Africa."
+        backgroundImage="https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&q=80&w=2000"
+      />
 
       {isLoading ? (
         <div className="text-center py-20">Loading gallery...</div>

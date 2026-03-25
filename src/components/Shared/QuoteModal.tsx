@@ -11,7 +11,8 @@ const QuoteModal: React.FC = () => {
     email: '',
     phone: '',
     travelers: '2',
-    dates: '',
+    arrivalDate: '',
+    departureDate: '',
     destination: '',
     safariType: '',
     specialRequests: ''
@@ -112,7 +113,11 @@ const QuoteModal: React.FC = () => {
             </div>
             <div className="form-group">
               <label>Arrival Date</label>
-              <input type="date" name="dates" required value={formData.dates} onChange={handleChange} />
+              <input type="date" name="arrivalDate" required value={formData.arrivalDate} onChange={handleChange} />
+            </div>
+            <div className="form-group">
+              <label>Departure Date</label>
+              <input type="date" name="departureDate" required value={formData.departureDate} onChange={handleChange} />
             </div>
           </div>
 

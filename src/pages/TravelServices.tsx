@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useStore } from '../store/useStore';
 import { API_BASE_URL } from '../config';
 import { Plane, FileCheck, HelpCircle } from 'lucide-react';
+import PageHeader from '../components/Shared/PageHeader';
 import './TravelServices.css';
 
 const TravelServices: React.FC = () => {
@@ -17,16 +18,15 @@ const TravelServices: React.FC = () => {
 
   return (
     <div className="travel-services-page">
-      <section className="services-hero" style={{ backgroundImage: `url(${settings?.bannerImage || 'https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&q=80&w=2000'})` }}>
-        <div className="hero-overlay"></div>
-        <div className="container services-hero-content text-center">
-          <h1>{settings?.title || 'Complete Travel Solutions'}</h1>
-          <p className="max-w-2xl mx-auto">
-            {settings?.subtitle || "From your ticket to your visa, we've got you covered. AfriVibe Safaris provides end-to-end support for a seamless journey."}
-          </p>
-          <button className="btn-primary mt-lg" onClick={() => openQuoteModal()}>Request Consultation</button>
-        </div>
-      </section>
+      <PageHeader 
+        title={settings?.title || 'Travel Solutions'}
+        subtitle={settings?.subtitle || "From your ticket to your visa, we've got you covered."}
+        backgroundImage={settings?.bannerImage || 'https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&q=80&w=2000'}
+      />
+
+      <div className="container text-center mt-lg">
+         <button className="btn-primary" onClick={() => openQuoteModal()}>Request Consultation</button>
+      </div>
 
       <section className="services-list section container py-xl">
         <h2 className="text-center mb-xl">Our Core Travel Services</h2>

@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  LayoutDashboard, Users, FileText, CheckCircle,
-  Trash2, Edit, Plus, X, LogOut, BookOpen, Map, Settings
+  Trash2, Edit, Plus, X, LogOut, BookOpen, Map, Settings, Video
 } from 'lucide-react';
 import SiteSettingsEditor from '../components/Admin/SiteSettingsEditor';
 import { API_BASE_URL } from '../config';
@@ -419,7 +418,7 @@ const ReviewModal: React.FC<{ review: any; onClose: () => void; onSave: () => vo
 // ——— MAIN ADMIN PAGE ——————————————————————————————————————————————
 const Admin: React.FC = () => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<'quotes' | 'reviews' | 'packages' | 'articles' | 'destinations' | 'gallery' | 'settings'>('quotes');
+  const [activeTab, setActiveTab] = useState<'quotes' | 'reviews' | 'packages' | 'articles' | 'destinations' | 'gallery' | 'settings' | 'virtualSafari'>('quotes');
   const [quotes, setQuotes] = useState<any[]>([]);
   const [reviews, setReviews] = useState<any[]>([]);
   const [packages, setPackages] = useState<any[]>([]);
@@ -526,6 +525,9 @@ const Admin: React.FC = () => {
           <button className={`admin-nav-item ${activeTab === 'gallery' ? 'active' : ''}`} onClick={() => setActiveTab('gallery')}>
             <Users size={20} /> Gallery
           </button>
+          <button className={`admin-nav-item ${activeTab === 'virtualSafari' ? 'active' : ''}`} onClick={() => setActiveTab('virtualSafari')}>
+            <Video size={20} /> Virtual Safaris
+          </button>
           <button className={`admin-nav-item ${activeTab === 'settings' ? 'active' : ''}`} onClick={() => setActiveTab('settings')}>
             <Settings size={20} /> Site Content
           </button>
@@ -544,6 +546,7 @@ const Admin: React.FC = () => {
              : activeTab === 'articles' ? 'Blog Articles' 
              : activeTab === 'destinations' ? 'Destination Manager' 
              : activeTab === 'settings' ? 'Site Content Database' 
+             : activeTab === 'virtualSafari' ? 'Virtual Safari Configuration'
              : 'Gallery Manager'}
           </h2>
           <div className="admin-user"><Users size={20} /> Admin</div>
@@ -752,7 +755,10 @@ const Admin: React.FC = () => {
           )}
 
           {/* ——— SITE SETTINGS ——— */}
-          {activeTab === 'settings' && <SiteSettingsEditor />}
+          {activeTab === 'settings' && <SiteSettingsEditor view="all" />}
+
+          {/* ——— VIRTUAL SAFARI ——— */}
+          {activeTab === 'virtualSafari' && <SiteSettingsEditor view="virtualSafari" />}
 
         </div>
       </div>

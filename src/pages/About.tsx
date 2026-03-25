@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { API_BASE_URL } from '../config';
+import PageHeader from '../components/Shared/PageHeader';
 import './About.css';
 
 const About: React.FC = () => {
@@ -14,13 +15,11 @@ const About: React.FC = () => {
 
   return (
     <div className="about-page">
-      <section className="about-hero" style={{ backgroundImage: `url(${settings?.bannerImage || 'https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&q=80&w=2000'})` }}>
-        <div className="hero-overlay"></div>
-        <div className="container about-hero-content">
-          <h1>AfriVibe Safaris — About Us</h1>
-          <p>{settings?.subtitle || 'A bridge between Africa and the world.'}</p>
-        </div>
-      </section>
+      <PageHeader 
+        title="About AfriVibe Safaris" 
+        subtitle={settings?.subtitle || 'A bridge between Africa and the world.'}
+        backgroundImage={settings?.bannerImage || 'https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&q=80&w=2000'}
+      />
 
       <section className="about-section container py-xl">
         <div className="about-grid">

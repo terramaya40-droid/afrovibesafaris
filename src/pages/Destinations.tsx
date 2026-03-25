@@ -4,6 +4,7 @@ import { useStore } from '../store/useStore';
 import { Filter } from 'lucide-react';
 import { API_BASE_URL } from '../config';
 import { getImageUrl } from '../lib/cloudinary';
+import PageHeader from '../components/Shared/PageHeader';
 import './Destinations.css';
 
 const FALLBACK_COUNTRIES = [
@@ -78,14 +79,11 @@ const Destinations: React.FC = () => {
 
   return (
     <div className="destinations-page">
-      {/* Header Banner */}
-      <div className="destinations-banner">
-        <div className="banner-overlay"></div>
-        <div className="container banner-content">
-          <h1>Explore Africa</h1>
-          <p>Discover breath-taking landscapes, diverse wildlife, and rich cultures across our destinations.</p>
-        </div>
-      </div>
+      <PageHeader 
+        title="Explore Africa"
+        subtitle="Discover breath-taking landscapes, diverse wildlife, and rich cultures across our destinations."
+        backgroundImage="https://images.unsplash.com/photo-1534067783941-51c9c23eeaec?auto=format&fit=crop&q=80&w=2000"
+      />
 
 
 

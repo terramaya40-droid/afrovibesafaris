@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useStore } from '../store/useStore';
 import { API_BASE_URL } from '../config';
 import { Heart, Sun, Ghost, Coffee } from 'lucide-react';
+import PageHeader from '../components/Shared/PageHeader';
 import './Wellness.css';
 
 const Wellness: React.FC = () => {
@@ -17,16 +18,16 @@ const Wellness: React.FC = () => {
 
   return (
     <div className="wellness-page">
-      <section className="wellness-hero" style={{ backgroundImage: `url(${settings?.bannerImage || 'https://images.unsplash.com/photo-1523805081730-61444927f07c?auto=format&fit=crop&q=80&w=2000'})` }}>
-        <div className="hero-overlay"></div>
-        <div className="container wellness-hero-content text-center">
-          <h1>{settings?.title || 'AfriVibe Wellness Safari'}</h1>
-          <p className="max-w-2xl mx-auto">
-            {settings?.subtitle || 'Experience the healing power of the African wilderness. Designed for relaxation and reconnection, combining wildlife experiences with calm, mindful moments in nature.'}
-          </p>
-          <button className="btn-primary mt-lg" onClick={() => openQuoteModal()}>Request This Experience</button>
-        </div>
-      </section>
+      <PageHeader 
+        title={settings?.title || 'Wellness Safaris'}
+        subtitle={settings?.subtitle || 'Experience the healing power of the African wilderness.'}
+        backgroundImage={settings?.bannerImage || 'https://images.unsplash.com/photo-1523805081730-61444927f07c?auto=format&fit=crop&q=80&w=2000'}
+      />
+      
+      {/* Action Button positioned after header if needed, but PageHeader is just for visual hero */}
+      <div className="container text-center mt-lg">
+         <button className="btn-primary" onClick={() => openQuoteModal()}>Request This Experience</button>
+      </div>
 
       <section className="wellness-intro container py-xl text-center">
         <h2 className="mb-md">Reconnect with Nature and Self</h2>

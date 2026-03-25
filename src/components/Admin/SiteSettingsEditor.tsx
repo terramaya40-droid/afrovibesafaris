@@ -7,7 +7,11 @@ const getAuthHeader = () => ({
   'Authorization': `Bearer ${localStorage.getItem('afrivibe_token')}`
 });
 
-const SiteSettingsEditor: React.FC = () => {
+interface SiteSettingsEditorProps {
+  view?: 'all' | 'virtualSafari';
+}
+
+const SiteSettingsEditor: React.FC<SiteSettingsEditorProps> = ({ view = 'all' }) => {
   const [settings, setSettings] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -163,7 +167,8 @@ const SiteSettingsEditor: React.FC = () => {
       <div className="settings-container" style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
         
         {/* --- HOMEPAGE SETTINGS --- */}
-        <section className="settings-section" style={{ background: '#f9f9fa', padding: '24px', borderRadius: '8px' }}>
+        {view === 'all' && (
+          <section className="settings-section" style={{ background: '#f9f9fa', padding: '24px', borderRadius: '8px' }}>
           <h3 style={{ marginBottom: '16px', borderBottom: '1px solid #ddd', paddingBottom: '8px' }}>Homepage</h3>
           
           <div style={{ marginBottom: '24px' }}>
@@ -244,8 +249,10 @@ const SiteSettingsEditor: React.FC = () => {
             </div>
           </div>
         </section>
+        )}
 
         {/* --- ABOUT PAGE SETTINGS --- */}
+        {view === 'all' && (
         <section className="settings-section" style={{ background: '#f9f9fa', padding: '24px', borderRadius: '8px' }}>
           <h3 style={{ marginBottom: '16px', borderBottom: '1px solid #ddd', paddingBottom: '8px' }}>About Page</h3>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
@@ -267,8 +274,10 @@ const SiteSettingsEditor: React.FC = () => {
             </div>
           </div>
         </section>
+        )}
 
         {/* --- WELLNESS & TRAVEL SERVICES --- */}
+        {view === 'all' && (
         <section className="settings-section" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px' }}>
           <div style={{ background: '#f9f9fa', padding: '24px', borderRadius: '8px' }}>
             <h3 style={{ marginBottom: '16px', borderBottom: '1px solid #ddd', paddingBottom: '8px' }}>Wellness Page</h3>
@@ -294,8 +303,10 @@ const SiteSettingsEditor: React.FC = () => {
             <textarea rows={4} value={settings.travelServices?.body || ''} onChange={(e) => updateField('travelServices', 'body', e.target.value)} style={{ width: '100%', padding: '8px' }} />
           </div>
         </section>
+        )}
 
         {/* --- VIRTUAL SAFARI SETTINGS --- */}
+        {(view === 'all' || view === 'virtualSafari') && (
         <section className="settings-section" style={{ background: '#f9f9fa', padding: '24px', borderRadius: '8px' }}>
           <h3 style={{ marginBottom: '16px', borderBottom: '1px solid #ddd', paddingBottom: '8px' }}>Virtual Safaris</h3>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px' }}>
@@ -372,9 +383,10 @@ const SiteSettingsEditor: React.FC = () => {
             ))}
           </div>
         </section>
+        )}
 
         {/* --- FOOTER & CONTACT SETTINGS --- */}
-
+        {view === 'all' && (
         <section className="settings-section" style={{ background: '#f9f9fa', padding: '24px', borderRadius: '8px' }}>
           <h3 style={{ marginBottom: '16px', borderBottom: '1px solid #ddd', paddingBottom: '8px' }}>Footer & Social Links</h3>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '24px' }}>
@@ -420,6 +432,7 @@ const SiteSettingsEditor: React.FC = () => {
             </div>
           </div>
         </section>
+        )}
 
       </div>
     </div>
