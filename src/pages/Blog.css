@@ -128,7 +128,7 @@
 .blog-meta {
   display: flex;
   gap: var(--spacing-md);
-  color: var(--color-gray-500);
+  color: var(--text-muted);
   font-size: 0.75rem;
   margin-bottom: var(--spacing-sm);
 }
@@ -151,10 +151,11 @@
 }
 
 .blog-card-excerpt {
-  color: var(--color-gray-500);
+  color: var(--text-secondary);
   font-size: 0.95rem;
   margin-bottom: var(--spacing-md);
   flex-grow: 1;
+  line-height: 1.6;
 }
 
 .read-more-link {

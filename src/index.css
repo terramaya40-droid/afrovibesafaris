@@ -80,8 +80,8 @@
   --bg-secondary: #1E1B18;
   --bg-accent: #26221F;
   --text-main: #FFFFFF;
-  --text-secondary: #D1D5DB;
-  --text-muted: #9CA3AF;
+  --text-secondary: #C5C1B5; /* Warmer, higher contrast cream */
+  --text-muted: #9A9690;     /* Warmer muted gray */
   --border-main: rgba(255, 255, 255, 0.1);
   --card-bg: #1E1B18;
   --input-bg: #26221F;
@@ -92,8 +92,8 @@
   --bg-secondary: #FFFFFF;
   --bg-accent: #EDE8DF;
   --text-main: #1A1A18;
-  --text-secondary: #5A574F;
-  --text-muted: #9A9690;
+  --text-secondary: #4A4742; /* Deeper warm gray for readability */
+  --text-muted: #6E6A61;     /* Highly legible muted gray */
   --border-main: #EDE8DF;
   --card-bg: #FFFFFF;
   --input-bg: #FFFFFF;
@@ -105,8 +105,8 @@
   --bg-secondary: #1E1B18;
   --bg-accent: #26221F;
   --text-main: #FFFFFF;
-  --text-secondary: #D1D5DB;
-  --text-muted: #9CA3AF;
+  --text-secondary: #C5C1B5;
+  --text-muted: #9A9690;
   --border-main: rgba(255, 255, 255, 0.1);
   --card-bg: #1E1B18;
   --input-bg: #26221F;
