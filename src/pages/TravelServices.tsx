@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useStore } from '../store/useStore';
 import { API_BASE_URL } from '../config';
 import { Plane, FileCheck, HelpCircle } from 'lucide-react';
@@ -6,7 +6,6 @@ import PageHeader from '../components/Shared/PageHeader';
 import './TravelServices.css';
 
 const TravelServices: React.FC = () => {
-  const { openQuoteModal } = useStore();
   const [settings, setSettings] = useState<any>(null);
 
   useEffect(() => {
@@ -25,7 +24,7 @@ const TravelServices: React.FC = () => {
       />
 
       <div className="container text-center mt-lg">
-         <button className="btn-primary" onClick={() => openQuoteModal()}>Request Consultation</button>
+         <Link to="/trip-planner?destination=Services" className="btn-primary">Request Consultation</Link>
       </div>
 
       <section className="services-list section container py-xl">
@@ -67,7 +66,7 @@ const TravelServices: React.FC = () => {
             Our team is here to manage the details, so you can focus on the memories. 
             Contact us today for a full consultation on your upcoming trip.
           </p>
-          <button className="btn-primary" onClick={() => openQuoteModal()}>Speak with an Expert</button>
+          <Link to="/trip-planner?destination=Services" className="btn-primary">Speak with an Expert</Link>
         </div>
       </section>
     </div>

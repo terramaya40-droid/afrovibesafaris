@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useStore } from '../store/useStore';
 import { API_BASE_URL } from '../config';
 import { Heart, Sun, Ghost, Coffee } from 'lucide-react';
@@ -6,7 +6,6 @@ import PageHeader from '../components/Shared/PageHeader';
 import './Wellness.css';
 
 const Wellness: React.FC = () => {
-  const { openQuoteModal } = useStore();
   const [settings, setSettings] = useState<any>(null);
 
   useEffect(() => {
@@ -26,7 +25,7 @@ const Wellness: React.FC = () => {
       
       {/* Action Button positioned after header if needed, but PageHeader is just for visual hero */}
       <div className="container text-center mt-lg">
-         <button className="btn-primary" onClick={() => openQuoteModal()}>Request This Experience</button>
+         <Link to="/trip-planner?destination=Wellness" className="btn-primary">Request This Experience</Link>
       </div>
 
       <section className="wellness-intro container py-xl text-center">
@@ -69,7 +68,7 @@ const Wellness: React.FC = () => {
           <p className="max-w-2xl mx-auto mb-lg">
             Let us craft a wellness experience that leaves you feeling grounded, restored, and inspired.
           </p>
-          <button className="btn-secondary" onClick={() => openQuoteModal()}>Plan My Wellness Safari</button>
+          <Link to="/trip-planner?destination=Wellness" className="btn-secondary">Plan My Wellness Safari</Link>
         </div>
       </section>
     </div>

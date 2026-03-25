@@ -21,7 +21,7 @@ interface DestinationCardProps {
 const DestinationCard: React.FC<DestinationCardProps> = ({ 
   _id, title, country, description, image, rating, reviewCount, packageType, pricing 
 }) => {
-  const { userType, openQuoteModal } = useStore();
+  const { userType } = useStore();
 
   const getPrice = () => {
     switch(userType) {
@@ -29,15 +29,6 @@ const DestinationCard: React.FC<DestinationCardProps> = ({
       case 'Citizen': return pricing.cit;
       default: return pricing.nonRes;
     }
-  };
-
-  const handleRequestQuote = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    openQuoteModal({
-      destination: `${title}, ${country}`,
-      safariType: packageType || ''
-    });
   };
 
   return (

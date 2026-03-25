@@ -8,7 +8,7 @@ import './DestinationDetail.css';
 
 const DestinationDetail: React.FC = () => {
   const { country, destinationId } = useParams<{ country: string; destinationId: string }>();
-  const { userType, openQuoteModal } = useStore();
+  const { userType } = useStore();
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [currentImageIdx, setCurrentImageIdx] = useState(0);
