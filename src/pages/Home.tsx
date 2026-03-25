@@ -84,7 +84,7 @@ const Home: React.FC = () => {
   const servicesRef = useScrollReveal<HTMLElement>();
   const featuresRef = useScrollReveal<HTMLElement>();
   const destinationsRef = useScrollReveal<HTMLElement>();
-  const testimonialsRef = useScrollReveal<HTMLElement>();
+  const testimonialsRef = useScrollReveal<HTMLDivElement>();
   const ctaRef = useScrollReveal<HTMLElement>();
 
   const [scrolled, setScrolled] = useState(false);
