@@ -3,6 +3,7 @@ import { useStore } from '../store/useStore';
 import { Globe, Video, Users, CheckCircle, MapPin, ArrowRight } from 'lucide-react';
 import { API_BASE_URL } from '../config';
 import * as LucideIcons from 'lucide-react';
+import PageHeader from '../components/Shared/PageHeader';
 import './VirtualSafari.css';
 
 const VirtualSafari: React.FC = () => {
@@ -49,17 +50,11 @@ const VirtualSafari: React.FC = () => {
 
   return (
     <div className="virtual-safari-page">
-      {/* Hero Section */}
-      <div className="vs-hero" style={{ backgroundImage: `linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)), url('${vsContent?.bannerImage || 'https://images.unsplash.com/photo-1547471080-7fc2dd0102ad?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'}')` }}>
-        <div className="container text-center text-white relative z-10">
-          <Globe size={64} className="mx-auto mb-md text-accent animate-pulse-slow" />
-          <h1 className="hero-title">{vsContent?.title || 'Virtual Safaris'}</h1>
-          <p className="hero-subtitle">{vsContent?.subtitle || 'Bring the magic of Africa directly to your classroom, living room, or office.'}</p>
-          <button className="btn-primary mt-lg" onClick={() => document.getElementById('experiences')?.scrollIntoView({ behavior: 'smooth' })}>
-            View Experiences <ArrowRight size={18} style={{ marginLeft: '8px' }} />
-          </button>
-        </div>
-      </div>
+      <PageHeader 
+        title={vsContent?.title || 'Virtual Safaris'} 
+        subtitle={vsContent?.subtitle || 'Bring the magic of Africa directly to your classroom, living room, or office.'}
+        backgroundImage={vsContent?.bannerImage || 'https://images.unsplash.com/photo-1547471080-7fc2dd0102ad?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'}
+      />
 
       {/* How it Works */}
       <section className="vs-how section container">
