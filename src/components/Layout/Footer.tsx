@@ -1,11 +1,26 @@
+import React, { useState, useEffect } from 'react';
 import { Facebook, Instagram, Phone, Mail, Youtube } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useScrollReveal } from '../../hooks/useScrollReveal';
 import { API_BASE_URL } from '../../config';
-import { useState, useEffect } from 'react';
 
 const Footer: React.FC = () => {
-  const [settings, setSettings] = useState<any>(null);
+  const [settings, setSettings] = useState<any>({
+    contact: {
+      phone: '+254 742 009 497',
+      email: 'info@afrivibesafaris.com',
+      socialLinks: {
+        instagram: 'https://instagram.com/afrovibesafaris',
+        facebook: 'https://facebook.com/afrovibesafaris',
+        youtube: 'https://youtube.com/@afrovibesafaris',
+        tripadvisor: '#'
+      },
+      whatsapp: {
+        phone: '254742009497',
+        message: 'Hello AfriVibe Safaris!'
+      }
+    }
+  });
   
   useEffect(() => {
     fetch(`${API_BASE_URL}/settings`)
