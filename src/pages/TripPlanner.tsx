@@ -1,21 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useStore } from '../store/useStore';
-import { Check, ChevronRight, ChevronLeft, MapPin } from 'lucide-react';
+import { Check, ChevronRight, ChevronLeft, MapPin, Plus } from 'lucide-react';
+import { API_BASE_URL } from '../config';
 import './TripPlanner.css';
 
+// Configuration for static categories
 const COUNTRIES = ['Kenya', 'Tanzania', 'Uganda', 'Rwanda', 'Botswana'];
 const CATEGORIES = ['Safari', 'Hiking', 'Beach', 'Nature', 'Experiences'];
 const SAFARI_TYPES = ['Family', 'Couple', 'Inclusive', 'Classical'];
-
-// Mock packages mapped to countries for step 3
-const PACKAGES_BY_COUNTRY: Record<string, string[]> = {
-  'Kenya': ['Maasai Mara Migration', 'Amboseli Elephants', 'Diani Beach'],
-  'Tanzania': ['Serengeti Plains', 'Ngorongoro Crater', 'Zanzibar Escape'],
-  'Uganda': ['Bwindi Gorilla Trek', 'Queen Elizabeth Park'],
-  'Rwanda': ['Volcanoes National Park Trek', 'Lake Kivu Relaxation'],
-  'Botswana': ['Okavango Delta Luxury', 'Chobe River Safari']
-};
 
 const TripPlanner: React.FC = () => {
   const { openQuoteModal } = useStore();
@@ -24,6 +17,19 @@ const TripPlanner: React.FC = () => {
   
   // Builder State
   const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
+  const [customDestination, setCustomDestination] = useState('');
+  const [allPackages, setAllPackages] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/packages`)
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          setAllPackages(data);
+        }
+      })
+      .catch(console.error);
+  }, []);
 
   useEffect(() => {
     const dest = searchParams.get('destination');
@@ -44,10 +50,15 @@ const TripPlanner: React.FC = () => {
     }
   };
 
-  const currentAvailablePackages = selectedCountries.flatMap(c => PACKAGES_BY_COUNTRY[c] || []);
+  const currentAvailablePackages = allPackages
+    .filter(p => selectedCountries.includes(p.country))
+    .map(p => p.title);
 
   const handleFinish = () => {
-    const summary = `Countries: ${selectedCountries.join(', ')} | Packages: ${selectedPackages.join(', ')}`;
+    const finalCountries = [...selectedCountries];
+    if (customDestination) finalCountries.push(`Custom: ${customDestination}`);
+    
+    const summary = `Countries: ${finalCountries.join(', ')} | Packages: ${selectedPackages.join(', ')}`;
     openQuoteModal({
       destination: summary,
       safariType: selectedSafariType
@@ -100,6 +111,16 @@ const TripPlanner: React.FC = () => {
                       <span>{country}</span>
                     </button>
                   ))}
+                  <div className="select-card custom-dest-card" style={{ gridColumn: '1 / -1', marginTop: '1rem', display: 'flex', alignItems: 'center', gap: '1rem', background: 'rgba(112, 130, 91, 0.05)', border: '1px dashed var(--color-primary)' }}>
+                    <Plus size={20} className="text-primary" />
+                    <input 
+                      type="text" 
+                      placeholder="Add another destination of your own..." 
+                      value={customDestination}
+                      onChange={(e) => setCustomDestination(e.target.value)}
+                      style={{ flex: 1, background: 'transparent', border: 'none', padding: '0.8rem', fontSize: '1rem', outline: 'none' }}
+                    />
+                  </div>
                 </div>
               </div>
             )}
@@ -170,7 +191,11 @@ const TripPlanner: React.FC = () => {
                 <div className="summary-box">
                   <div className="summary-item">
                     <h4>Destinations</h4>
-                    <p>{selectedCountries.length > 0 ? selectedCountries.join(', ') : 'None selected'}</p>
+                    <p>
+                      {selectedCountries.join(', ')}
+                      {customDestination && (selectedCountries.length > 0 ? `, ${customDestination}` : customDestination)}
+                      {selectedCountries.length === 0 && !customDestination && 'None selected'}
+                    </p>
                   </div>
                   <div className="summary-item">
                     <h4>Interests</h4>
@@ -201,11 +226,11 @@ const TripPlanner: React.FC = () => {
                   className="btn-primary step-btn" 
                   onClick={() => setStep(step + 1)}
                   disabled={
-                    (step === 1 && selectedCountries.length === 0) ||
+                    (step === 1 && selectedCountries.length === 0 && !customDestination) ||
                     (step === 4 && !selectedSafariType)
                   }
                 >
-                  <span className={((step === 1 && selectedCountries.length === 0) || (step === 4 && !selectedSafariType)) ? 'disabled-text' : ''}>Next</span> <ChevronRight size={18} />
+                  <span className={((step === 1 && selectedCountries.length === 0 && !customDestination) || (step === 4 && !selectedSafariType)) ? 'disabled-text' : ''}>Next</span> <ChevronRight size={18} />
                 </button>
               ) : (
                 <button className="btn-primary step-btn" onClick={handleFinish}>

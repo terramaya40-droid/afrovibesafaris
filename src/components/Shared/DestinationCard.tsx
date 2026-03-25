@@ -63,7 +63,7 @@ const DestinationCard: React.FC<DestinationCardProps> = ({
             <span className="price-value">{getPrice()}</span>
             <span className="price-type">/ {userType}</span>
           </div>
-          <button className="btn-primary btn-sm" onClick={handleRequestQuote}>Quote</button>
+          <Link to={`/trip-planner?destination=${country}`} className="btn-primary btn-sm">Quote</Link>
         </div>
       </div>
     </Link>

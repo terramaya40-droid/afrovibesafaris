@@ -111,12 +111,12 @@ const DestinationDetail: React.FC = () => {
                         <td><strong>{pkg.type}</strong></td>
                         <td className="text-primary font-bold">{displayedPrice}</td>
                         <td className="table-actions">
-                          <button 
+                          <Link 
                             className="btn-primary" 
-                            onClick={() => openQuoteModal({ destination: data.title, safariType: pkg.type })}
+                            to={`/trip-planner?destination=${data.country}`}
                           >
                             Request Quote
-                          </button>
+                          </Link>
                           <a href={`https://wa.me/254742009497?text=I'm interested in the ${pkg.type} package for ${data.title}`} target="_blank" rel="noreferrer" className="btn-outline">
                             WhatsApp
                           </a>
@@ -165,12 +165,12 @@ const DestinationDetail: React.FC = () => {
             </ul>
             <div className="booking-card-cta">
               <p className="price-from">From <strong>{data.pricingTable?.[0]?.nonRes || data.pricing?.nonRes || 'Inquire'}</strong></p>
-              <button 
+              <Link 
                 className="btn-primary w-full mt-sm"
-                onClick={() => openQuoteModal({ destination: data.title })}
+                to={`/trip-planner?destination=${data.country}`}
               >
                 Request Custom Quote
-              </button>
+              </Link>
             </div>
           </div>
 
