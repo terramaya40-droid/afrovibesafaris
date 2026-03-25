@@ -15,8 +15,10 @@ const QuoteModal: React.FC = () => {
     departureDate: '',
     destination: '',
     safariType: '',
-    specialRequests: ''
+    specialRequests: '',
+    pricingTarget: 'Non-Resident'
   });
+  const [destOptions, setDestOptions] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
 
@@ -26,10 +28,21 @@ const QuoteModal: React.FC = () => {
         ...prev,
         destination: quoteContext.destination || '',
         safariType: quoteContext.safariType || '',
+        pricingTarget: userType || 'Non-Resident'
       }));
-      setSubmitSuccess(false); // Reset success state when modal opens
+      setSubmitSuccess(false);
+
+      // Fetch options
+      Promise.all([
+        fetch(`${API_BASE_URL}/destinations`).then(r => r.json()),
+        fetch(`${API_BASE_URL}/packages`).then(r => r.json())
+      ]).then(([dests, pkgs]) => {
+        const dNames = Array.isArray(dests) ? dests.map((d: any) => d.name) : [];
+        const pNames = Array.isArray(pkgs) ? pkgs.map((p: any) => p.title) : [];
+        setDestOptions(Array.from(new Set([...dNames, ...pNames])));
+      }).catch(console.error);
     }
-  }, [isQuoteModalOpen, quoteContext]);
+  }, [isQuoteModalOpen, quoteContext, userType]);
 
   if (!isQuoteModalOpen) return null;
 
@@ -123,7 +136,11 @@ const QuoteModal: React.FC = () => {
 
           <div className="form-group">
             <label>Destination / Package</label>
-            <input type="text" name="destination" placeholder="Where do you want to go?" value={formData.destination} onChange={handleChange} />
+            <select name="destination" required value={formData.destination} onChange={handleChange}>
+              <option value="">Select Destination</option>
+              {destOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+              <option value="Custom / Not Listed">Custom / Not Listed</option>
+            </select>
           </div>
 
           <div className="form-group-row">
@@ -139,7 +156,11 @@ const QuoteModal: React.FC = () => {
             </div>
             <div className="form-group">
               <label>Pricing Target</label>
-              <input type="text" disabled value={userType} className="disabled-input" />
+              <select name="pricingTarget" value={formData.pricingTarget} onChange={handleChange}>
+                <option value="Non-Resident">Non-Resident (Global)</option>
+                <option value="Resident">EA Resident</option>
+                <option value="Citizen">EA Citizen</option>
+              </select>
             </div>
           </div>
 

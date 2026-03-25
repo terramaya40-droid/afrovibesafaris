@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
+  LayoutDashboard, Users, FileText, CheckCircle,
   Trash2, Edit, Plus, X, LogOut, BookOpen, Map, Settings, Video
 } from 'lucide-react';
 import SiteSettingsEditor from '../components/Admin/SiteSettingsEditor';
