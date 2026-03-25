@@ -284,31 +284,44 @@ const Home: React.FC = () => {
       </section>
 
       {/* Testimonials */}
-      <section className="testimonials section bg-light container reveal" ref={testimonialsRef}>
-        <div className="section-header text-center">
-          <h2 className="section-label">Community</h2>
-          <h3 className="mt-xs">Voices of the Wild</h3>
-          <p>Read what our adventurers have to say.</p>
-        </div>
-        <div className="testimonials-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 'var(--space-xl)' }}>
-          {reviews.slice(0, 3).map((review) => (
-            <TestimonialCard 
-              key={review._id}
-              _id={review._id}
-              userName={review.userName}
-              userLocation={review.userLocation || 'Global'}
-              packageTitle={review.packageTitle}
-              rating={review.rating}
-              reviewText={review.reviewText}
-              sharedPhotos={review.sharedPhotos}
-              createdAt={review.createdAt || new Date().toISOString()}
-            />
-          ))}
-        </div>
-        <div className="text-center mt-xl">
-          <Link to="/testimonials" className="btn-secondary">Read More Stories</Link>
+      <section className="testimonials section bg-light py-2xl">
+        <div className="container reveal" ref={testimonialsRef}>
+          <div className="flex-between mb-xl">
+            <div className="section-header mb-0">
+              <h2 className="section-label">Community</h2>
+              <h3 className="mt-xs">Voices of the Wild</h3>
+              <p>Read what our adventurers have to say.</p>
+            </div>
+            <Link to="/testimonials" className="view-all-link">
+              Read More Stories <ArrowRight size={16} />
+            </Link>
+          </div>
+          
+          <div className="testimonials-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 'var(--space-xl)' }}>
+            {reviews.slice(0, 3).map((review) => (
+              <TestimonialCard 
+                key={review._id}
+                _id={review._id}
+                userName={review.userName}
+                userLocation={review.userLocation || 'Global'}
+                packageTitle={review.packageTitle}
+                rating={review.rating}
+                reviewText={review.reviewText}
+                sharedPhotos={review.sharedPhotos}
+                createdAt={review.createdAt || new Date().toISOString()}
+              />
+            ))}
+          </div>
+          
+          <div className="text-center mt-2xl">
+            <button className="btn-primary" onClick={() => setIsReviewModalOpen(true)}>
+              Give a Review
+            </button>
+          </div>
         </div>
       </section>
+
+      {isReviewModalOpen && <TestimonialFormModal onClose={() => setIsReviewModalOpen(false)} />}
 
       {/* CTA Section */}
       <section className="cta-section section text-center reveal" ref={ctaRef}>
