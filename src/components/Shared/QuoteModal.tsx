@@ -40,7 +40,14 @@ const QuoteModal: React.FC = () => {
       ]).then(([dests, pkgs]) => {
         const dNames = Array.isArray(dests) ? dests.map((d: any) => d.name) : [];
         const pNames = Array.isArray(pkgs) ? pkgs.map((p: any) => p.title) : [];
-        setDestOptions(Array.from(new Set([...dNames, ...pNames])));
+        let allOptions = Array.from(new Set([...dNames, ...pNames]));
+        
+        // If we have a context destination (like a summary from Trip Planner), add it to options
+        if (quoteContext.destination && !allOptions.includes(quoteContext.destination)) {
+          allOptions = [quoteContext.destination, ...allOptions];
+        }
+        
+        setDestOptions(allOptions);
       }).catch(console.error);
     }
   }, [isQuoteModalOpen, quoteContext, userType]);
