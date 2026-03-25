@@ -73,7 +73,9 @@ const Footer: React.FC = () => {
             <a href={social.instagram} target="_blank" rel="noreferrer" aria-label="Instagram"><Instagram size={18} /></a>
             <a href={social.youtube} target="_blank" rel="noreferrer" aria-label="YouTube"><Youtube size={18} /></a>
             <a href="#" aria-label="LinkedIn"><Linkedin size={18} /></a>
-            <a href={`https://wa.me/${whatsapp.phone}`} target="_blank" rel="noreferrer" className="whatsapp-icon-link"><Phone size={18} /></a>
+            <a href={`https://wa.me/${whatsapp.phone}`} target="_blank" rel="noreferrer" className="whatsapp-icon-link">
+              <img src="/whatsapp.png" alt="WhatsApp" style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
+            </a>
           </div>
         </div>
 

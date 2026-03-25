@@ -53,7 +53,7 @@
 }
 
 .mission-vision {
-  background-color: var(--color-primary);
+  background-color: var(--sage-dark);
   color: var(--color-white);
 }
 
@@ -65,14 +65,17 @@
 
 .mv-card {
   padding: var(--spacing-lg);
-  border: 1px solid rgba(255,255,255,0.2);
+  border: 1px solid rgba(255,255,255,0.1);
   border-radius: var(--radius-md);
 }
 
 .mv-card h3 {
-  color: var(--color-secondary);
+  color: var(--color-white);
+  font-family: var(--font-display);
+  font-size: 2rem;
   margin-bottom: var(--spacing-md);
 }
+
 
 .team-stats {
   display: grid;
