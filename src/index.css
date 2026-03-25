@@ -76,15 +76,15 @@
 
 /* --- THEME SPECIFIC COLORS --- */
 :root[data-theme='dark'] {
-  --bg-main: #0F0F0D;
-  --bg-secondary: #1A1A18;
-  --bg-accent: #1F1F1C;
+  --bg-main: #141210;
+  --bg-secondary: #1E1B18;
+  --bg-accent: #26221F;
   --text-main: #FFFFFF;
   --text-secondary: #D1D5DB;
   --text-muted: #9CA3AF;
   --border-main: rgba(255, 255, 255, 0.1);
-  --card-bg: #1A1A18;
-  --input-bg: #222220;
+  --card-bg: #1E1B18;
+  --input-bg: #26221F;
 }
 
 :root[data-theme='light'] {
@@ -101,15 +101,15 @@
 
 /* Default Theme fallback (Dark) */
 :root:not([data-theme='light']) {
-  --bg-main: #0F0F0D;
-  --bg-secondary: #1A1A18;
-  --bg-accent: #1F1F1C;
+  --bg-main: #141210;
+  --bg-secondary: #1E1B18;
+  --bg-accent: #26221F;
   --text-main: #FFFFFF;
   --text-secondary: #D1D5DB;
   --text-muted: #9CA3AF;
   --border-main: rgba(255, 255, 255, 0.1);
-  --card-bg: #1A1A18;
-  --input-bg: #222220;
+  --card-bg: #1E1B18;
+  --input-bg: #26221F;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }

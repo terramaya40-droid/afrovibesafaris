@@ -154,6 +154,38 @@ const SiteSettingsEditor: React.FC<SiteSettingsEditorProps> = ({ view = 'all' })
     }));
   };
 
+  const ImageInput = ({ value, onChange, label }: { value: string, onChange: (val: string) => void, label: string }) => {
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          onChange(reader.result as string);
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+
+    return (
+      <div style={{ marginBottom: '12px' }}>
+        <label style={{ display: 'block', fontSize: '13px', fontWeight: 'bold', marginBottom: '4px' }}>{label}</label>
+        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+          <input 
+            type="text" 
+            value={value} 
+            onChange={(e) => onChange(e.target.value)} 
+            placeholder="Image URL or upload file"
+            style={{ flex: 1, padding: '8px', fontSize: '13px' }}
+          />
+          <label className="btn-outline btn-sm" style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', height: '35px' }}>
+            <span>Upload</span>
+            <input type="file" accept="image/*" onChange={handleFileChange} style={{ display: 'none' }} />
+          </label>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="admin-panel animation-fade">
       <div className="panel-toolbar">
@@ -177,7 +209,7 @@ const SiteSettingsEditor: React.FC<SiteSettingsEditorProps> = ({ view = 'all' })
               <div key={i} style={{ display: 'flex', gap: '16px', marginBottom: '16px', alignItems: 'center', background: '#fff', padding: '16px', borderRadius: '4px', border: '1px solid #eee' }}>
                 <img src={slide.image || '/placeholder.jpg'} alt="Slide" style={{ width: '80px', height: '60px', objectFit: 'cover', borderRadius: '4px' }} />
                 <div style={{ flex: 1 }}>
-                  <input type="text" placeholder="Image URL" value={slide.image} onChange={(e) => updateSlide(i, 'image', e.target.value)} style={{ width: '100%', marginBottom: '8px', padding: '8px' }} />
+                  <ImageInput label="Slide Image" value={slide.image} onChange={(val) => updateSlide(i, 'image', val)} />
                   <input type="text" placeholder="Slide Title" value={slide.title} onChange={(e) => updateSlide(i, 'title', e.target.value)} style={{ width: '100%', padding: '8px' }} />
                 </div>
                 <button className="btn-outline text-red" onClick={() => removeSlide(i)}><Trash2 size={16} /></button>
@@ -219,8 +251,7 @@ const SiteSettingsEditor: React.FC<SiteSettingsEditorProps> = ({ view = 'all' })
                     <h5 style={{ margin: 0 }}>Service #{i + 1}</h5>
                     <button className="text-red" onClick={() => removeService(i)} style={{ padding: '4px' }}><Trash2 size={14} /></button>
                   </div>
-                  <label style={{ display: 'block', fontSize: '12px', marginBottom: '2px' }}>Background Image URL</label>
-                  <input type="text" value={service.image} onChange={(e) => updateService(i, 'image', e.target.value)} style={{ width: '100%', marginBottom: '8px', padding: '6px', fontSize: '13px' }} />
+                  <ImageInput label="Background Image" value={service.image} onChange={(val) => updateService(i, 'image', val)} />
                   <label style={{ display: 'block', fontSize: '12px', marginBottom: '2px' }}>Title</label>
                   <input type="text" value={service.title} onChange={(e) => updateService(i, 'title', e.target.value)} style={{ width: '100%', marginBottom: '8px', padding: '6px', fontSize: '13px' }} />
                   <label style={{ display: 'block', fontSize: '12px', marginBottom: '2px' }}>Description</label>
@@ -257,8 +288,7 @@ const SiteSettingsEditor: React.FC<SiteSettingsEditorProps> = ({ view = 'all' })
           <h3 style={{ marginBottom: '16px', borderBottom: '1px solid #ddd', paddingBottom: '8px' }}>About Page</h3>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
             <div style={{ gridColumn: '1 / -1' }}>
-              <label style={{ display: 'block', fontSize: '14px', marginBottom: '4px' }}>Banner Image URL</label>
-              <input type="text" value={settings.about?.bannerImage || ''} onChange={(e) => updateField('about', 'bannerImage', e.target.value)} style={{ width: '100%', padding: '8px' }} />
+              <ImageInput label="Banner Image" value={settings.about?.bannerImage || ''} onChange={(val) => updateField('about', 'bannerImage', val)} />
             </div>
             <div>
               <label style={{ display: 'block', fontSize: '14px', marginBottom: '4px' }}>Section Title</label>
@@ -281,8 +311,7 @@ const SiteSettingsEditor: React.FC<SiteSettingsEditorProps> = ({ view = 'all' })
         <section className="settings-section" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px' }}>
           <div style={{ background: '#f9f9fa', padding: '24px', borderRadius: '8px' }}>
             <h3 style={{ marginBottom: '16px', borderBottom: '1px solid #ddd', paddingBottom: '8px' }}>Wellness Page</h3>
-            <label style={{ display: 'block', fontSize: '14px', marginBottom: '4px' }}>Banner Image URL</label>
-            <input type="text" value={settings.wellness?.bannerImage || ''} onChange={(e) => updateField('wellness', 'bannerImage', e.target.value)} style={{ width: '100%', padding: '8px', marginBottom: '12px' }} />
+            <ImageInput label="Banner Image" value={settings.wellness?.bannerImage || ''} onChange={(val) => updateField('wellness', 'bannerImage', val)} />
             <label style={{ display: 'block', fontSize: '14px', marginBottom: '4px' }}>Title</label>
             <input type="text" value={settings.wellness?.title || ''} onChange={(e) => updateField('wellness', 'title', e.target.value)} style={{ width: '100%', padding: '8px', marginBottom: '12px' }} />
             <label style={{ display: 'block', fontSize: '14px', marginBottom: '4px' }}>Subtitle</label>
@@ -293,8 +322,7 @@ const SiteSettingsEditor: React.FC<SiteSettingsEditorProps> = ({ view = 'all' })
 
           <div style={{ background: '#f9f9fa', padding: '24px', borderRadius: '8px' }}>
             <h3 style={{ marginBottom: '16px', borderBottom: '1px solid #ddd', paddingBottom: '8px' }}>Travel Services Page</h3>
-            <label style={{ display: 'block', fontSize: '14px', marginBottom: '4px' }}>Banner Image URL</label>
-            <input type="text" value={settings.travelServices?.bannerImage || ''} onChange={(e) => updateField('travelServices', 'bannerImage', e.target.value)} style={{ width: '100%', padding: '8px', marginBottom: '12px' }} />
+            <ImageInput label="Banner Image" value={settings.travelServices?.bannerImage || ''} onChange={(val) => updateField('travelServices', 'bannerImage', val)} />
             <label style={{ display: 'block', fontSize: '14px', marginBottom: '4px' }}>Title</label>
             <input type="text" value={settings.travelServices?.title || ''} onChange={(e) => updateField('travelServices', 'title', e.target.value)} style={{ width: '100%', padding: '8px', marginBottom: '12px' }} />
             <label style={{ display: 'block', fontSize: '14px', marginBottom: '4px' }}>Subtitle</label>
@@ -311,8 +339,7 @@ const SiteSettingsEditor: React.FC<SiteSettingsEditorProps> = ({ view = 'all' })
           <h3 style={{ marginBottom: '16px', borderBottom: '1px solid #ddd', paddingBottom: '8px' }}>Virtual Safaris</h3>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px' }}>
             <div style={{ gridColumn: '1 / -1' }}>
-              <label style={{ display: 'block', fontSize: '14px', marginBottom: '4px' }}>Hero Banner Image URL</label>
-              <input type="text" value={settings.virtualSafari?.bannerImage || ''} onChange={(e) => updateField('virtualSafari', 'bannerImage', e.target.value)} style={{ width: '100%', padding: '8px' }} />
+              <ImageInput label="Hero Banner Image" value={settings.virtualSafari?.bannerImage || ''} onChange={(val) => updateField('virtualSafari', 'bannerImage', val)} />
             </div>
             <div>
               <label style={{ display: 'block', fontSize: '14px', marginBottom: '4px' }}>Hero Title</label>
@@ -332,11 +359,8 @@ const SiteSettingsEditor: React.FC<SiteSettingsEditorProps> = ({ view = 'all' })
                   <h5 style={{ margin: 0 }}>Experience #{i + 1}</h5>
                   <button className="text-red" onClick={() => removeVirtualExperience(i)} style={{ padding: '4px' }}><Trash2 size={14} /></button>
                 </div>
+                <ImageInput label="Experience Image" value={exp.image} onChange={(val) => updateVirtualExperience(i, 'image', val)} />
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-                  <div style={{ gridColumn: '1 / -1' }}>
-                    <label style={{ display: 'block', fontSize: '12px', marginBottom: '2px' }}>Image URL</label>
-                    <input type="text" value={exp.image} onChange={(e) => updateVirtualExperience(i, 'image', e.target.value)} style={{ width: '100%', marginBottom: '8px', padding: '6px', fontSize: '13px' }} />
-                  </div>
                   <div>
                     <label style={{ display: 'block', fontSize: '12px', marginBottom: '2px' }}>Title</label>
                     <input type="text" value={exp.title} onChange={(e) => updateVirtualExperience(i, 'title', e.target.value)} style={{ width: '100%', marginBottom: '8px', padding: '6px', fontSize: '13px' }} />
