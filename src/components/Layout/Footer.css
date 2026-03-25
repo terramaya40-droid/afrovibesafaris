@@ -136,59 +136,80 @@
   transform: translateY(-2px);
 }
 
-/* Trust Badges */
-.trust-badges-row {
+/* Logo Row & Brand Text */
+.footer-logo-row {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: var(--space-md);
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
 }
 
-.trust-badge {
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1);
-  color: rgba(255,255,255,0.6);
-  font-family: var(--font-body);
+.brand-text h2 {
+  font-family: var(--font-display);
+  margin: 0;
+  line-height: 1;
+  color: white;
+}
+
+.brand-text p {
+  color: #D4A373; /* Golden Terracotta */
+  letter-spacing: 0.2em;
   font-size: 0.7rem;
   font-weight: 700;
-  letter-spacing: 0.5px;
-  padding: 0.35rem 0.65rem;
-  border-radius: 2px;
-  text-transform: uppercase;
+  margin: 4px 0 0;
 }
 
-/* Footer Bottom Bar */
-.footer-bottom {
-  border-top: 1px solid rgba(255,255,255,0.05);
-  padding: var(--space-md) 0;
-}
-
-.footer-bottom-inner {
+/* Newsletter Form */
+.newsletter-form {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: var(--space-sm);
-  color: var(--text-muted);
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.newsletter-form input {
+  background: white;
+  border: none;
+  padding: 0.75rem 1rem;
+  border-radius: 2px;
   font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: #333;
+  width: 100%;
 }
 
-@media (min-width: 768px) {
-  .footer-bottom-inner {
-    flex-direction: row;
-    justify-content: space-between;
-  }
+.newsletter-form button {
+  background: #D4A373;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 2px;
+  font-family: var(--font-body);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.8rem;
+  transition: background 0.3s ease;
 }
 
-.footer-flags {
-  font-size: 1.1rem;
+.newsletter-form button:hover {
+  background: #C49262;
 }
 
-.footer-legal a {
-  color: var(--text-muted);
-  transition: color var(--transition-fast);
-  text-decoration: none;
-}
+/* Utility Flex used in TSX */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.items-start { align-items: flex-start; }
+.justify-between { justify-content: space-between; }
+.gap-sm { gap: 0.5rem; }
+.gap-md { gap: 1rem; }
+.mb-md { margin-bottom: 1.5rem; }
+.mt-lg { margin-top: 2.5rem; }
+.mt-2xl { margin-top: 6rem; }
+.text-xs { font-size: 0.75rem; }
+.text-sm { font-size: 0.875rem; }
+.text-gray-400 { color: #9ca3af; }
+.text-gray-500 { color: #6b7280; }
+.opacity-60 { opacity: 0.6; }
 
-.footer-legal a:hover {
-  color: var(--terracotta-light);
-}
