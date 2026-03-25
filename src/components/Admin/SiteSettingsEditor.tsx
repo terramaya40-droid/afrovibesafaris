@@ -108,6 +108,48 @@ const SiteSettingsEditor: React.FC = () => {
     }));
   };
 
+  const updateVirtualExperience = (index: number, field: string, value: any) => {
+    const newExp = [...(settings.virtualSafari.experiences || [])];
+    if (field.includes('.')) {
+      const [parent, child] = field.split('.');
+      newExp[index] = { ...newExp[index], [parent]: { ...newExp[index][parent], [child]: value } };
+    } else {
+      newExp[index] = { ...newExp[index], [field]: value };
+    }
+    setSettings((prev: any) => ({
+      ...prev,
+      virtualSafari: { ...prev.virtualSafari, experiences: newExp }
+    }));
+  };
+
+  const addVirtualExperience = () => {
+    setSettings((prev: any) => ({
+      ...prev,
+      virtualSafari: {
+        ...prev.virtualSafari,
+        experiences: [...(prev.virtualSafari.experiences || []), { title: 'New Experience', location: '', duration: '', image: '', pricing: { nonRes: '', res: '', cit: '' } }]
+      }
+    }));
+  };
+
+  const removeVirtualExperience = (index: number) => {
+    const newExp = [...settings.virtualSafari.experiences];
+    newExp.splice(index, 1);
+    setSettings((prev: any) => ({
+      ...prev,
+      virtualSafari: { ...prev.virtualSafari, experiences: newExp }
+    }));
+  };
+
+  const updateVirtualHow = (index: number, field: string, value: string) => {
+    const newHow = [...(settings.virtualSafari.howItWorks || [])];
+    newHow[index] = { ...newHow[index], [field]: value };
+    setSettings((prev: any) => ({
+      ...prev,
+      virtualSafari: { ...prev.virtualSafari, howItWorks: newHow }
+    }));
+  };
+
   return (
     <div className="admin-panel animation-fade">
       <div className="panel-toolbar">
@@ -253,7 +295,86 @@ const SiteSettingsEditor: React.FC = () => {
           </div>
         </section>
 
+        {/* --- VIRTUAL SAFARI SETTINGS --- */}
+        <section className="settings-section" style={{ background: '#f9f9fa', padding: '24px', borderRadius: '8px' }}>
+          <h3 style={{ marginBottom: '16px', borderBottom: '1px solid #ddd', paddingBottom: '8px' }}>Virtual Safaris</h3>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px' }}>
+            <div style={{ gridColumn: '1 / -1' }}>
+              <label style={{ display: 'block', fontSize: '14px', marginBottom: '4px' }}>Hero Banner Image URL</label>
+              <input type="text" value={settings.virtualSafari?.bannerImage || ''} onChange={(e) => updateField('virtualSafari', 'bannerImage', e.target.value)} style={{ width: '100%', padding: '8px' }} />
+            </div>
+            <div>
+              <label style={{ display: 'block', fontSize: '14px', marginBottom: '4px' }}>Hero Title</label>
+              <input type="text" value={settings.virtualSafari?.title || ''} onChange={(e) => updateField('virtualSafari', 'title', e.target.value)} style={{ width: '100%', padding: '8px' }} />
+            </div>
+            <div>
+              <label style={{ display: 'block', fontSize: '14px', marginBottom: '4px' }}>Hero Subtitle</label>
+              <input type="text" value={settings.virtualSafari?.subtitle || ''} onChange={(e) => updateField('virtualSafari', 'subtitle', e.target.value)} style={{ width: '100%', padding: '8px' }} />
+            </div>
+          </div>
+
+          <h4 style={{ marginBottom: '12px', borderTop: '1px solid #eee', paddingTop: '24px' }}>Virtual Experiences</h4>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '16px' }}>
+            {(settings.virtualSafari?.experiences || []).map((exp: any, i: number) => (
+              <div key={i} style={{ background: '#fff', padding: '16px', borderRadius: '4px', border: '1px solid #eee' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
+                  <h5 style={{ margin: 0 }}>Experience #{i + 1}</h5>
+                  <button className="text-red" onClick={() => removeVirtualExperience(i)} style={{ padding: '4px' }}><Trash2 size={14} /></button>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+                  <div style={{ gridColumn: '1 / -1' }}>
+                    <label style={{ display: 'block', fontSize: '12px', marginBottom: '2px' }}>Image URL</label>
+                    <input type="text" value={exp.image} onChange={(e) => updateVirtualExperience(i, 'image', e.target.value)} style={{ width: '100%', marginBottom: '8px', padding: '6px', fontSize: '13px' }} />
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '12px', marginBottom: '2px' }}>Title</label>
+                    <input type="text" value={exp.title} onChange={(e) => updateVirtualExperience(i, 'title', e.target.value)} style={{ width: '100%', marginBottom: '8px', padding: '6px', fontSize: '13px' }} />
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '12px', marginBottom: '2px' }}>Location</label>
+                    <input type="text" value={exp.location} onChange={(e) => updateVirtualExperience(i, 'location', e.target.value)} style={{ width: '100%', marginBottom: '8px', padding: '6px', fontSize: '13px' }} />
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '12px', marginBottom: '2px' }}>Duration</label>
+                    <input type="text" value={exp.duration} onChange={(e) => updateVirtualExperience(i, 'duration', e.target.value)} style={{ width: '100%', marginBottom: '8px', padding: '6px', fontSize: '13px' }} />
+                  </div>
+                  <div style={{ borderTop: '1px solid #eee', gridColumn: '1 / -1', paddingTop: '8px', marginTop: '4px' }}>
+                    <p style={{ fontSize: '12px', fontWeight: 'bold', marginBottom: '8px' }}>Pricing</p>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px' }}>
+                      <input type="text" placeholder="Non-Res" value={exp.pricing?.nonRes} onChange={(e) => updateVirtualExperience(i, 'pricing.nonRes', e.target.value)} style={{ width: '100%', padding: '6px', fontSize: '12px' }} />
+                      <input type="text" placeholder="Res" value={exp.pricing?.res} onChange={(e) => updateVirtualExperience(i, 'pricing.res', e.target.value)} style={{ width: '100%', padding: '6px', fontSize: '12px' }} />
+                      <input type="text" placeholder="Cit" value={exp.pricing?.cit} onChange={(e) => updateVirtualExperience(i, 'pricing.cit', e.target.value)} style={{ width: '100%', padding: '6px', fontSize: '12px' }} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+            <div 
+              onClick={addVirtualExperience}
+              style={{ border: '2px dashed #ddd', borderRadius: '4px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', minHeight: '150px', color: '#999' }}
+            >
+              <Plus size={24} />
+              <span>Add Virtual Experience</span>
+            </div>
+          </div>
+
+          <h4 style={{ marginBottom: '12px', marginTop: '32px', borderTop: '1px solid #eee', paddingTop: '24px' }}>How it Works</h4>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}>
+            {(settings.virtualSafari?.howItWorks || []).map((step: any, i: number) => (
+              <div key={i} style={{ background: '#fff', padding: '16px', borderRadius: '4px', border: '1px solid #eee' }}>
+                <label style={{ display: 'block', fontSize: '12px', marginBottom: '2px' }}>Icon Name (Lucide)</label>
+                <input type="text" value={step.icon} onChange={(e) => updateVirtualHow(i, 'icon', e.target.value)} style={{ width: '100%', marginBottom: '8px', padding: '6px', fontSize: '13px' }} />
+                <label style={{ display: 'block', fontSize: '12px', marginBottom: '2px' }}>Title</label>
+                <input type="text" value={step.title} onChange={(e) => updateVirtualHow(i, 'title', e.target.value)} style={{ width: '100%', marginBottom: '8px', padding: '6px', fontSize: '13px' }} />
+                <label style={{ display: 'block', fontSize: '12px', marginBottom: '2px' }}>Description</label>
+                <textarea rows={2} value={step.description} onChange={(e) => updateVirtualHow(i, 'description', e.target.value)} style={{ width: '100%', padding: '6px', fontSize: '13px' }} />
+              </div>
+            ))}
+          </div>
+        </section>
+
         {/* --- FOOTER & CONTACT SETTINGS --- */}
+
         <section className="settings-section" style={{ background: '#f9f9fa', padding: '24px', borderRadius: '8px' }}>
           <h3 style={{ marginBottom: '16px', borderBottom: '1px solid #ddd', paddingBottom: '8px' }}>Footer & Social Links</h3>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '24px' }}>

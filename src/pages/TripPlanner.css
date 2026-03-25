@@ -1,11 +1,25 @@
 .planner-header {
   background-color: var(--color-dark);
-  color: var(--color-white);
+  color: var(--color-white) !important;
   padding: var(--spacing-xl) 0;
-  background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1547471080-7fc2dd0102ad?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+  background-image: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1547471080-7fc2dd0102ad?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
   background-size: cover;
   background-position: center;
+  text-align: center;
 }
+
+.planner-header h1 {
+  color: var(--color-white) !important;
+  text-shadow: 0 4px 12px rgba(0,0,0,0.6);
+  margin-bottom: var(--spacing-xs);
+}
+
+.planner-header p {
+  color: var(--color-white) !important;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+  opacity: 1 !important;
+}
+
 
 .planner-container {
   background: var(--color-white);

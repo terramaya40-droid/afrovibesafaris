@@ -63,6 +63,37 @@ const siteSettingsSchema = new mongoose.Schema({
       phone: { type: String, default: '254742009497' },
       message: { type: String, default: 'Hello AfriVibe Safaris!' }
     }
+  },
+  virtualSafari: {
+    bannerImage: { type: String, default: 'https://images.unsplash.com/photo-1547471080-7fc2dd0102ad?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80' },
+    title: { type: String, default: 'Virtual Safaris' },
+    subtitle: { type: String, default: 'Bring the magic of Africa directly to your classroom, living room, or office.' },
+    experiences: {
+      type: [{
+        title: String,
+        location: String,
+        duration: String,
+        image: String,
+        pricing: {
+          nonRes: String,
+          res: String,
+          cit: String
+        }
+      }],
+      default: [
+        { title: 'Live Waterhole Cam', location: 'Tsavo West, Kenya', duration: '60 mins', image: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&q=80&w=800', pricing: { nonRes: '$150', res: 'KES 5,000', cit: 'KES 3,000' } },
+        { title: 'Gorilla Trek VR', location: 'Bwindi, Uganda', duration: '90 mins', image: 'https://images.unsplash.com/photo-1503918232442-118111139b51?auto=format&fit=crop&q=80&w=800', pricing: { nonRes: '$200', res: 'UGX 100,000', cit: 'UGX 50,000' } },
+        { title: 'Serengeti Migration Stream', location: 'Tanzania', duration: '120 mins', image: 'https://images.unsplash.com/photo-1534177616072-ef7b14d49435?auto=format&fit=crop&q=80&w=800', pricing: { nonRes: '$300', res: 'TSH 150,000', cit: 'TSH 80,000' } }
+      ]
+    },
+    howItWorks: {
+      type: [{ title: String, description: String, icon: String }],
+      default: [
+        { title: 'Choose Experience', description: 'Select from our curated live or VR experiences.', icon: 'Globe' },
+        { title: 'Book Session', description: 'Pick a date and time that works for your group.', icon: 'Video' },
+        { title: 'Connect Live', description: 'Join our expert rangers via secure high-speed link.', icon: 'Users' }
+      ]
+    }
   }
 }, { timestamps: true });
 

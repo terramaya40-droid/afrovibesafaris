@@ -111,8 +111,8 @@ const QuoteModal: React.FC = () => {
               <input type="number" name="travelers" min="1" required value={formData.travelers} onChange={handleChange} />
             </div>
             <div className="form-group">
-              <label>Travel Dates (Approx)</label>
-              <input type="text" name="dates" placeholder="e.g. Aug 2026 or Next Summer" required value={formData.dates} onChange={handleChange} />
+              <label>Arrival Date</label>
+              <input type="date" name="dates" required value={formData.dates} onChange={handleChange} />
             </div>
           </div>
 
