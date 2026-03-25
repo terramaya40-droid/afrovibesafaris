@@ -9,7 +9,7 @@ import TestimonialCard from '../components/Shared/TestimonialCard';
 import TestimonialFormModal from '../components/Shared/TestimonialFormModal';
 import './Home.css';
 import { getImageUrl } from '../lib/cloudinary';
-import { Compass, Camera, Globe, Heart, ArrowRight } from 'lucide-react';
+import { Compass, Camera, Globe, Heart, ArrowRight, Quote } from 'lucide-react';
 
 interface PackageData {
   _id: string;
@@ -124,17 +124,23 @@ const Home: React.FC = () => {
     fetch(`${API_BASE_URL}/testimonials`)
       .then(res => res.json())
       .then(data => {
-        if (Array.isArray(data)) setReviews(data);
+        // Handle object response with testimonials array
+        if (data && data.testimonials && Array.isArray(data.testimonials)) {
+          setReviews(data.testimonials);
+        } else if (Array.isArray(data)) {
+          setReviews(data);
+        }
       })
       .catch(console.error);
   }, []);
 
-  const services = [
-    { id: 'safaris', title: 'Safaris & Tours', icon: <Compass size={32} />, link: '/destinations', desc: 'Curated wildlife adventures.' },
-    { id: 'virtual', title: 'Virtual Safaris', icon: <Globe size={32} />, link: '/virtual-safari', desc: 'Remote African experiences.' },
-    { id: 'wellness', title: 'Wellness Experiences', icon: <Heart size={32} />, link: '/wellness', desc: 'Reconnect with nature and self.' },
-    { id: 'flights', title: 'Flight Booking', icon: <Compass size={32} />, link: '/travel-services', desc: 'Domestic & international flights.' },
-    { id: 'visa', title: 'Visa Assistance', icon: <Globe size={32} />, link: '/travel-services', desc: 'Expert guidance for your journey.' }
+  // Use dynamic services from settings if available, else use defaults
+  const displayServices = settings?.home?.services || [
+    { title: 'Safaris & Tours', description: 'Curated wildlife adventures.', image: 'https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&q=80&w=800', link: '/destinations' },
+    { title: 'Virtual Safaris', description: 'Remote African experiences.', image: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&q=80&w=800', link: '/virtual-safari' },
+    { title: 'Wellness Experiences', description: 'Reconnect with nature and self.', image: 'https://images.unsplash.com/photo-1549488344-1f9b8d2bd1f3?auto=format&fit=crop&q=80&w=800', link: '/wellness' },
+    { title: 'Flight Booking', description: 'Domestic & international flights.', image: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&q=80&w=800', link: '/travel-services' },
+    { title: 'Visa Assistance', description: 'Expert guidance for your journey.', image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&q=80&w=800', link: '/travel-services' }
   ];
 
   return (
@@ -204,18 +210,27 @@ const Home: React.FC = () => {
           <h3 className="mt-xs">{settings?.home?.servicesTitle || 'Complete Travel Solutions'}</h3>
           <p>{settings?.home?.servicesSubtitle || 'Everything you need for your African journey.'}</p>
         </div>
-        <div className="services-grid">
-          {services.map(service => (
-            <Link key={service.id} to={service.link} className="service-block">
-              <div className="service-icon">{service.icon}</div>
-              <h3>{service.title}</h3>
-              <p>{service.desc}</p>
+        <div className="services-card-grid">
+          {displayServices.map((service: any, index: number) => (
+            <Link key={index} to={service.link} className="service-image-card">
+              <div 
+                className="service-card-bg" 
+                style={{ backgroundImage: `url('${service.image || '/placeholder.jpg'}')` }}
+              ></div>
+              <div className="service-card-overlay"></div>
+              <div className="service-card-content">
+                <h3>{service.title}</h3>
+                <p>{service.description}</p>
+                <span className="service-card-link">Explore <ArrowRight size={14} /></span>
+              </div>
             </Link>
           ))}
         </div>
       </section>
 
       {/* Features grid */}
+... (rest of the file)
+
       <section className="features section container reveal" ref={featuresRef}>
         <div className="section-header text-center">
           <h2 className="section-label">Why Choose Us</h2>
@@ -284,9 +299,12 @@ const Home: React.FC = () => {
       </section>
 
       {/* Testimonials */}
-      <section className="testimonials section bg-light py-2xl">
+      <section className="testimonials section bg-light py-2xl" style={{ position: 'relative', overflow: 'hidden' }}>
+        <div className="decorative-quote-bg">
+          <Quote size={300} />
+        </div>
         <div className="container reveal" ref={testimonialsRef}>
-          <div className="flex-between mb-xl">
+          <div className="flex-between mb-xl" style={{ position: 'relative', zIndex: 2 }}>
             <div className="section-header mb-0">
               <h2 className="section-label">Community</h2>
               <h3 className="mt-xs">Voices of the Wild</h3>
@@ -297,7 +315,7 @@ const Home: React.FC = () => {
             </Link>
           </div>
           
-          <div className="testimonials-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 'var(--space-xl)' }}>
+          <div className="testimonials-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 'var(--space-xl)', position: 'relative', zIndex: 2 }}>
             {reviews.slice(0, 3).map((review) => (
               <TestimonialCard 
                 key={review._id}

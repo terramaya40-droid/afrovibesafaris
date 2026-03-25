@@ -13,6 +13,21 @@ const siteSettingsSchema = new mongoose.Schema({
     heroSubtitle: { type: String, default: 'Discover Africa through curated safaris, wellness experiences, and complete travel solutions — from flights to unforgettable adventures.' },
     servicesTitle: { type: String, default: 'Our Services' },
     servicesSubtitle: { type: String, default: 'Complete travel solutions for your African journey.' },
+    services: {
+      type: [{ 
+        title: String, 
+        description: String, 
+        image: String, 
+        link: String 
+      }],
+      default: [
+        { id: 'safaris', title: 'Safaris & Tours', description: 'Curated wildlife adventures.', image: 'https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&q=80&w=800', link: '/destinations' },
+        { id: 'virtual', title: 'Virtual Safaris', description: 'Remote African experiences.', image: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&q=80&w=800', link: '/virtual-safari' },
+        { id: 'wellness', title: 'Wellness Experiences', description: 'Reconnect with nature and self.', image: 'https://images.unsplash.com/photo-1549488344-1f9b8d2bd1f3?auto=format&fit=crop&q=80&w=800', link: '/wellness' },
+        { id: 'flights', title: 'Flight Booking', description: 'Domestic & international flights.', image: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&q=80&w=800', link: '/travel-services' },
+        { id: 'visa', title: 'Visa Assistance', description: 'Expert guidance for your journey.', image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&q=80&w=800', link: '/travel-services' }
+      ]
+    },
     ctaTitle: { type: String, default: 'Ready to answer the call of the wild?' },
     ctaSubtitle: { type: String, default: 'Let our safari experts craft your perfect, personalized itinerary today.' }
   },

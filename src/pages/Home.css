@@ -397,6 +397,114 @@
   margin: 0 auto;
 }
 
+/* Services Image Cards */
+.services-section {
+  padding-bottom: var(--space-3xl);
+}
+
+.services-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-xl);
+  margin-top: var(--space-2xl);
+}
+
+.service-image-card {
+  position: relative;
+  height: 380px;
+  border-radius: 4px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: var(--space-xl);
+  text-decoration: none;
+  transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.service-card-bg {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform 1.2s cubic-bezier(0.165, 0.84, 0.44, 1);
+  z-index: 1;
+}
+
+.service-card-overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0) 20%, rgba(0,0,0,0.85) 90%);
+  z-index: 2;
+  transition: opacity 0.4s ease;
+}
+
+.service-card-content {
+  position: relative;
+  z-index: 3;
+  color: white;
+  transform: translateY(20px);
+  transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.service-card-content h3 {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  margin-bottom: 0.5rem;
+  color: white;
+}
+
+.service-card-content p {
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.8);
+  margin-bottom: 1.25rem;
+  line-height: 1.5;
+  opacity: 0;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  transform: translateY(10px);
+}
+
+.service-card-link {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--terracotta);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.service-image-card:hover {
+  transform: translateY(-8px);
+}
+
+.service-image-card:hover .service-card-bg {
+  transform: scale(1.1);
+}
+
+.service-image-card:hover .service-card-content {
+  transform: translateY(0);
+}
+
+.service-image-card:hover .service-card-content p {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Community / Testimonials Polish */
+.decorative-quote-bg {
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  color: var(--terracotta);
+  opacity: 0.05;
+  pointer-events: none;
+  z-index: 0;
+  transform: rotate(15deg);
+}
+
 @media (max-width: 768px) {
   .hero-slider {
     height: 70vh;
@@ -440,4 +548,15 @@
   .section-header h3 {
     font-size: 1.75rem;
   }
+  .service-image-card {
+    height: 320px;
+  }
+  .service-card-content p {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .service-card-content {
+    transform: translateY(0);
+  }
 }
+

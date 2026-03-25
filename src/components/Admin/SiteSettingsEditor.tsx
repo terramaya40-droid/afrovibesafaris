@@ -80,6 +80,34 @@ const SiteSettingsEditor: React.FC = () => {
     }));
   };
 
+  const updateService = (index: number, field: string, value: string) => {
+    const newServices = [...(settings.home.services || [])];
+    newServices[index] = { ...newServices[index], [field]: value };
+    setSettings((prev: any) => ({
+      ...prev,
+      home: { ...prev.home, services: newServices }
+    }));
+  };
+
+  const addService = () => {
+    setSettings((prev: any) => ({
+      ...prev,
+      home: {
+        ...prev.home,
+        services: [...(prev.home.services || []), { title: 'New Service', description: '', image: '', link: '' }]
+      }
+    }));
+  };
+
+  const removeService = (index: number) => {
+    const newServices = [...settings.home.services];
+    newServices.splice(index, 1);
+    setSettings((prev: any) => ({
+      ...prev,
+      home: { ...prev.home, services: newServices }
+    }));
+  };
+
   return (
     <div className="admin-panel animation-fade">
       <div className="panel-toolbar">
@@ -117,18 +145,60 @@ const SiteSettingsEditor: React.FC = () => {
               <textarea rows={3} value={settings.home?.heroSubtitle || ''} onChange={(e) => updateField('home', 'heroSubtitle', e.target.value)} style={{ width: '100%', padding: '8px' }} />
             </div>
             <div>
-              <label style={{ display: 'block', fontSize: '14px', marginBottom: '4px' }}>Services Title</label>
-              <input type="text" value={settings.home?.servicesTitle || ''} onChange={(e) => updateField('home', 'servicesTitle', e.target.value)} style={{ width: '100%', padding: '8px', marginBottom: '16px' }} />
-              <label style={{ display: 'block', fontSize: '14px', marginBottom: '4px' }}>Services Subtitle</label>
-              <input type="text" value={settings.home?.servicesSubtitle || ''} onChange={(e) => updateField('home', 'servicesSubtitle', e.target.value)} style={{ width: '100%', padding: '8px' }} />
-            </div>
-            <div>
-              <label style={{ display: 'block', fontSize: '14px', marginBottom: '4px' }}>CTA Title (Footer)</label>
+              <label style={{ display: 'block', fontSize: '14px', marginBottom: '4px' }}>CTA Title (Home/Community)</label>
               <input type="text" value={settings.home?.ctaTitle || ''} onChange={(e) => updateField('home', 'ctaTitle', e.target.value)} style={{ width: '100%', padding: '8px', marginBottom: '16px' }} />
-            </div>
-            <div>
               <label style={{ display: 'block', fontSize: '14px', marginBottom: '4px' }}>CTA Subtitle</label>
               <input type="text" value={settings.home?.ctaSubtitle || ''} onChange={(e) => updateField('home', 'ctaSubtitle', e.target.value)} style={{ width: '100%', padding: '8px' }} />
+            </div>
+          </div>
+
+          <div style={{ marginTop: '32px' }}>
+            <h4 style={{ marginBottom: '12px', borderTop: '1px solid #eee', paddingTop: '24px' }}>Services Cards (with Images)</h4>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+              <div>
+                <label style={{ display: 'block', fontSize: '14px', marginBottom: '4px' }}>Services Section Title</label>
+                <input type="text" value={settings.home?.servicesTitle || ''} onChange={(e) => updateField('home', 'servicesTitle', e.target.value)} style={{ width: '100%', padding: '8px', marginBottom: '16px' }} />
+              </div>
+              <div>
+                <label style={{ display: 'block', fontSize: '14px', marginBottom: '4px' }}>Services Section Subtitle</label>
+                <input type="text" value={settings.home?.servicesSubtitle || ''} onChange={(e) => updateField('home', 'servicesSubtitle', e.target.value)} style={{ width: '100%', padding: '8px' }} />
+              </div>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '16px', marginTop: '16px' }}>
+              {(settings.home?.services || []).map((service: any, i: number) => (
+                <div key={i} style={{ background: '#fff', padding: '16px', borderRadius: '4px', border: '1px solid #eee' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
+                    <h5 style={{ margin: 0 }}>Service #{i + 1}</h5>
+                    <button className="text-red" onClick={() => removeService(i)} style={{ padding: '4px' }}><Trash2 size={14} /></button>
+                  </div>
+                  <label style={{ display: 'block', fontSize: '12px', marginBottom: '2px' }}>Background Image URL</label>
+                  <input type="text" value={service.image} onChange={(e) => updateService(i, 'image', e.target.value)} style={{ width: '100%', marginBottom: '8px', padding: '6px', fontSize: '13px' }} />
+                  <label style={{ display: 'block', fontSize: '12px', marginBottom: '2px' }}>Title</label>
+                  <input type="text" value={service.title} onChange={(e) => updateService(i, 'title', e.target.value)} style={{ width: '100%', marginBottom: '8px', padding: '6px', fontSize: '13px' }} />
+                  <label style={{ display: 'block', fontSize: '12px', marginBottom: '2px' }}>Description</label>
+                  <textarea rows={2} value={service.description} onChange={(e) => updateService(i, 'description', e.target.value)} style={{ width: '100%', marginBottom: '8px', padding: '6px', fontSize: '13px' }} />
+                  <label style={{ display: 'block', fontSize: '12px', marginBottom: '2px' }}>Link Path (e.g. /destinations)</label>
+                  <input type="text" value={service.link} onChange={(e) => updateService(i, 'link', e.target.value)} style={{ width: '100%', padding: '6px', fontSize: '13px' }} />
+                </div>
+              ))}
+              <div 
+                onClick={addService}
+                style={{ 
+                  border: '2px dashed #ddd', 
+                  borderRadius: '4px', 
+                  display: 'flex', 
+                  flexDirection: 'column',
+                  alignItems: 'center', 
+                  justifyContent: 'center', 
+                  cursor: 'pointer',
+                  minHeight: '200px',
+                  color: '#999'
+                }}
+              >
+                <Plus size={24} />
+                <span>Add Service Card</span>
+              </div>
             </div>
           </div>
         </section>
