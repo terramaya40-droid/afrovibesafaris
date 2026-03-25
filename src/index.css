@@ -33,7 +33,7 @@
   --spacing-xl: var(--space-xl);
   --spacing-xxl: var(--space-3xl);
 
-  /* --- A3. Constant Brand Colors --- */
+  /* --- A3. Constant Brand Colors (Legacy & New) --- */
   --terracotta: #C4622D;
   --terracotta-light: #E8845A;
   --terracotta-dark: #9A4420;
@@ -44,6 +44,16 @@
   --color-secondary: var(--terracotta);
   --color-white: #FFFFFF;
   --color-dark: #1A1A18;
+  
+  --color-gray-50:  #F9FAFB;
+  --color-gray-100: #EDE8DF;      /* Cream */
+  --color-gray-200: #E5E7EB;
+  --color-gray-300: #D1D5DB;
+  --color-gray-400: #9CA3AF;
+  --color-gray-500: #9A9690;
+  --color-gray-600: #5A574F;
+  --color-gray-700: #374151;
+  --color-gray-800: #1A1A18;
 
   /* --- A4. Transitions & Shadows --- */
   --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);

@@ -46,7 +46,7 @@
 .logo-text {
   font-size: 1.4rem;
   font-weight: 800;
-  color: var(--color-white);
+  color: var(--text-main);
   line-height: 1;
   display: flex;
   flex-direction: column;
@@ -69,12 +69,16 @@
 .nav-link {
   font-family: var(--font-body);
   font-weight: 600;
-  color: var(--color-white);
+  color: #FFFFFF; /* Default white for when on dark headers */
   font-size: 0.8rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   opacity: 0.85;
   transition: opacity var(--transition-fast), color var(--transition-fast);
+}
+
+.navbar.nav-scrolled .nav-link {
+  color: var(--text-main);
 }
 
 .nav-link:hover, .nav-link.active {
@@ -103,10 +107,14 @@
   background: none;
   border: none;
   cursor: pointer;
-  color: var(--color-white);
+  color: #FFFFFF; /* High contrast on headers */
   padding: 0.5rem;
   border-radius: 50%;
   transition: background 0.2s;
+}
+
+.nav-scrolled .mobile-menu-btn {
+  color: var(--text-main);
 }
 
 .mobile-menu-btn:hover {
