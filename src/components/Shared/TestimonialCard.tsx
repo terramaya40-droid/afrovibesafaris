@@ -42,7 +42,7 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
       <div className="testimonial-card">
         <div className="tc-header">
           <div className="tc-avatar">
-            {userName.charAt(0).toUpperCase()}
+            {userName.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()}
           </div>
           <div className="tc-meta">
             <h4 className="tc-name">{userName}</h4>
@@ -58,7 +58,7 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
         </div>
 
         <div className="tc-content">
-          <p className="tc-text">"{reviewText}"</p>
+          <p className="tc-text">{reviewText}</p>
         </div>
 
         {packageTitle && (

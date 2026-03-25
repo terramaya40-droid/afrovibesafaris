@@ -1,5 +1,5 @@
 .testimonial-card {
-  background: var(--color-white);
+  background: #ede8e0; /* Warm sandy tone requested by user */
   border-radius: 4px;
   padding: var(--space-lg);
   box-shadow: var(--shadow-sm);
@@ -7,7 +7,7 @@
   flex-direction: column;
   gap: var(--space-md);
   height: 100%;
-  border-left: 3px solid var(--terracotta);
+  border-left: 5px solid var(--terracotta); /* Stronger visual anchor */
 }
 
 .tc-header {
@@ -17,17 +17,18 @@
 }
 
 .tc-avatar {
-  width: 44px;
-  height: 44px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
-  background: var(--sand);
+  background: rgba(196, 102, 45, 0.1);
   color: var(--terracotta);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-display);
-  font-size: 1.25rem;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
   font-weight: 700;
+  flex-shrink: 0;
 }
 
 .tc-meta {
@@ -37,8 +38,9 @@
 .tc-name {
   font-family: var(--font-body);
   font-weight: 700;
-  color: var(--deep-gray);
+  color: #1A1A18;
   margin-bottom: 2px;
+  text-transform: none; /* Ensure no all-caps screaming */
 }
 
 .tc-location {
@@ -57,10 +59,11 @@
 }
 
 .tc-text {
-  font-style: italic;
-  font-size: 0.95rem;
+  font-style: normal; /* Removed italics */
+  font-weight: 400; /* Normal weight */
+  font-size: 1rem;
   line-height: 1.6;
-  color: var(--text-secondary);
+  color: #4a4742; /* Requested readable neutral tone */
 }
 
 .tc-safari {
