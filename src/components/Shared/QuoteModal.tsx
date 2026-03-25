@@ -13,6 +13,8 @@ const QuoteModal: React.FC = () => {
     travelers: '2',
     arrivalDate: '',
     departureDate: '',
+    destination: '',
+    safariType: '',
     specialRequests: '',
     pricingTarget: 'Non-Resident',
     nationality: ''
