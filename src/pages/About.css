@@ -44,7 +44,12 @@
   .about-grid.reverse .about-image {
     order: 2;
   }
+  .mv-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+  }
 }
+
 
 .about-image img {
   width: 100%;
