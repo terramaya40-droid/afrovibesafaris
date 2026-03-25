@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useStore } from '../store/useStore';
 import { Check, ChevronRight, ChevronLeft, MapPin } from 'lucide-react';
 import './TripPlanner.css';
@@ -18,10 +19,19 @@ const PACKAGES_BY_COUNTRY: Record<string, string[]> = {
 
 const TripPlanner: React.FC = () => {
   const { openQuoteModal } = useStore();
+  const [searchParams] = useSearchParams();
   const [step, setStep] = useState(1);
   
   // Builder State
   const [selectedCountries, setSelectedCountries] = useState<string[]>([]);
+
+  useEffect(() => {
+    const dest = searchParams.get('destination');
+    if (dest && COUNTRIES.includes(dest)) {
+      setSelectedCountries([dest]);
+      setStep(2); // Jump to interests if destination is pre-filled
+    }
+  }, [searchParams]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedPackages, setSelectedPackages] = useState<string[]>([]);
   const [selectedSafariType, setSelectedSafariType] = useState<string>('');
