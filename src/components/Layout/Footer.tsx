@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Facebook, Instagram, Phone, Mail, Youtube, Linkedin, Twitter } from 'lucide-react';
+import { Facebook, Instagram, Phone, Mail, Youtube, Linkedin } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useScrollReveal } from '../../hooks/useScrollReveal';
 import { API_BASE_URL } from '../../config';
