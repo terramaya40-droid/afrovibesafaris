@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Facebook, Instagram, Phone, Mail, Youtube } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useScrollReveal } from '../../hooks/useScrollReveal';
-import { API_BASE_URL } from '../../config';
+import { API_BASE_URL } from '../../../config';
 
 const Footer: React.FC = () => {
   const [settings, setSettings] = useState<any>({
