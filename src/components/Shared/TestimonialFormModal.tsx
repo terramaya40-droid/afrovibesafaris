@@ -15,6 +15,7 @@ const COUNTRIES = [
 const TestimonialFormModal: React.FC<TestimonialFormModalProps> = ({ onClose }) => {
   const [form, setForm] = useState({
     userName: '',
+    email: '',
     userLocation: 'Global',
     packageTitle: '',
     rating: 5,
@@ -172,14 +173,26 @@ const TestimonialFormModal: React.FC<TestimonialFormModalProps> = ({ onClose }) 
               />
             </div>
             <div className="form-group">
-              <label>Country *</label>
-              <select 
-                value={form.userLocation} 
-                onChange={e => setForm({...form, userLocation: e.target.value})}
-              >
-                {COUNTRIES.map(c => <option key={c} value={c}>{c}</option>)}
-              </select>
+              <label>Email Address *</label>
+              <input 
+                required 
+                type="email"
+                value={form.email} 
+                onChange={e => setForm({...form, email: e.target.value})} 
+                placeholder="john@gmail.com"
+              />
             </div>
+          </div>
+
+          <div className="form-group">
+            <label>Country *</label>
+            <select 
+              value={form.userLocation} 
+              onChange={e => setForm({...form, userLocation: e.target.value})}
+              style={{ width: '100%' }}
+            >
+              {COUNTRIES.map(c => <option key={c} value={c}>{c}</option>)}
+            </select>
           </div>
 
           <div className="form-group">

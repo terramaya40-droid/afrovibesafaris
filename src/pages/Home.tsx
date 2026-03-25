@@ -6,6 +6,7 @@ import type { UserType } from '../store/useStore';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import DestinationCard from '../components/Shared/DestinationCard';
 import TestimonialCard from '../components/Shared/TestimonialCard';
+import TestimonialFormModal from '../components/Shared/TestimonialFormModal';
 import './Home.css';
 import { getImageUrl } from '../lib/cloudinary';
 import { Compass, Camera, Globe, Heart, ArrowRight } from 'lucide-react';
@@ -76,6 +77,7 @@ const Home: React.FC = () => {
 
   const [settings, setSettings] = useState<any>(null);
   const [reviews, setReviews] = useState<any[]>([]);
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
 
   const activeSlides = settings?.home?.heroSlides?.length > 0 ? settings.home.heroSlides : defaultHeroSlides;
 

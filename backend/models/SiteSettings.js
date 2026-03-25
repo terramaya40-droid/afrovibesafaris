@@ -37,7 +37,17 @@ const siteSettingsSchema = new mongoose.Schema({
   contact: {
     email: { type: String, default: 'info@afrivibesafaris.com' },
     phone: { type: String, default: '+254 742 009 497' },
-    address: { type: String, default: 'Nairobi, Kenya' }
+    address: { type: String, default: 'Nairobi, Kenya' },
+    socialLinks: {
+      instagram: { type: String, default: 'https://instagram.com/afrovibesafaris' },
+      facebook: { type: String, default: 'https://facebook.com/afrovibesafaris' },
+      youtube: { type: String, default: 'https://youtube.com/@afrovibesafaris' },
+      tripadvisor: { type: String, default: '#' }
+    },
+    whatsapp: {
+      phone: { type: String, default: '254742009497' },
+      message: { type: String, default: 'Hello AfriVibe Safaris!' }
+    }
   }
 }, { timestamps: true });
 

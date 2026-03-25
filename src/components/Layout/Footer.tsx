@@ -1,15 +1,37 @@
-import React from 'react';
-import './Footer.css';
 import { Facebook, Instagram, Phone, Mail, Youtube } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useScrollReveal } from '../../hooks/useScrollReveal';
+import { API_BASE_URL } from '../../config';
+import { useState, useEffect } from 'react';
 
 const Footer: React.FC = () => {
+  const [settings, setSettings] = useState<any>(null);
+  
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/settings`)
+      .then(res => res.json())
+      .then(data => setSettings(data))
+      .catch(err => console.error('Error loading footer settings:', err));
+  }, []);
+
   const footerRef = useScrollReveal<HTMLElement>(0.1);
   const col1Ref = useScrollReveal<HTMLDivElement>(0.1);
   const col2Ref = useScrollReveal<HTMLDivElement>(0.1);
   const col3Ref = useScrollReveal<HTMLDivElement>(0.1);
   const col4Ref = useScrollReveal<HTMLDivElement>(0.1);
+
+  // Default fallbacks matching the model
+  const contact = settings?.contact || {};
+  const social = contact.socialLinks || {
+    instagram: 'https://instagram.com/afrovibesafaris',
+    facebook: 'https://facebook.com/afrovibesafaris',
+    youtube: 'https://youtube.com/@afrovibesafaris',
+    tripadvisor: '#'
+  };
+  const whatsapp = contact.whatsapp || {
+    phone: '254742009497',
+    message: 'Hello AfriVibe Safaris!'
+  };
 
   return (
     <footer className="footer reveal" ref={footerRef}>
@@ -21,10 +43,10 @@ const Footer: React.FC = () => {
           </Link>
           <p className="footer-tagline">Authentic African Experiences,<br />Curated With Care</p>
           <div className="social-links">
-            <a href="https://instagram.com/afrovibesafaris" target="_blank" rel="noreferrer" aria-label="Instagram"><Instagram size={18} /></a>
-            <a href="https://facebook.com/afrovibesafaris" target="_blank" rel="noreferrer" aria-label="Facebook"><Facebook size={18} /></a>
-            <a href="#" aria-label="TripAdvisor" className="text-sm font-bold px-1">TA</a>
-            <a href="#" aria-label="YouTube"><Youtube size={18} /></a>
+            <a href={social.instagram} target="_blank" rel="noreferrer" aria-label="Instagram"><Instagram size={18} /></a>
+            <a href={social.facebook} target="_blank" rel="noreferrer" aria-label="Facebook"><Facebook size={18} /></a>
+            <a href={social.tripadvisor} target="_blank" rel="noreferrer" aria-label="TripAdvisor" className="text-sm font-bold px-1">TA</a>
+            <a href={social.youtube} target="_blank" rel="noreferrer" aria-label="YouTube"><Youtube size={18} /></a>
           </div>
         </div>
 
@@ -57,11 +79,11 @@ const Footer: React.FC = () => {
         <div className="footer-col reveal" ref={col4Ref} style={{ transitionDelay: '0.3s' }}>
           <h4>GET IN TOUCH</h4>
           <ul className="contact-list">
-            <li><Phone size={14} /><a href="tel:+254742009497">+254 742 009 497</a></li>
-            <li><Mail size={14} /><a href="mailto:info@afrivibesafaris.com">info@afrivibesafaris.com</a></li>
+            <li><Phone size={14} /><a href={`tel:${contact.phone || '+254742009497'}`}>{contact.phone || '+254 742 009 497'}</a></li>
+            <li><Mail size={14} /><a href={`mailto:${contact.email || 'info@afrivibesafaris.com'}`}>{contact.email || 'info@afrivibesafaris.com'}</a></li>
           </ul>
           <a
-            href="https://wa.me/254742009497?text=Hello%20AfriVibe%20Safaris!"
+            href={`https://wa.me/${whatsapp.phone}?text=${encodeURIComponent(whatsapp.message)}`}
             target="_blank"
             rel="noreferrer"
             className="whatsapp-cta-btn mt-xs mb-lg inline-block"

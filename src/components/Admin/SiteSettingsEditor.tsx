@@ -183,6 +183,53 @@ const SiteSettingsEditor: React.FC = () => {
           </div>
         </section>
 
+        {/* --- FOOTER & CONTACT SETTINGS --- */}
+        <section className="settings-section" style={{ background: '#f9f9fa', padding: '24px', borderRadius: '8px' }}>
+          <h3 style={{ marginBottom: '16px', borderBottom: '1px solid #ddd', paddingBottom: '8px' }}>Footer & Social Links</h3>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '24px' }}>
+            <div>
+              <h4 style={{ marginBottom: '12px', fontSize: '15px' }}>Contact Info</h4>
+              <label style={{ display: 'block', fontSize: '13px', marginBottom: '4px' }}>Email</label>
+              <input type="text" value={settings.contact?.email || ''} onChange={(e) => updateField('contact', 'email', e.target.value)} style={{ width: '100%', padding: '8px', marginBottom: '12px' }} />
+              <label style={{ display: 'block', fontSize: '13px', marginBottom: '4px' }}>Phone</label>
+              <input type="text" value={settings.contact?.phone || ''} onChange={(e) => updateField('contact', 'phone', e.target.value)} style={{ width: '100%', padding: '8px', marginBottom: '12px' }} />
+              <label style={{ display: 'block', fontSize: '13px', marginBottom: '4px' }}>Address</label>
+              <input type="text" value={settings.contact?.address || ''} onChange={(e) => updateField('contact', 'address', e.target.value)} style={{ width: '100%', padding: '8px' }} />
+            </div>
+            <div>
+              <h4 style={{ marginBottom: '12px', fontSize: '15px' }}>Social Links</h4>
+              <label style={{ display: 'block', fontSize: '13px', marginBottom: '4px' }}>Instagram</label>
+              <input type="text" value={settings.contact?.socialLinks?.instagram || ''} onChange={(e) => {
+                const newSocial = { ...settings.contact.socialLinks, instagram: e.target.value };
+                updateField('contact', 'socialLinks', newSocial);
+              }} style={{ width: '100%', padding: '8px', marginBottom: '12px' }} />
+              <label style={{ display: 'block', fontSize: '13px', marginBottom: '4px' }}>Facebook</label>
+              <input type="text" value={settings.contact?.socialLinks?.facebook || ''} onChange={(e) => {
+                const newSocial = { ...settings.contact.socialLinks, facebook: e.target.value };
+                updateField('contact', 'socialLinks', newSocial);
+              }} style={{ width: '100%', padding: '8px', marginBottom: '12px' }} />
+              <label style={{ display: 'block', fontSize: '13px', marginBottom: '4px' }}>YouTube</label>
+              <input type="text" value={settings.contact?.socialLinks?.youtube || ''} onChange={(e) => {
+                const newSocial = { ...settings.contact.socialLinks, youtube: e.target.value };
+                updateField('contact', 'socialLinks', newSocial);
+              }} style={{ width: '100%', padding: '8px' }} />
+            </div>
+            <div>
+              <h4 style={{ marginBottom: '12px', fontSize: '15px' }}>WhatsApp Integration</h4>
+              <label style={{ display: 'block', fontSize: '13px', marginBottom: '4px' }}>WhatsApp Number (Digits only)</label>
+              <input type="text" value={settings.contact?.whatsapp?.phone || ''} onChange={(e) => {
+                const newWS = { ...settings.contact.whatsapp, phone: e.target.value };
+                updateField('contact', 'whatsapp', newWS);
+              }} style={{ width: '100%', padding: '8px', marginBottom: '12px' }} />
+              <label style={{ display: 'block', fontSize: '13px', marginBottom: '4px' }}>Default Message</label>
+              <input type="text" value={settings.contact?.whatsapp?.message || ''} onChange={(e) => {
+                const newWS = { ...settings.contact.whatsapp, message: e.target.value };
+                updateField('contact', 'whatsapp', newWS);
+              }} style={{ width: '100%', padding: '8px' }} />
+            </div>
+          </div>
+        </section>
+
       </div>
     </div>
   );

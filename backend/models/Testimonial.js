@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 const testimonialSchema = new mongoose.Schema({
   userName: { type: String, required: true },
   userLocation: { type: String, required: true, default: 'Global' },
+  email: { type: String, required: true },
   packageId: { type: mongoose.Schema.Types.ObjectId, ref: 'Package' },
   packageTitle: { type: String }, // For easier display without population if needed
   rating: { type: Number, required: true, min: 1, max: 5 },
