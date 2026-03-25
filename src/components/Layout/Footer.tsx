@@ -35,17 +35,17 @@ const Footer: React.FC = () => {
   const col3Ref = useScrollReveal<HTMLDivElement>(0.1);
   const col4Ref = useScrollReveal<HTMLDivElement>(0.1);
 
-  // Default fallbacks matching the model
+  // Default fallbacks matching the model with granular overrides
   const contact = settings?.contact || {};
-  const social = contact.socialLinks || {
-    instagram: 'https://instagram.com/afrovibesafaris',
-    facebook: 'https://facebook.com/afrovibesafaris',
-    youtube: 'https://youtube.com/@afrovibesafaris',
-    tripadvisor: '#'
+  const social = {
+    instagram: contact.socialLinks?.instagram || 'https://instagram.com/afrovibesafaris',
+    facebook: contact.socialLinks?.facebook || 'https://facebook.com/afrovibesafaris',
+    youtube: contact.socialLinks?.youtube || 'https://youtube.com/@afrovibesafaris',
+    tripadvisor: contact.socialLinks?.tripadvisor || '#'
   };
-  const whatsapp = contact.whatsapp || {
-    phone: '254742009497',
-    message: 'Hello AfriVibe Safaris!'
+  const whatsapp = {
+    phone: contact.whatsapp?.phone || '254742009497',
+    message: contact.whatsapp?.message || 'Hello AfriVibe Safaris!'
   };
 
   return (
