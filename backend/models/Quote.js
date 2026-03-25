@@ -9,7 +9,8 @@ const quoteSchema = new mongoose.Schema({
   departureDate: { type: Date, required: true },
   destination: { type: String, required: true },
   safariType: { type: String, required: true },
-  specialNotes: { type: String },
+  pricingTarget: { type: String, required: true },
+  specialRequests: { type: String },
   status: { 
     type: String, 
     enum: ['Pending', 'Quote Sent', 'Booked', 'Rejected'],
