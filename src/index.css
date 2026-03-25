@@ -99,34 +99,11 @@ html { scroll-behavior: smooth; }
 
 html, body {
   font-family: var(--font-body);
-  color: #FFFFFF; /* Pure white text */
-  background-color: #000000; /* Pure black background */
+  color: var(--text-secondary);
+  background-color: var(--warm-white);
   line-height: var(--line-height-body);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
-}
-
-/* Specific text elements for dark mode */
-h1, h2, h3, h4, h5, h6 {
-  color: #FFFFFF !important;
-}
-
-p {
-  color: rgba(255, 255, 255, 0.8) !important;
-}
-
-/* Maintain warm background ONLY for Home page or specific sections if needed */
-.home-page {
-  color: var(--text-secondary);
-  background-color: var(--warm-white);
-}
-
-.home-page h1, .home-page h2, .home-page h3 {
-  color: var(--deep-gray) !important;
-}
-
-.home-page p {
-  color: var(--text-secondary) !important;
 }
 
 h1 {
