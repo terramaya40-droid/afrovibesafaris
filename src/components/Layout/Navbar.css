@@ -12,11 +12,11 @@
 }
 
 .navbar.nav-scrolled {
-  background-color: rgba(26, 26, 24, 0.95);
+  background-color: var(--bg-secondary);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.15);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--border-main);
 }
 
 .nav-content {
@@ -110,13 +110,13 @@
 }
 
 .mobile-menu-btn:hover {
-  background: var(--color-gray-100);
+  background: var(--bg-accent);
 }
 
 .mobile-menu {
   display: none;
   flex-direction: column;
-  background-color: var(--deep-gray);
+  background-color: var(--bg-secondary);
   padding: var(--space-xl) var(--space-md);
   position: fixed;
   top: 80px;

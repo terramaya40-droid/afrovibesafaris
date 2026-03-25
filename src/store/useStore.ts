@@ -9,6 +9,9 @@ interface AppState {
   quoteContext: Partial<QuoteContext>; // Allows pre-filling the quote modal
   openQuoteModal: (context?: Partial<QuoteContext>) => void;
   closeQuoteModal: () => void;
+  theme: 'light' | 'dark';
+  setTheme: (theme: 'light' | 'dark') => void;
+  toggleTheme: () => void;
 }
 
 interface QuoteContext {
@@ -23,5 +26,15 @@ export const useStore = create<AppState>((set) => ({
   isQuoteModalOpen: false,
   quoteContext: {},
   openQuoteModal: (context = {}) => set({ isQuoteModalOpen: true, quoteContext: context }),
-  closeQuoteModal: () => set({ isQuoteModalOpen: false, quoteContext: {} })
+  closeQuoteModal: () => set({ isQuoteModalOpen: false, quoteContext: {} }),
+  theme: (localStorage.getItem('afrivibe_theme') as 'light' | 'dark') || 'dark',
+  setTheme: (theme) => {
+    localStorage.setItem('afrivibe_theme', theme);
+    set({ theme });
+  },
+  toggleTheme: () => set((state) => {
+    const newTheme = state.theme === 'light' ? 'dark' : 'light';
+    localStorage.setItem('afrivibe_theme', newTheme);
+    return { theme: newTheme };
+  })
 }));

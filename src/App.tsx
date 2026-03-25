@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { useStore } from './store/useStore';
 import Layout from './components/Layout/Layout';
 import ProtectedRoute from './components/ProtectedRoute';
 import Home from './pages/Home';
@@ -19,6 +20,12 @@ import Admin from './pages/Admin';
 import AdminLogin from './pages/AdminLogin';
 
 const App: React.FC = () => {
+  const { theme } = useStore();
+
+  React.useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
+
   return (
     <Router>
       <Routes>
