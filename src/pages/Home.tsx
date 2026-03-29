@@ -164,21 +164,21 @@ const Home: React.FC = () => {
                 <button className="btn-hero-primary" onClick={() => openQuoteModal()}>Plan My Safari</button>
                 <Link to="/destinations" className="btn-hero-secondary">Explore Destinations</Link>
               </div>
+            </div>
 
-              <div className="hero-bar">
-                <div className="hero-user-selector">
-                  <p>Show me pricing for:</p>
-                  <div className="selector-group">
-                    {(['Non-Resident', 'Resident', 'Citizen'] as UserType[]).map(type => (
-                      <button
-                        key={type}
-                        className={`selector-btn ${userType === type ? 'active' : ''}`}
-                        onClick={() => setUserType(type)}
-                      >
-                        {type}
-                      </button>
-                    ))}
-                  </div>
+            <div className={`hero-bar ${index === currentSlide ? 'active' : ''}`}>
+              <div className="hero-user-selector">
+                <p>Show me pricing for:</p>
+                <div className="selector-group">
+                  {(['Non-Resident', 'Resident', 'Citizen'] as UserType[]).map(type => (
+                    <button
+                      key={type}
+                      className={`selector-btn ${userType === type ? 'active' : ''}`}
+                      onClick={() => setUserType(type)}
+                    >
+                      {type}
+                    </button>
+                  ))}
                 </div>
               </div>
             </div>

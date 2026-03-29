@@ -6,8 +6,7 @@ import { Menu, X } from 'lucide-react';
 import './Navbar.css';
 
 const Navbar: React.FC = () => {
-  const { userType, setUserType } = useStore();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { userType, setUserType, isMobileMenuOpen, setIsMobileMenuOpen } = useStore();
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
 

@@ -12,6 +12,8 @@ interface AppState {
   theme: 'light' | 'dark';
   setTheme: (theme: 'light' | 'dark') => void;
   toggleTheme: () => void;
+  isMobileMenuOpen: boolean;
+  setIsMobileMenuOpen: (isOpen: boolean) => void;
 }
 
 interface QuoteContext {
@@ -36,5 +38,7 @@ export const useStore = create<AppState>((set) => ({
     const newTheme = state.theme === 'light' ? 'dark' : 'light';
     localStorage.setItem('afrivibe_theme', newTheme);
     return { theme: newTheme };
-  })
+  }),
+  isMobileMenuOpen: false,
+  setIsMobileMenuOpen: (isOpen) => set({ isMobileMenuOpen: isOpen })
 }));
