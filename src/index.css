@@ -289,6 +289,9 @@ img { max-width: 100%; display: block; }
 
 /* ---- UTILITIES ---- */
 .text-center { text-align: center; }
+.text-white, .bg-dark, .bg-primary, .bg-dark-sage { color: #FFFFFF !important; }
+.text-white p, .bg-dark p, .bg-primary p, .bg-dark-sage p { color: #FFFFFF !important; }
+.text-white h1, .text-white h2, .text-white h3, .bg-dark h1, .bg-dark h2, .bg-dark h3 { color: #FFFFFF !important; }
 .text-white { color: var(--color-white) !important; }
 .text-primary { color: var(--color-primary); }
 .text-secondary { color: var(--color-secondary); }

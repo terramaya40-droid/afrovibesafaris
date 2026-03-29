@@ -110,6 +110,11 @@
 
 .bg-dark {
   background-color: var(--color-dark);
+  color: #FFFFFF !important;
+}
+
+.bg-dark p, .bg-dark h2 {
+  color: #FFFFFF !important;
 }
 
 .mt-md { margin-top: var(--spacing-md); }
