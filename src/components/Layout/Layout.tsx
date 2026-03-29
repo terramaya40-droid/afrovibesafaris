@@ -4,6 +4,7 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import QuoteModal from '../Shared/QuoteModal';
 import ThemeToggle from '../Shared/ThemeToggle';
+import WhatsAppButton from '../Shared/WhatsAppButton';
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -32,6 +33,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <Footer />
       <QuoteModal />
       <ThemeToggle />
+      <WhatsAppButton />
     </div>
   );
 };
