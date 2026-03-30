@@ -1,27 +1,18 @@
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 import dotenv from 'dotenv';
 dotenv.config();
 
-// Create reusable transporter object using the default SMTP transport
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST || 'mail.spacemail.com',
-  port: parseInt(process.env.SMTP_PORT || '465'),
-  secure: process.env.SMTP_PORT === '465', // true for 465, false for other ports like 587
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 /**
- * Send an email notification for a new quote submission.
+ * Send an email notification for a new quote submission using Resend.
  * @param {Object} quoteData - The newly created quote object.
  */
 export const sendQuoteNotification = async (quoteData) => {
   try {
     const adminEmail = process.env.ADMIN_EMAIL_RECEIVER;
-    const mailOptions = {
-      from: `"AfriVibe System" <${process.env.SMTP_USER}>`,
+    const { data, error } = await resend.emails.send({
+      from: 'AfriVibe Safaris <noreply@afrivibesafaris.com>',
       to: adminEmail,
       subject: `New Quote Request from ${quoteData.name}`,
       html: `
@@ -43,24 +34,28 @@ export const sendQuoteNotification = async (quoteData) => {
           <p style="font-size: 12px; color: #777;">Please log in to your admin dashboard to manage this request.</p>
         </div>
       `,
-    };
+    });
 
-    const info = await transporter.sendMail(mailOptions);
-    console.log('Quote notification email sent: %s', info.messageId);
+    if (error) {
+      console.error('Error sending quote notification via Resend:', error);
+      return;
+    }
+
+    console.log('Quote notification email sent via Resend:', data.id);
   } catch (error) {
-    console.error('Error sending quote notification email:', error);
+    console.error('Exception during quote notification:', error);
   }
 };
 
 /**
- * Send an email notification for a new testimonial submission.
+ * Send an email notification for a new testimonial submission using Resend.
  * @param {Object} testimonialData - The newly created testimonial object.
  */
 export const sendTestimonialNotification = async (testimonialData) => {
   try {
     const adminEmail = process.env.ADMIN_EMAIL_RECEIVER;
-    const mailOptions = {
-      from: `"AfriVibe System" <${process.env.SMTP_USER}>`,
+    const { data, error } = await resend.emails.send({
+      from: 'AfriVibe Safaris <noreply@afrivibesafaris.com>',
       to: adminEmail,
       subject: `New Testimonial Submitted by ${testimonialData.userName}`,
       html: `
@@ -77,11 +72,15 @@ export const sendTestimonialNotification = async (testimonialData) => {
           <p style="font-size: 12px; color: #777;">Please log in to your admin dashboard to approve or manage this testimonial.</p>
         </div>
       `,
-    };
+    });
 
-    const info = await transporter.sendMail(mailOptions);
-    console.log('Testimonial notification email sent: %s', info.messageId);
+    if (error) {
+      console.error('Error sending testimonial notification via Resend:', error);
+      return;
+    }
+
+    console.log('Testimonial notification email sent via Resend:', data.id);
   } catch (error) {
-    console.error('Error sending testimonial notification email:', error);
+    console.error('Exception during testimonial notification:', error);
   }
 };
