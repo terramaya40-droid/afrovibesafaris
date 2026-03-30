@@ -1,6 +1,7 @@
 import express from 'express';
 import Testimonial from '../models/Testimonial.js';
 import verifyToken from '../middleware/auth.js';
+import { sendTestimonialNotification } from '../utils/emailService.js';
 
 const router = express.Router();
 
@@ -44,6 +45,10 @@ router.post('/', async (req, res) => {
   try {
     const newTestimonial = new Testimonial(req.body);
     const saved = await newTestimonial.save();
+
+    // Send email notification to admin asynchronously
+    sendTestimonialNotification(saved).catch(err => console.error("Failed to send testimonial email", err));
+
     res.status(201).json(saved);
   } catch (error) {
     res.status(400).json({ message: 'Error submitting testimonial', error: error.message });
