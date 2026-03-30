@@ -1,7 +1,7 @@
 import express from 'express';
 import Quote from '../models/Quote.js';
 import verifyToken from '../middleware/auth.js';
-import { sendQuoteNotification } from '../utils/emailService.js';
+import { sendQuoteNotification, sendQuoteAutoReply } from '../utils/emailService.js';
 
 const router = express.Router();
 
@@ -22,7 +22,12 @@ router.post('/', async (req, res) => {
     const savedQuote = await newQuote.save();
     
     // Send email notification to admin asynchronously
-    sendQuoteNotification(savedQuote).catch(err => console.error("Failed to send quote email", err));
+    sendQuoteNotification(savedQuote).catch(err => console.error("Failed to send quote admin email", err));
+
+    // Send auto-reply acknowledging receipt to the customer asynchronously
+    if (savedQuote.email) {
+      sendQuoteAutoReply(savedQuote).catch(err => console.error("Failed to send quote auto-reply", err));
+    }
 
     res.status(201).json(savedQuote);
   } catch (error) {
